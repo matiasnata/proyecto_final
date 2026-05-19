@@ -221,6 +221,8 @@ def cancelar_reserva_id(id_reservas):
 def consultar_disponiblidad_hora():
     fecha = request.args.get('fecha')
     turnos_fijos = ['11:00', '12:30', '14:00', '15:30', '17:00', '20:00', '21:30', '23:00']
+    conn = None
+    cursor = None
     capacidad_max = 100
     if not fecha:
         return jsonify({
@@ -233,7 +235,7 @@ def consultar_disponiblidad_hora():
         }), 400
     
     try:
-        conn = db.get_connection()
+        conn = get_connection()
         cursor = conn.cusor(dictionary=True)
         
         query = """SELECT hora, COALESCE(SUM(cantidad_personas), o
@@ -273,3 +275,8 @@ def consultar_disponiblidad_hora():
                 "description":f"Error interno del servidor: {e}"
             }]
         }), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
