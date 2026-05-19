@@ -1,5 +1,6 @@
 from flask import jsonify, Blueprint, request
 from database import db
+from utils import generar_paginacion
 
 
 reseñas_bp = Blueprint('reseñas', __name__, url_prefix="/api/reseñas")
@@ -13,10 +14,15 @@ def obtener_reseñas():
     except ValueError:
         offset = 0
         limit = 10
+        
     try:
         conn = db.get_connection()
         cursor = conn.cursor(dictionary=True)
-        query = """SELECT re.id_reserva", re.puntaje, re.comentario, re.fecha_publicacion, r.nombre_cliente, r.cliente_email
+        query_conteo = """SELECT COUNT(*) as total FROM reseñas"""
+        cursor.execute(query_conteo)
+        total = cursor.fetchone()['total']
+        
+        query = """SELECT re.id_reserva, re.puntaje, re.comentario, re.fecha_publicacion, r.nombre_cliente, r.cliente_email
                    FROM reseñas re
                    INNER JOIN reservas r ON re.id_reserva = r.id_reserva
                    ORDER BY re.fecha_publicacion DESC
@@ -29,9 +35,12 @@ def obtener_reseñas():
         #convertimos las fechas a string para que no den error al serializar a json
         
         for fila in resultados:
-            fila['fecha_publicacion'] = fila['fecha_publicacion'].strftime('%Y-%M-%D %H:%m:%S')
+            if fila:
+                fila['fecha_publicacion'] = fila['fecha_publicacion'].strftime('%Y-%m-%d %H:%M:%S') #convertir un objeto de fecha y hora en texto (string) legible para humanos o para sistemas (como un JSON).
         
-        links = generar_links_paginacion(request, limit, offset)
+        
+        
+        links = generar_paginacion(limit, offset, request, total)
         
         
         return jsonify({
