@@ -1,4 +1,3 @@
-
 from flask import Flask, jsonify, request, Blueprint
 from database import db
 from mysql.connector import Error
@@ -14,7 +13,7 @@ def ver_servicios_extras():
         dbs = db.get_connection()
         cursor = dbs.cursor(dictionary = True)
         query = """
-        SELECT *
+        SELECT id_servicio, nombre_servicio, descripcion
         FROM servicios_extras as s_e
         WHERE s_e.activo = True
         """
@@ -247,5 +246,46 @@ def alta_baja_modificacion_servicio_extras(id):
             cursor.close()
         if dbs and dbs.is_connected():
             dbs.close()
-@servicios_extra_bp.route("/restaurante/servicios-extra/<int:id>", methods =['DELETE'])
-def obtener_servicios_extras_por_id()
+@servicios_extra_bp.route("/restaurante/servicios-extra/<int:id>", methods =['GET'])
+def servicio_extras_por_id(id):
+    dbs = None
+    cursor = None
+    try:
+        dbs = db.get_connection()
+        cursor = dbs.cursor(dictionary=True)
+        query = """ 
+        SELECT nombre_servicio, descripcion
+        FROM servicios_extras 
+        WHERE id_servicio = %s 
+        """
+        cursor.execute(query, (id,))
+        validacion = cursor.fetchone()
+        if not validacion:
+            return jsonify({
+                "Error": [{
+                    "code": 404,
+                    "message": "No existe el servicio",
+                    "level": "error",
+                    "description": "No se encontro el servicio con ese numero de ID"
+                }]
+            }), 404
+        return jsonify ({
+            "message":"Se encontro un servicio con ese numero de ID",
+            "servicio": validacion,
+            "code": 200
+        }), 200
+    except Error as e:
+        return jsonify({
+            "Error": [{
+                "code": 500,
+                "message": "Error con la conexion a la base de datos",
+                "level": "error",
+                "description": f"Fallo interno del servidor, {str(e)}"
+            }]
+        }), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if dbs and dbs.is_connected():
+            dbs.close()
+    
