@@ -1,21 +1,19 @@
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from database.db import get_connection
 from mysql.connector import Error
 
-reservas_bp = Blueprint("reservas", __name__)
-
-@reservas_bp.route('/reservas', methods=['GET'])
-
-def obtener_reservas():
+ 
+def paginar_tabla(nombre_tabla, base_url):
     try:
-        limit_arg = request.args.get ('_limit', default = '10')
-        offset_arg = request.args.get ('_offset', default = '0') 
+        limit_arg = request.args.get('_limit', default='5')  
+        offset_arg = request.args.get('_offset', default='0') 
+        
         if not (limit_arg.isdigit() and offset_arg.isdigit()):
             return jsonify({
                 'errors':[{
                     'code': 400,
-                    'message': 'Parametros invalidos',
-                    'description': 'los parametros _limit y _offset deben ser numeros enteros.'
+                    'message': 'Parámetros inválidos',
+                    'description': 'Los parámetros _limit y _offset deben ser números enteros.'
                 }]
             }), 400
             
@@ -25,40 +23,43 @@ def obtener_reservas():
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
         
-        cursor.execute('SELECT COUNT(*) as total FROM reservas')
-        total_reservas = cursor.fetchone()['total']
         
-        query = 'SELECT * FROM reservas LIMIT %s OFFSET %s'
+        cursor.execute(f'SELECT COUNT(*) as total FROM {nombre_tabla}')
+        total_registros = cursor.fetchone()['total']
+        
+        query = f'SELECT * FROM {nombre_tabla} LIMIT {limit} OFFSET {offset}'
         cursor.execute(query, (limit, offset))
         resultado = cursor.fetchall()
         
         if not resultado:
-            conn.close()
-            return'', 204
-        
-        base_url = 'http://127.0.0.1:8080/reservas'
-        ultimo_offset = max(0, ((total_reservas -1) //limit)* limit)
-        prev_offset = 0
-        if offset > 0:
-            prev_offset = max(0, offset - limit)
-            links ={
-                '_first': {'href': f'{base_url}?_limit={limit}&_offset=0'},
-                '_prev': {'href': f'{base_url}?_limit={limit}&_offset={prev_offset}'},
-                '_next': {'href': f'{base_url}?_limit={limit}&_offset={offset + limit}'},
-                '_last': {'href': f'{base_url}?_limit={limit}&_offset={ultimo_offset}'},
-            }
             cursor.close()
             conn.close()
-            return jsonify({
-                'Reservas': resultado,
-                '_links' : links
-            }), 200 
+            return '', 204
+        
+        ultimo_offset = max(0, ((total_registros - 1) // limit) * limit)
+        prev_offset = max(0, offset - limit) if offset > 0 else 0
+        
+        links = {
+            '_first': {'href': f'{base_url}?_limit={limit}&_offset=0'},
+            '_prev': {'href': f'{base_url}?_limit={limit}&_offset={prev_offset}'},
+            '_next': {'href': f'{base_url}?_limit={limit}&_offset={offset + limit}'},
+            '_last': {'href': f'{base_url}?_limit={limit}&_offset={ultimo_offset}'},
+        }
+        
+        cursor.close()
+        conn.close()
+        
+        
+        return jsonify({
+            'datos': resultado,
+            '_links': links
+        }), 200 
 
-    except:
+    except Exception as e:
         return jsonify({
             'errors': [{
                 'code': 500,
                 'message': "Error interno del servidor",
-                'description': 'Fallo interno del servidor'
+                'description': str(e)
             }]
         }), 500
