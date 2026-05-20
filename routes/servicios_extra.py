@@ -37,8 +37,10 @@ def ver_servicios_extras():
         }), 500
 
     finally:
-        cursor.close()
-        dbs.close()
+        if cursor:
+            cursor.close()
+        if dbs and dbs.is_connected():
+            dbs.close()
 
 @servicios_extra_bp.route("/restaurante/admin/servicios-extra", methods =['POST'])
 def agregar_servicio_extras():
@@ -175,7 +177,7 @@ def eliminar_servicio_extras(id):
         if dbs and dbs.is_connected():
             dbs.close()
 @servicios_extra_bp.route("/restaurante/admin/servicios-extra/<int:id>", methods =['PATCH'])
-def baja_servicio_extras(id):
+def alta_baja_modificacion_servicio_extras(id):
     dbs = None
     cursor = None
     actualizar = request.get_json()
@@ -209,6 +211,15 @@ def baja_servicio_extras(id):
             }), 404
         descripcion_actualizar = actualizar["descripcion"]
         estado_actualizar = actualizar["activo"]
+        if not isinstance(estado_actualizar, bool):
+            return jsonify({
+                "Error":[{
+                    "code": 400,
+                    "message": "El campo activo debe ser true o false",
+                    "level": "Error",
+                    "description": "El campo activo solo acepta valores booleanos"
+                }]
+            }), 400
         query = """
         UPDATE servicios_extras
         SET descripcion = %s, activo = %s
@@ -236,3 +247,5 @@ def baja_servicio_extras(id):
             cursor.close()
         if dbs and dbs.is_connected():
             dbs.close()
+@servicios_extra_bp.route("/restaurante/servicios-extra/<int:id>", methods =['DELETE'])
+def obtener_servicios_extras_por_id()
