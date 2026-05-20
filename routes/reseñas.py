@@ -360,3 +360,92 @@ def eliminar_reseña_admin(id_reseña):
             cursor.close()
         if conn:
             conn.close()
+
+@reseñas_bp.route('/admin/reseñas/<int:id>', methods=['PUT'])
+def actualizar_reseña(id):
+
+    conn = None
+    cursor = None
+
+    data = request.get_json()
+
+    # validar json
+    if not data:
+        return jsonify({
+            "errors": [{
+                "code": "400",
+                "message": "Debe enviar datos para actualizar",
+                "level": "error"
+            }]
+        }), 400
+
+    puntaje = data.get('puntaje')
+    comentario = data.get('comentario')
+
+    # validar campos
+    if not puntaje or not comentario:
+        return jsonify({
+            "errors": [{
+                "code": "400",
+                "message": "Faltan datos obligatorios",
+                "level": "error"
+            }]
+        }), 400
+
+    try:
+
+        conn = db.get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # verificar si existe la reseña
+        query_check = """
+            SELECT id_reseña
+            FROM reseñas
+            WHERE id_reseña = %s
+        """
+
+        cursor.execute(query_check, (id,))
+        reseña = cursor.fetchone()
+
+        if not reseña:
+            return jsonify({
+                "errors": [{
+                    "code": "404",
+                    "message": "La reseña no existe",
+                    "level": "error"
+                }]
+            }), 404
+
+        # actualizar reseña
+        query_update = """
+            UPDATE reseñas
+            SET puntaje = %s,
+                comentario = %s
+            WHERE id_reseña = %s
+        """
+
+        cursor.execute(query_update, (puntaje, comentario, id))
+
+        conn.commit()
+
+        return jsonify({
+            "message": "Reseña actualizada correctamente"
+        }), 200
+
+    except Exception as e:
+
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error interno del servidor",
+                "description": str(e)
+            }]
+        }), 500
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
