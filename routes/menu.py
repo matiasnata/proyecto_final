@@ -3,7 +3,7 @@ from database.db import get_connection
 
 menu_bp = Blueprint("menu",__name__)
 
-@menu_bp.route("/menu", methods=["GET"])
+@menu_bp.route("/platos", methods=["GET"])
 def obtener_menu():
     try:
         conn = get_connection()
@@ -25,7 +25,7 @@ def obtener_menu():
         }), 500
 
 
-@menu_bp.route("/admin/menu", methods=["POST"])
+@menu_bp.route("/platos", methods=["POST"])
 def crear_plato_admin():
     data = request.get_json()
     conn = None
@@ -91,7 +91,7 @@ def crear_plato_admin():
             conn.close()
 
 
-@menu_bp.route("/admin/menu/<int:id_plato>", methods=["PUT"])
+@menu_bp.route("/platos/<int:id_plato>", methods=["PUT"])
 def editar_plato_admin(id_plato):
     data = request.get_json()
     conn = None
@@ -161,7 +161,7 @@ def editar_plato_admin(id_plato):
             conn.close()
 
 
-@menu_bp.route("/admin/menu/<int:id_plato>", methods=["DELETE"])
+@menu_bp.route("/platos/<int:id_plato>", methods=["DELETE"])
 def eliminar_plato_admin(id_plato):
     conn = None
     cursor = None
