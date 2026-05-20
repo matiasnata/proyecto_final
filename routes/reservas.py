@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from database.db import get_connection
 from mysql.connector import Error
 import uuid #Esto sirve para generar el codigo QR
@@ -275,8 +275,23 @@ def consultar_disponiblidad_hora():
                 "description":f"Error interno del servidor: {e}"
             }]
         }), 500
+
     finally:
         if cursor:
             cursor.close()
         if conn:
             conn.close()
+    
+@reservas_bp.route("/reservas/admin", methods = ["GET"])        
+def mostrar_reservas_dashboard():
+    
+    conn = get_connection()
+    cursor = conn.cursor()
+    query = "SELECT nombre_cliente, cantidad_personas, fecha, hora, estado_reserva FROM reservas"
+    cursor.execute(query)
+    reservas = cursor.fetchall()
+    cursor.close()
+    
+    return render_template("admin.html", total_reservas = reservas)
+      
+    
