@@ -136,13 +136,13 @@ def crear_reseña():
                 }]
             }), 409
             
-        query_insert = "INSERT INTO resenas (id_reserva, estrellas, comentario) VALUES (%s, %s, %s)"
+        query_insert = "INSERT INTO reseñas (id_reserva, puntaje, comentario) VALUES (%s, %s, %s)"
         cursor.execute(query_insert, (id_reserva, puntaje, comentario))
         conn.commit()
 
         return jsonify({
             "message": "Reseña guardada con éxito",
-            "id_resena": cursor.lastrowid
+            "id_reseña": cursor.lastrowid
         }), 201
         
     except Exception as e:
@@ -449,3 +449,43 @@ def actualizar_reseña(id):
 
         if conn:
             conn.close()
+
+@reseñas_bp.route('/admin/promedio', methods=["GET"])
+def obtener_promedio_puntaje():
+    try:
+        conn = db.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        query = """
+            SELECT 
+                ROUND(AVG(puntaje), 1) as promedio, 
+                COUNT(*) as total_reseñas 
+            FROM reseñas
+        """
+        cursor.execute(query)
+        resultado = cursor.fetchone()
+        
+        promedio = resultado['promedio'] if resultado['promedio'] is not None else 0.0
+        total = resultado['total_reseñas']
+        
+        return jsonify({
+            "promedio": promedio,
+            "total_reseñas": total
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error inesperado al calcular el promedio de las reseñas",
+                "level": "error",
+                "description": f"Error interno del servidor: {e}"
+            }]
+        }), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    
+    
