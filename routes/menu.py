@@ -25,32 +25,6 @@ def obtener_menu():
         }), 500
 
 
-@menu_bp.route("/admin/menu", methods=["GET"])
-def obtener_menu_admin():
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        query = "SELECT * FROM menu"
-        cursor.execute(query)
-
-        menu = cursor.fetchall()
-
-        cursor.close()
-        conn.close()
-
-        return jsonify(menu), 200
-
-    except Exception as e:
-        return jsonify({
-            "errors": [{
-                "code": "500",
-                "message": "Error al obtener el menú",
-                "description": str(e)
-            }]
-        }), 500
-
-
 @menu_bp.route("/admin/menu", methods=["POST"])
 def crear_plato_admin():
     data = request.get_json()
