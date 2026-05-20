@@ -160,7 +160,80 @@ def crear_reseña():
         if conn:
             conn.close()
 
+@reseñas_bp.route('/buscar', methods=['GET'])
+def buscar_reseñas_por_email():
+    email = request.args.get('email')
+    try:
+        limit = int(request.args.get('_limit', 10))
+        offset = int(request.args.get('_offset', 0))
+    
+    except ValueError:
+        offset = 0
+        limit = 10
+    
+    if not email:
+        return jsonify({
+            "errors":[{
+                "code":"400",
+                "message":"Por favor ingrese el email que queres buscar",
+                "level":"error",
+                "Description": "Falta el mail por el cual buscar"
+            }]
+        }), 400
+       
+    conn = None
+    cursor = None
+    try:
+        conn = db.get_connection()
+        cursor = conn.cursor(dictionary=True)
         
+        query_conteo = """
+                      SELECT COUNT(*) as total 
+                      FROM reseñas re
+                      INNER JOIN reservas r ON re.id_reserva = r.id_reserva
+                      WHERE r.cliente_email = %s
+                      """
+        cursor.execute(query_conteo,(email))
+        total = cursor.fetchone()['total']
+
+        query = """
+            SELECT re.id_reseña, re.puntaje, re.comentario, re.fecha_publicacion, r.id_reserva, r.nombre_cliente, r.cliente_email
+            FROM reseñas re
+            INNER JOIN reservas r ON re.id_reserva = r.id_reserva
+            WHERE r.cliente_email = %s
+            ORDER BY re.fecha_publicacion DESC
+            LIMIT %s OFFSET %s
+        """
+        cursor.execute(query, (email, limit, offset))
+        resultados = cursor.fetchall()
+
+        for fila in resultados:
+            if fila['fecha_publicacion']:
+                fila['fecha_publicacion'] = fila['fecha_publicacion'].strftime('%Y-%m-%d %H:%M:%S')
+        
+        links = generar_paginacion(limit, offset, request, total)
+        
+
+        return jsonify({
+            "message": f"Reseñas de {email}",
+            "resultado": resultados,
+            "links": links
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "errors":[{
+                "code": "500",
+                "message": "Error inesperado al conetarse con la base de datos",
+                "level": "error",
+                "description":f"Error interno del servidor: {e}"
+            }]
+        }), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 
         
