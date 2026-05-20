@@ -22,7 +22,7 @@ def obtener_reseñas():
         cursor.execute(query_conteo)
         total = cursor.fetchone()['total']
         
-        query = """SELECT re.id_reserva, re.puntaje, re.comentario, re.fecha_publicacion, r.nombre_cliente, r.cliente_email
+        query = """SELECT re.id_reserva, re.puntaje, re.comentario, re.fecha_publicacion, r.nombre_cliente
                    FROM reseñas re
                    INNER JOIN reservas r ON re.id_reserva = r.id_reserva
                    ORDER BY re.fecha_publicacion DESC
@@ -236,6 +236,79 @@ def buscar_reseñas_por_email():
             conn.close()
 
 
-        
-        
+@reseñas_bp.route('/admin/reseñas', methods=['GET'])
+def obtener_reseñas_admin():
+    conn = None
+    cursor = None
+    try:
+
+        limit = int(request.args.get('_limit', 10)) #para traer 10 registros
+        offset = int(request.args.get('_offset', 0))
+
+        conn = db.get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query_conteo = """
+            SELECT COUNT(*) as total
+            FROM reseñas
+        """#aca conteo la cantidad de resultados, necesario si bien muestro las primeras 10, asi puedo verificar la cantidad de paginas
+
+        cursor.execute(query_conteo)
+        total = cursor.fetchone()['total']
+
+        query = """
+            SELECT id_reseña,
+                   puntaje,
+                   comentario,
+                   fecha_publicacion,
+                   r.nombre_cliente,
+                   r.cliente_email,
+                   r.estado_reserva
+            FROM reseñas 
+            INNER JOIN reservas r
+                ON reseñas.id_reserva = r.id_reserva
+            ORDER BY fecha_publicacion DESC
+            LIMIT %s OFFSET %s
+        """
+
+        cursor.execute(query, (limit, offset)) #ejecuto la query con los limites de paginacion
+
+        resultados = cursor.fetchall() #trae todos los resultados, sin el limit
+
+        for fila in resultados:
+            if fila['fecha_publicacion']:
+                fila['fecha_publicacion'] = fila['fecha_publicacion'].strftime('%Y-%m-%d %H:%M:%S') #esto es para mostrar las fechas en el json, ya que el datetime aveces no lo puede mostrar
+
+        links = generar_paginacion(limit, offset, request, total)
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
+        return jsonify({
+            "message": "Listado de reseñas para administrador",
+            "resultado": resultados,
+            "_links": links
+        }), 200
+
+    except Exception as e:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error interno del servidor",
+                "description": str(e)
+            }]
+        }), 500
+
+
+    
     
