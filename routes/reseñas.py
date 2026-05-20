@@ -193,7 +193,7 @@ def buscar_reseñas_por_email():
                       INNER JOIN reservas r ON re.id_reserva = r.id_reserva
                       WHERE r.cliente_email = %s
                       """
-        cursor.execute(query_conteo,(email))
+        cursor.execute(query_conteo,(email,))
         total = cursor.fetchone()['total']
 
         query = """
@@ -236,7 +236,7 @@ def buscar_reseñas_por_email():
             conn.close()
 
 
-@reseñas_bp.route('/admin/reseñas', methods=['GET'])
+@reseñas_bp.route('/admin', methods=['GET'])
 def obtener_reseñas_admin():
     conn = None
     cursor = None
@@ -273,7 +273,7 @@ def obtener_reseñas_admin():
 
         cursor.execute(query, (limit, offset)) #ejecuto la query con los limites de paginacion
 
-        resultados = cursor.fetchall() #trae todos los resultados, sin el limit
+        resultados = cursor.fetchall() #trae todos los resultados devueltos por la query
 
         for fila in resultados:
             if fila['fecha_publicacion']:
@@ -310,8 +310,8 @@ def obtener_reseñas_admin():
         }), 500
 
 
-@reseñas_bp.route('/admin/reseñas/<int:id_reseña>', methods=['DELETE'])
-def eliminar_reseña_admin(id_reseña):
+@reseñas_bp.route('/admin/<int:id>', methods=['DELETE'])
+def eliminar_reseña_admin(id):
     conn = None
     cursor = None
     try:
@@ -320,7 +320,7 @@ def eliminar_reseña_admin(id_reseña):
 
         # Verifico si existe la reseña
         query_check = "SELECT id_reseña FROM reseñas WHERE id_reseña = %s"  
-        cursor.execute(query_check, (id_reseña,))  # Busca coincidencia en la DB con el id
+        cursor.execute(query_check, (id,))  # Busca coincidencia en la DB con el id
         reseña = cursor.fetchone()  # Guarda el resultado en reseña
 
         if not reseña:
@@ -329,17 +329,17 @@ def eliminar_reseña_admin(id_reseña):
                     'code': '404',  
                     'message': 'La reseña indicada no existe',
                     'level': 'error',
-                    'description': f'No se encontró una reseña con el id: {id_reseña}'
+                    'description': f'No se encontró una reseña con el id: {id}'
                 }]
             }), 404  # No encontrado
 
         # Si existe la reseña, la elimina
         query_delete = "DELETE FROM reseñas WHERE id_reseña = %s"
-        cursor.execute(query_delete, (id_reseña,))
+        cursor.execute(query_delete, (id,))
         conn.commit()  # Guarda los cambios en la DB
 
         return jsonify({
-            "message": f"Reseña {id_reseña} eliminada con éxito"
+            "message": f"Reseña {id} eliminada con éxito"
         }), 200  # Éxito
 
     except Exception as e:
@@ -361,7 +361,7 @@ def eliminar_reseña_admin(id_reseña):
         if conn:
             conn.close()
 
-@reseñas_bp.route('/admin/reseñas/<int:id>', methods=['PUT'])
+@reseñas_bp.route('/admin/<int:id>', methods=['PUT'])
 def actualizar_reseña(id):
 
     conn = None
