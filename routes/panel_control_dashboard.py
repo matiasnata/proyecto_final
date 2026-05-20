@@ -3,7 +3,7 @@ from database.db import get_connection
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
-@dashboard_bp.route("/dashboard/panel_de_control", methods=["GET"])
+@dashboard_bp.route("/dashboard/estadistica", methods=["GET"])
 def mostrar_dashboard():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
