@@ -310,5 +310,53 @@ def obtener_reseñas_admin():
         }), 500
 
 
-    
-    
+@reseñas_bp.route('/admin/reseñas/<int:id_reseña>', methods=['DELETE'])
+def eliminar_reseña_admin(id_reseña):
+    conn = None
+    cursor = None
+    try:
+        conn = db.get_connection()  # Conexión con la DB
+        cursor = conn.cursor(dictionary=True)  # Como se van a traer los datos de la DB
+
+        # Verifico si existe la reseña
+        query_check = "SELECT id_reseña FROM reseñas WHERE id_reseña = %s"  
+        cursor.execute(query_check, (id_reseña,))  # Busca coincidencia en la DB con el id
+        reseña = cursor.fetchone()  # Guarda el resultado en reseña
+
+        if not reseña:
+            return jsonify({
+                'errors': [{
+                    'code': '404',  
+                    'message': 'La reseña indicada no existe',
+                    'level': 'error',
+                    'description': f'No se encontró una reseña con el id: {id_reseña}'
+                }]
+            }), 404  # No encontrado
+
+        # Si existe la reseña, la elimina
+        query_delete = "DELETE FROM reseñas WHERE id_reseña = %s"
+        cursor.execute(query_delete, (id_reseña,))
+        conn.commit()  # Guarda los cambios en la DB
+
+        return jsonify({
+            "message": f"Reseña {id_reseña} eliminada con éxito"
+        }), 200  # Éxito
+
+    except Exception as e:
+        if conn:
+            conn.rollback()  # Si algo falla, se deshace cualquier cambio a medias
+            
+        return jsonify({
+            "errors": [{
+                "code": "500",  
+                "message": "Error al intentar eliminar la reseña",
+                "level": "error",
+                "description": str(e)
+            }]
+        }), 500  # Error interno del servidor
+        
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
