@@ -34,7 +34,7 @@ def mostrar_dashboard():
                            reservas_mes = total_reservas_mes)
 
 
-@dashboard_bp.route('/admin/promedio', methods=["GET"])
+@dashboard_bp.route('/dashboard/promedio', methods=["GET"])
 def obtener_promedio_puntaje():
     conn = None
     cursor = None
