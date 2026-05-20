@@ -169,7 +169,7 @@ def actualizar_reserva_id(id_reservas):
                 }]
             }), 500
 
-@reservas_bp.route('/reservas/<int:id_reservas>/cancelar', methods=['PATCH'])
+@reservas_bp.route('/reservas/<int:id_reservas>', methods=['DELETE'])
 def cancelar_reserva_id(id_reservas):
     if id_reservas <= 0:
         return jsonify({
