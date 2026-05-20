@@ -25,6 +25,98 @@ def obtener_menu():
         }), 500
 
 
+@menu_bp.route("/admin/menu", methods=["GET"])
+def obtener_menu_admin():
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = "SELECT * FROM menu"
+        cursor.execute(query)
+
+        menu = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify(menu), 200
+
+    except Exception as e:
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error al obtener el menú",
+                "description": str(e)
+            }]
+        }), 500
+
+
+@menu_bp.route("/admin/menu", methods=["POST"])
+def crear_plato_admin():
+    data = request.get_json()
+    conn = None
+    cursor = None
+
+    if not data:
+        return jsonify({
+            "errors": [{
+                "code": "400",
+                "message": "Faltan los datos para crear el plato",
+                "level": "error"
+            }]
+        }), 400
+
+    nombre_plato = data.get('nombre_plato')
+    descripcion = data.get('descripcion')
+    precio = data.get('precio')
+    url_imagen = data.get('url_imagen')
+    restricciones = data.get('restricciones')
+    plato_disponible = data.get('plato_disponible', True)  # por defecto es True
+
+    # valido los campos obligatorios
+    if not nombre_plato or not descripcion or not precio:
+        return jsonify({
+            "errors": [{
+                "code": "400",
+                "message": "nombre_plato, descripcion y precio son obligatorios",
+                "level": "error"
+            }]
+        }), 400
+
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+            INSERT INTO menu (nombre_plato, descripcion, precio, url_imagen, restricciones, plato_disponible)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (nombre_plato, descripcion, precio, url_imagen, restricciones, plato_disponible))
+        conn.commit()
+
+        return jsonify({
+            "message": "Plato creado correctamente",
+            "id_plato": cursor.lastrowid
+        }), 201  # 201 = Created
+
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error al crear el plato",
+                "description": str(e)
+            }]
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
 @menu_bp.route("/admin/menu/<int:id_plato>", methods=["PUT"])
 def editar_plato_admin(id_plato):
     data = request.get_json()
@@ -92,4 +184,49 @@ def editar_plato_admin(id_plato):
         if cursor: 
             cursor.close()
         if conn: 
+            conn.close()
+
+
+@menu_bp.route("/admin/menu/<int:id_plato>", methods=["DELETE"])
+def eliminar_plato_admin(id_plato):
+    conn = None
+    cursor = None
+
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Verifica si el plato existe
+        cursor.execute("SELECT id_plato FROM menu WHERE id_plato = %s", (id_plato,))
+        if not cursor.fetchone():
+            return jsonify({
+                "errors": [{
+                    "code": "404",
+                    "message": "El plato indicado no existe",
+                    "level": "error"
+                }]
+            }), 404
+
+        cursor.execute("DELETE FROM menu WHERE id_plato = %s", (id_plato,))
+        conn.commit()
+
+        return jsonify({
+            "message": f"Plato con ID {id_plato} eliminado correctamente"
+        }), 200
+
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error al eliminar el plato",
+                "description": str(e)
+            }]
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
             conn.close()
