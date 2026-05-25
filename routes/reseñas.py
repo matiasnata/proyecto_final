@@ -183,7 +183,7 @@ def crear_reseña():
         if conn:
             conn.close()
 
-@reseñas_bp.route('/admin', methods=['GET'])
+@reseñas_bp.route('/reseñas', methods=['GET'])
 def obtener_reseñas_admin():
     conn = None
     cursor = None
@@ -257,7 +257,7 @@ def obtener_reseñas_admin():
         }), 500
 
 
-@reseñas_bp.route('/admin/<int:id>', methods=['DELETE'])
+@reseñas_bp.route('/reseñas/<int:id>', methods=['DELETE'])
 def eliminar_reseña_admin(id):
     conn = None
     cursor = None
@@ -307,76 +307,3 @@ def eliminar_reseña_admin(id):
             cursor.close()
         if conn:
             conn.close()
-
-
-@reseñas_bp.route('/admin/promedio', methods=['GET'])
-def obtener_promedio_reseñas():
-    # Capturamos la fecha desde la URL, ej: ?fecha_desde=2024-01-01
-    fecha_desde = request.args.get('fecha_desde')
-
-    # 1. Validación de seguridad: Comprobar que la fecha tenga el formato correcto
-    if fecha_desde:
-        try:
-            # Intentamos leer la fecha para asegurar que sea YYYY-MM-DD, chequea que el formato coincida y si conicide lo pasa a un objeto time que reocnoce sql.
-            datetime.strptime(fecha_desde, '%Y-%m-%d')
-        except ValueError:
-            return jsonify({
-                "errors": [{
-                    "code": "400",
-                    "message": "Formato de fecha inválido",
-                    "level": "error",
-                    "description": "El parámetro fecha_desde debe tener el formato YYYY-MM-DD"
-                }]
-            }), 400
-
-    conn = None
-    cursor = None
-    try:
-        conn = db.get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        # 2. Armamos la consulta base
-        query = """
-            SELECT 
-                ROUND(AVG(puntaje), 1) as promedio, 
-                COUNT(*) as total_reseñas 
-            FROM reseñas
-        """
-        
-        parametros = ()
-
-        # 3. Si mandaron una fecha, le agregamos el filtro WHERE a la consulta
-        if fecha_desde:
-            query += " WHERE fecha_publicacion >= %s"
-            parametros = (fecha_desde,)
-
-        # Ejecutamos la consulta pasándole los parámetros (si los hay)
-        cursor.execute(query, parametros)
-        resultado = cursor.fetchone()
-
-        promedio = resultado['promedio'] if resultado['promedio'] is not None else 0.0
-        total = resultado['total_reseñas']
-
-        return jsonify({
-            "message": f"Promedio calculado {'desde ' + fecha_desde if fecha_desde else 'histórico'}",
-            "promedio": promedio,
-            "total_reseñas": total
-        }), 200
-
-    except Exception as e:
-        return jsonify({
-            "errors": [{
-                "code": "500",
-                "message": "Error inesperado al calcular el promedio de las reseñas",
-                "level": "error",
-                "description": f"Error interno del servidor: {e}"
-            }]
-        }), 500
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-    
-    
