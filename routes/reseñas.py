@@ -183,7 +183,7 @@ def crear_reseña():
         if conn:
             conn.close()
 
-@reseñas_bp.route('/admin', methods=['GET'])
+@reseñas_bp.route('/reseñas', methods=['GET'])
 def obtener_reseñas_admin():
     conn = None
     cursor = None
@@ -257,7 +257,7 @@ def obtener_reseñas_admin():
         }), 500
 
 
-@reseñas_bp.route('/admin/<int:id>', methods=['DELETE'])
+@reseñas_bp.route('/reseñas/<int:id>', methods=['DELETE'])
 def eliminar_reseña_admin(id):
     conn = None
     cursor = None
@@ -307,4 +307,3 @@ def eliminar_reseña_admin(id):
             cursor.close()
         if conn:
             conn.close()
-            
