@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint, request
 from database import db
 from utils import generar_paginacion
-
+from datetime import datetime
 
 reseñas_bp = Blueprint('reseñas', __name__, url_prefix="/api/reseñas")
 
@@ -14,22 +14,45 @@ def obtener_reseñas():
     except ValueError:
         offset = 0
         limit = 10
+    
+    email = request.args.get('email',"")
+    
         
     try:
         conn = db.get_connection()
         cursor = conn.cursor(dictionary=True)
-        query_conteo = """SELECT COUNT(*) as total FROM reseñas"""
-        cursor.execute(query_conteo)
-        total = cursor.fetchone()['total']
+        query_conteo = """SELECT COUNT(*) as total FROM reseñas re 
+                          INNER JOIN reservas r ON re.id_reserva = r.id_reserva"""
         
-        query = """SELECT re.id_reserva, re.puntaje, re.comentario, re.fecha_publicacion, r.nombre_cliente
+        query_base= """SELECT re.id_reseña, re.id_reserva, re.puntaje, re.comentario, re.fecha_publicacion, r.nombre_cliente, r.cliente_email
                    FROM reseñas re
                    INNER JOIN reservas r ON re.id_reserva = r.id_reserva
-                   ORDER BY re.fecha_publicacion DESC
-                   LIMIT %s OFFSET %s
                 """
+        condiciones = []
+        params_filtro = []
+
+        if email:
+            condiciones.append("r.cliente_email = %s")
+            params_filtro.append(email)
+
+        # Si hay condiciones (como el email), se las agregamos a AMBAS consultas
+        if condiciones:
+            clausula_where = " WHERE " + " AND ".join(condiciones) #.join es genial ya que si hay mas de una ondiion se agregaria un and.
+            query_conteo += clausula_where
+            query_base += clausula_where
+
+        # 4. Ejecutamos el conteo primero (usando los parámetros de filtro)
+        cursor.execute(query_conteo, params_filtro)
+        total = cursor.fetchone()['total']
+
+        # 5. Terminamos de armar la consulta principal agregando ORDER y LIMIT
+        query_base += " ORDER BY re.fecha_publicacion DESC LIMIT %s OFFSET %s"
         
-        cursor.execute(query, (limit, offset))
+        # Sumamos los parámetros del filtro con los del límite
+        params_finales = params_filtro + [limit, offset]
+        
+        # Ejecutamos la búsqueda principal
+        cursor.execute(query_base, params_finales)
         resultados = cursor.fetchall()
         
         #convertimos las fechas a string para que no den error al serializar a json
@@ -160,82 +183,6 @@ def crear_reseña():
         if conn:
             conn.close()
 
-@reseñas_bp.route('/buscar', methods=['GET'])
-def buscar_reseñas_por_email():
-    email = request.args.get('email')
-    try:
-        limit = int(request.args.get('_limit', 10))
-        offset = int(request.args.get('_offset', 0))
-    
-    except ValueError:
-        offset = 0
-        limit = 10
-    
-    if not email:
-        return jsonify({
-            "errors":[{
-                "code":"400",
-                "message":"Por favor ingrese el email que queres buscar",
-                "level":"error",
-                "Description": "Falta el mail por el cual buscar"
-            }]
-        }), 400
-       
-    conn = None
-    cursor = None
-    try:
-        conn = db.get_connection()
-        cursor = conn.cursor(dictionary=True)
-        
-        query_conteo = """
-                      SELECT COUNT(*) as total 
-                      FROM reseñas re
-                      INNER JOIN reservas r ON re.id_reserva = r.id_reserva
-                      WHERE r.cliente_email = %s
-                      """
-        cursor.execute(query_conteo,(email,))
-        total = cursor.fetchone()['total']
-
-        query = """
-            SELECT re.id_reseña, re.puntaje, re.comentario, re.fecha_publicacion, r.id_reserva, r.nombre_cliente, r.cliente_email
-            FROM reseñas re
-            INNER JOIN reservas r ON re.id_reserva = r.id_reserva
-            WHERE r.cliente_email = %s
-            ORDER BY re.fecha_publicacion DESC
-            LIMIT %s OFFSET %s
-        """
-        cursor.execute(query, (email, limit, offset))
-        resultados = cursor.fetchall()
-
-        for fila in resultados:
-            if fila['fecha_publicacion']:
-                fila['fecha_publicacion'] = fila['fecha_publicacion'].strftime('%Y-%m-%d %H:%M:%S')
-        
-        links = generar_paginacion(limit, offset, request, total)
-        
-
-        return jsonify({
-            "message": f"Reseñas de {email}",
-            "resultado": resultados,
-            "links": links
-        }), 200
-
-    except Exception as e:
-        return jsonify({
-            "errors":[{
-                "code": "500",
-                "message": "Error inesperado al conetarse con la base de datos",
-                "level": "error",
-                "description":f"Error interno del servidor: {e}"
-            }]
-        }), 500
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-
 @reseñas_bp.route('/admin', methods=['GET'])
 def obtener_reseñas_admin():
     conn = None
@@ -361,91 +308,75 @@ def eliminar_reseña_admin(id):
         if conn:
             conn.close()
 
-@reseñas_bp.route('/admin/<int:id>', methods=['PUT'])
-def actualizar_reseña(id):
+
+@reseñas_bp.route('/admin/promedio', methods=['GET'])
+def obtener_promedio_reseñas():
+    # Capturamos la fecha desde la URL, ej: ?fecha_desde=2024-01-01
+    fecha_desde = request.args.get('fecha_desde')
+
+    # 1. Validación de seguridad: Comprobar que la fecha tenga el formato correcto
+    if fecha_desde:
+        try:
+            # Intentamos leer la fecha para asegurar que sea YYYY-MM-DD, chequea que el formato coincida y si conicide lo pasa a un objeto time que reocnoce sql.
+            datetime.strptime(fecha_desde, '%Y-%m-%d')
+        except ValueError:
+            return jsonify({
+                "errors": [{
+                    "code": "400",
+                    "message": "Formato de fecha inválido",
+                    "level": "error",
+                    "description": "El parámetro fecha_desde debe tener el formato YYYY-MM-DD"
+                }]
+            }), 400
 
     conn = None
     cursor = None
-
-    data = request.get_json()
-
-    # validar json
-    if not data:
-        return jsonify({
-            "errors": [{
-                "code": "400",
-                "message": "Debe enviar datos para actualizar",
-                "level": "error"
-            }]
-        }), 400
-
-    puntaje = data.get('puntaje')
-    comentario = data.get('comentario')
-
-    # validar campos
-    if not puntaje or not comentario:
-        return jsonify({
-            "errors": [{
-                "code": "400",
-                "message": "Faltan datos obligatorios",
-                "level": "error"
-            }]
-        }), 400
-
     try:
-
         conn = db.get_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # verificar si existe la reseña
-        query_check = """
-            SELECT id_reseña
+        # 2. Armamos la consulta base
+        query = """
+            SELECT 
+                ROUND(AVG(puntaje), 1) as promedio, 
+                COUNT(*) as total_reseñas 
             FROM reseñas
-            WHERE id_reseña = %s
         """
+        
+        parametros = ()
 
-        cursor.execute(query_check, (id,))
-        reseña = cursor.fetchone()
+        # 3. Si mandaron una fecha, le agregamos el filtro WHERE a la consulta
+        if fecha_desde:
+            query += " WHERE fecha_publicacion >= %s"
+            parametros = (fecha_desde,)
 
-        if not reseña:
-            return jsonify({
-                "errors": [{
-                    "code": "404",
-                    "message": "La reseña no existe",
-                    "level": "error"
-                }]
-            }), 404
+        # Ejecutamos la consulta pasándole los parámetros (si los hay)
+        cursor.execute(query, parametros)
+        resultado = cursor.fetchone()
 
-        # actualizar reseña
-        query_update = """
-            UPDATE reseñas
-            SET puntaje = %s,
-                comentario = %s
-            WHERE id_reseña = %s
-        """
-
-        cursor.execute(query_update, (puntaje, comentario, id))
-
-        conn.commit()
+        promedio = resultado['promedio'] if resultado['promedio'] is not None else 0.0
+        total = resultado['total_reseñas']
 
         return jsonify({
-            "message": "Reseña actualizada correctamente"
+            "message": f"Promedio calculado {'desde ' + fecha_desde if fecha_desde else 'histórico'}",
+            "promedio": promedio,
+            "total_reseñas": total
         }), 200
 
     except Exception as e:
-
         return jsonify({
             "errors": [{
                 "code": "500",
-                "message": "Error interno del servidor",
-                "description": str(e)
+                "message": "Error inesperado al calcular el promedio de las reseñas",
+                "level": "error",
+                "description": f"Error interno del servidor: {e}"
             }]
         }), 500
-
     finally:
-
         if cursor:
             cursor.close()
-
         if conn:
             conn.close()
+
+    
+    

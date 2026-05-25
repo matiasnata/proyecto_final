@@ -1,9 +1,9 @@
-from flask import jsonify, Blueprint, render_template
+from flask import Blueprint, render_template
 from database.db import get_connection
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
-@dashboard_bp.route("/dashboard/estadistica", methods=["GET"])
+@dashboard_bp.route("/dashboard/panel_de_control", methods=["GET"])
 def mostrar_dashboard():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -32,45 +32,3 @@ def mostrar_dashboard():
     return render_template("admin.html", pendientes=total_pendientes, 
                            personas_esperadas=total_personas_esperadas, 
                            reservas_mes = total_reservas_mes)
-
-
-@dashboard_bp.route('/dashboard/promedio', methods=["GET"])
-def obtener_promedio_puntaje():
-    conn = None
-    cursor = None
-
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-        
-        query = """
-            SELECT 
-                ROUND(AVG(puntaje), 1) as promedio, 
-                COUNT(*) as total_reseñas 
-            FROM reseñas
-        """
-        cursor.execute(query)
-        resultado = cursor.fetchone()
-        
-        promedio = resultado['promedio'] if resultado['promedio'] is not None else 0.0
-        total = resultado['total_reseñas']
-        
-        return jsonify({
-            "promedio": promedio,
-            "total_reseñas": total
-        }), 200
-
-    except Exception as e:
-        return jsonify({
-            "errors": [{
-                "code": "500",
-                "message": "Error inesperado al calcular el promedio de las reseñas",
-                "level": "error",
-                "description": f"Error interno del servidor: {e}"
-            }]
-        }), 500
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
