@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, render_template, request
-from database.db import get_connection, db
+from database.db import get_connection
 from datetime import datetime
 
 dashboard_bp = Blueprint("dashboard", __name__)
@@ -58,7 +58,7 @@ def obtener_promedio_reseñas():
     conn = None
     cursor = None
     try:
-        conn = db.get_connection()
+        conn = get_connection()
         cursor = conn.cursor(dictionary=True)
 
         # 2. Armamos la consulta base
