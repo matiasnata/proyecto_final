@@ -1,0 +1,72 @@
+.inicio{
+    display: flex;
+    justify-content:flex-end; 
+    align-items: center;       
+
+    height: 60px;              
+    padding: 0 40px;           
+    background-color: white;  
+}
+.links{
+    margin: 18px;
+    color: grey;
+    text-decoration: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+}
+.reservar_mesa_2{
+    padding: 10px 20px;
+    background-color:burlywood;
+    border-radius: 30px;
+    text-transform: capitalize;
+    font-weight: bolder;
+    color: white;
+    font-size: 18px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+}
+
+
+.portada{
+    background-image: url("../imagenes/foto_portada.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 1000px;
+
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;   
+    align-items: center;
+}
+
+h1{
+    color: white;
+    text-align: center;
+    font-size: 60px;
+    text-transform: capitalize;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 10px;
+    line-height: 1;
+    
+}
+p{
+    color: white;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.reservar_mesa{
+    padding: 18px 30px;
+    background-color:burlywood;
+    border-radius: 30px;
+    text-transform: capitalize;
+    font-weight: bolder;
+    color: white;
+    font-size: 18px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
