@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savoria admin</title>
+</head>
+<body class="admin-layout">
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>Savoria admin</h2>
+        </div>
+        <nav class="links_dashboard">
+            <ul>
+                <li><a href="{{ url_for('admin_dashboard') }}">Panel de Control</a></li> <!-- bueno esto lo que hace es buscar en tu archivo app.py del frontend una funcion que se llame admin dashboard y drenderiza el template que devuelve esa funcion-->
+                <li><a href="{{ url_for('admin_menu') }}">Gestión del Menú</a></li>
+                <li><a href="{{ url_for('admin_resenas') }}">Reseñas</a></li>
+                <li><a href="{{ url_for('admin_servicios') }}">Servicios</a></li>
+                <li><a href="{{ url_for('admin_reservas') }}">Reservas</a></li>
+                <li><a href="{{ url_for('admin_estadisticas') }}">Estadísticas</a></li>
+            </ul>
+
+            </nav>
+        <div class="logout">
+            <a href="{{ url_for('inicio') }}">Volver a la Web</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <h1>{% block titulo_seccion %}{% endblock %}</h1> <!--aca ponen el titulo de su seccion-->
+            <div class="user-profile">
+                <span class="avatar">{{ usuario_autenticado[0] | upper }}</span> <!--habria que ver luego cuando manejemos el inicio de sesion que s eguarde en alguna variable usuario, el nombre del usuario que inici sesion asi aparece su incial ahi arriba-->
+            </div>
+        </header>
+
+        <div class="content-area">
+            {% block admin_content %}{% endblock %} <!--aca el contenido de su seccion-->
+        </div>
+    </main>
+    
+</body>
+</html>
