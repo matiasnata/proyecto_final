@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, render_template, request
-from database.db import get_connection
+from database.conexion import get_connection
 from datetime import datetime
 
 dashboard_bp = Blueprint("dashboard", __name__)

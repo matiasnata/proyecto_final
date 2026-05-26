@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, request
-from database import db
+from database import conexion
 from utils import generar_paginacion
 from datetime import datetime
 
@@ -19,7 +19,7 @@ def obtener_reseñas():
     
         
     try:
-        conn = db.get_connection()
+        conn = conexion.get_connection()
         cursor = conn.cursor(dictionary=True)
         query_conteo = """SELECT COUNT(*) as total FROM reseñas re 
                           INNER JOIN reservas r ON re.id_reserva = r.id_reserva"""
@@ -119,7 +119,7 @@ def crear_reseña():
         
     
     try:
-        conn = db.get_connection()
+        conn = conexion.get_connection()
         cursor = conn.cursor(dictionary=True)
 
         # 3. Validar si la reserva existe y si el estado es 'asistio'
@@ -192,7 +192,7 @@ def obtener_reseñas_admin():
         limit = int(request.args.get('_limit', 10)) #para traer 10 registros
         offset = int(request.args.get('_offset', 0))
 
-        conn = db.get_connection()
+        conn = conexion.get_connection()
         cursor = conn.cursor(dictionary=True)
 
         query_conteo = """
@@ -262,7 +262,7 @@ def eliminar_reseña_admin(id):
     conn = None
     cursor = None
     try:
-        conn = db.get_connection()  # Conexión con la DB
+        conn = conexion.get_connection()  # Conexión con la DB
         cursor = conn.cursor(dictionary=True)  # Como se van a traer los datos de la DB
 
         # Verifico si existe la reseña
