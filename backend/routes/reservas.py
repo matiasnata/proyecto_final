@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from database.db import get_connection
+from database.conexion import get_connection
 from mysql.connector import Error
 import uuid #Esto sirve para generar el codigo QR
 

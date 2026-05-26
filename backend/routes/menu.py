@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from database.db import get_connection
+from database.conexion import get_connection
 
 menu_bp = Blueprint("menu",__name__)
 
