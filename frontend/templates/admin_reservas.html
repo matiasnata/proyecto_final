@@ -1,0 +1,38 @@
+{% extends "base_admin.html" %}
+
+{% block titulo_seccion %}Gestión de Reservas{% endblock %}
+
+{% block admin_content %}
+
+    <form>
+        <input type="text" placeholder="Buscar...">
+        <select name="estado">
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="asistio">Asistió</option>
+        </select>
+        <button type="button">Nueva Reserva</button>
+    </form>
+
+    <br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Email</th>
+                <th>Personas</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+{% endblock %}
