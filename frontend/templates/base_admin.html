@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/admin.css">
     <title>Flames JB Admin</title>
-    {% block estilos%} {% endblock %} <!-- Para agregar estilos a cada seccion -->
+    {% block estilos%} {% endblock %} <!-- Para agregar estilos a cada seccion -->\
+
 </head>
 <body class="admin-layout">
     <aside class="sidebar">
@@ -63,6 +64,6 @@
             {% block admin_content %}{% endblock %} <!--aca el contenido de su seccion-->
         </div>
     </main>
-    
+    {% block scripts %} {% endblock %}
 </body>
 </html>
