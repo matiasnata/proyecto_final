@@ -1,0 +1,16 @@
+{% extends 'base_admin.html' %}
+{% block titulo_seccion%}Admin servicios{% endblock %}
+{% block admin_content %}
+<section class="servicios-cuadro">
+    <button class="Agregar">Agregar servicio</button>
+    <ul>
+        {% for servicio in servicios %}
+        <li>
+            {{ servicio.id_servicio }} {{ servicio.nombre_servicio }} {{ servicio.descripcion }} {{ servicio.activo }}
+            <button class="Modificar" id="{{ servicio.id_servicio }}">Modificar</button>
+            <button class="Eliminar" id="{{ servicio.id_servicio }}">Eliminar</button>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}
