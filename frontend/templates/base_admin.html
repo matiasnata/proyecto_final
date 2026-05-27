@@ -3,39 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flames JB admin</title>
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <title>Flames JB Admin</title>
 </head>
 <body class="admin-layout">
     <aside class="sidebar">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='imagenes/fondo.png') }}" alt="Logo Flames JB">
-            <h2>Flames JB admin</h2>
-        </div>
-        <nav class="links_dashboard">
-            <ul>
-                <li><a href="{{ url_for('admin_dashboard') }}">Panel de Control</a></li> <!-- bueno esto lo que hace es buscar en tu archivo app.py del frontend una funcion que se llame admin dashboard y drenderiza el template que devuelve esa funcion-->
-                <li><a href="{{ url_for('admin_menu') }}">Gestión del Menú</a></li>
-                <li><a href="{{ url_for('admin_resenas') }}">Reseñas</a></li>
-                <li><a href="{{ url_for('admin_servicios') }}">Servicios</a></li>
-                <li><a href="{{ url_for('admin_reservas') }}">Reservas</a></li>
-                <li><a href="{{ url_for('admin_estadisticas') }}">Estadísticas</a></li>
-            </ul>
+        <div class="sidebar-header">
+            <img src="../static/Imagenes/fondo.jpg"
+            alt="Logo Flames"
+            class="sidebar-logo">
 
-            </nav>
-        <div class="logout">
-            <a href="{{ url_for('inicio') }}">Volver a la Web</a>
+            <span class="sidebar-title">
+                Flames JB Admin
+            </span>
         </div>
+    <nav class="links_dashboard">
+        <ul>
+            <li>
+                <a href="{{ url_for('admin_dashboard') }}"><img src="../static/Imagenes/menu1.png" alt="" class="nav-icon">Panel de Control</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin_menu') }}"><img src="../static/Imagenes/estadisticas.png" alt="" class="nav-icon">Gestión del Menú</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin_resenas') }}"><img src="../static/Imagenes/star.png" alt="" class="nav-icon">Reseñas</a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin_servicios') }}"><img src="../static/Imagenes/servicios.png" alt="" class="nav-icon">Servicios</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin_reservas') }}"><img src="../static/Imagenes/reservas.png" alt="" class="nav-icon">Reservas</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin_estadisticas') }}"><img src="../static/Imagenes/dashboard.png" alt="" class="nav-icon">Estadísticas</a>
+            </li>
+
+        </ul>
+
+    </nav>
+    <div class="sidebar-footer">
+        <a href="{{ url_for('inicio') }}"> <img src="../static/Imagenes/back.png" alt="" class="nav-icon">Volver a la Web</a>
+    </div>
     </aside>
 
     <main class="main-content">
-        <header class="top-bar">
+        <header class="topbar">
             <h1>{% block titulo_seccion %}{% endblock %}</h1> <!--aca ponen el titulo de su seccion-->
             <div class="user-profile">
-                <span class="avatar">{{ usuario_autenticado[0] | upper }}</span> <!--habria que ver luego cuando manejemos el inicio de sesion que s eguarde en alguna variable usuario, el nombre del usuario que inici sesion asi aparece su incial ahi arriba-->
+                <span class="admin-avatar">{{ usuario_autenticado[0] | upper }}</span> <!--habria que ver luego cuando manejemos el inicio de sesion que s eguarde en alguna variable usuario, el nombre del usuario que inici sesion asi aparece su incial ahi arriba-->
             </div>
         </header>
 
-        <div class="content-area">
+        <div class="page-content">
             {% block admin_content %}{% endblock %} <!--aca el contenido de su seccion-->
         </div>
     </main>
