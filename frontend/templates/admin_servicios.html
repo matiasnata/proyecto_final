@@ -1,0 +1,29 @@
+{% extends 'base_admin.html' %}
+{% block titulo_seccion%}Admin servicios{% endblock %}
+{% block admin_content %}
+<section class="servicios-cuadro">
+    <section class="Agregar-servicio">
+        <button class="Agregar">Agregar servicio</button>
+            <form action="{{ url_for('gestionar_servicios') }}" method="POST">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nservicio" placeholder="Nombre del servicio">
+                <label for="descripcion"> Descripcion</label>
+                <input type="text" id="descripcion" name="dservicio" placeholder="Descripcion">
+                <button type="submit" name="accion" value="agregar">Enviar</button>
+            </form>
+    </section>
+    <section class="lista-servicios">
+    <ul>
+        {% for servicio in servicios %}
+        <li>
+            {{ servicio.id_servicio }} {{ servicio.nombre_servicio }} {{ servicio.descripcion }} {{ servicio.activo }}
+             <form action="{{ url_for('gestionar_servicios', id=servicio.id_servicio) }}" method="POST">
+                <button type="submit" name="accion" value="modificar">Modificar</button>
+                <button type="submit" name="accion" value="eliminar">Eliminar</button>
+             </form>
+        </li>
+        {% endfor %}
+    </ul>
+    </section>
+</section>
+{% endblock %}
