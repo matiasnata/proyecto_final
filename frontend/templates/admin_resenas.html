@@ -1,5 +1,6 @@
 {% extends 'base_admin.html' %}
 {% block titulo_seccion %}Gestión de reseñas{% endblock %}
+
 {% block admin_content %}
 
 <table>
@@ -7,23 +8,41 @@
         <tr>
             <th>ID</th>
             <th>Cliente</th>
+            <th>Email</th>
             <th>Puntaje</th>
             <th>Comentario</th>
+            <th>Fecha</th>
+            <th>Estado reserva</th>
             <th>Acciones</th>
         </tr>
     </thead>
 
     <tbody>
+
+        {% for reseña in resultado %}
         <tr>
-            <td>1</td>
-            <td>Ana</td>
-            <td>5</td>
-            <td>Excelente atención</td>
+            <td>{{ reseña.id_reseña }}</td>
+
+            <td>{{ reseña.nombre_cliente }}</td>
+
+            <td>{{ reseña.cliente_email }}</td>
+
+            <td>{{ reseña.puntaje }}</td>
+
+            <td>{{ reseña.comentario }}</td>
+
+            <td>{{ reseña.fecha_publicacion }}</td>
+
+            <td>{{ reseña.estado_reserva }}</td>
+
             <td>
-                <button>Editar</button>
                 <button>Eliminar</button>
             </td>
         </tr>
+
+        {% endfor %}
+
     </tbody>
 </table>
+
 {% endblock %}
