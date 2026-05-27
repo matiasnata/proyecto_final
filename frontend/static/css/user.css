@@ -1,22 +1,57 @@
-.inicio{
+.portada{
     display: flex;
-    justify-content:flex-end; 
-    align-items: center;       
-
-    height: 60px;              
-    padding: 0 40px;           
+    align-items: center;            
     background-color: white;  
+    justify-content: space-between;
 }
-.links{
-    margin: 18px;
-    color: grey;
+
+
+.menu{
+    background-color: white;
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;   
+    align-items: center;
+}
+
+.imagen_logo{
+    display: flex;
+    align-items: flex-start;
+    height: 50px;
+}
+
+h1{
+    color: white;
+    text-align: center;
+    font-size: 60px;
+    text-transform: capitalize;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 10px;
+    line-height: 1;   
+}
+
+h2{
+    color: rgb(54, 84, 63);
+    text-align: center;
+    font-size: 35px;
+    text-transform: capitalize;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1;   
+      
+}
+
+
+.links_portada{
+    color: rgb(51, 51, 51);
     text-decoration: none;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-style: italic;
     font-weight: bold;
+    margin: 20px;
+
 }
-.reservar_mesa_2{
-    padding: 10px 20px;
+.boton_reservar_mesa_portada{
+    padding: 5px 20px;
     background-color:burlywood;
     border-radius: 30px;
     text-transform: capitalize;
@@ -27,40 +62,7 @@
 
 }
 
-
-.portada{
-    background-image: url("../imagenes/foto_portada.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 1000px;
-
-    display: flex;
-    flex-direction: column;    
-    justify-content: center;   
-    align-items: center;
-}
-
-h1{
-    color: white;
-    text-align: center;
-    font-size: 60px;
-    text-transform: capitalize;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-bottom: 10px;
-    line-height: 1;
-    
-}
-p{
-    color: white;
-    text-align: center;
-    font-size: 22px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-style: italic;
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-
-.reservar_mesa{
+.boton_reservar_mesa_inicio{
     padding: 18px 30px;
     background-color:burlywood;
     border-radius: 30px;
@@ -69,4 +71,96 @@ p{
     color: white;
     font-size: 18px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.inicio{
+    background-image: url("../Imagenes/foto_portada.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+    
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;   
+    align-items: center;
+}
+
+
+.descripcion_restaurante{
+    color: white;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    
+}
+
+p   {
+    color: rgb(79, 79, 79);
+    text-align: center;
+    font-size: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+}
+
+h3{
+    color:rgb(54, 84, 63);
+    text-align: center;
+    font-size: 35px;
+    text-transform: capitalize;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1;   
+    
+}
+
+.reseñas{
+    padding: 8px;
+    background-color: whitesmoke;
+}
+
+.footer{
+    background-color:rgb(54, 84, 63);
+    display: flex;
+    justify-content:space-around
+}
+
+.columna1{
+    text-align: center
+}
+
+.nombre_restaurante{
+    color: aliceblue;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans- ;
+}
+
+.descripcion_breve{
+    
+    color: azure;
+    font-size: 18px;
+    
+}
+
+.columna2{
+ text-align: center;
+}
+
+.contacto{
+    
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans- ;
+    color: aliceblue;
+    
+}
+
+.ubicacion{
+    color: azure;
+    font-size: 18px;
+}
+
+.numero{
+    color: azure;
+    font-size: 18px;
 }
