@@ -1,38 +1,51 @@
-{% extends "base_admin.html" %}
+{% extends 'base_admin.html' %}
 
-{% block titulo_seccion %}Gestión de Reservas{% endblock %}
+{% block titulo_seccion %}Gestión de reservas{% endblock %}
 
 {% block admin_content %}
 
-    <form>
-        <input type="text" placeholder="Buscar...">
-        <select name="estado">
-            <option value="">Todos los estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="confirmada">Confirmada</option>
-            <option value="cancelada">Cancelada</option>
-            <option value="asistio">Asistió</option>
-        </select>
-        <button type="button">Nueva Reserva</button>
-    </form>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Email</th>
+            <th>Personas</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
 
-    <br>
+    <tbody>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Email</th>
-                <th>Personas</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            </tbody>
-    </table>
+        {% for reserva in total_reservas %}
+        <tr>
+            <td>{{ reserva.id_reservas }}</td>
+
+            <td>{{ reserva.nombre_cliente }}</td>
+
+            <td>{{ reserva.cliente_email }}</td>
+
+            <td>{{ reserva.cantidad_personas }}</td>
+
+            <td>{{ reserva.fecha }}</td>
+
+            <td>{{ reserva.hora }}</td>
+
+            <td>{{ reserva.estado_reserva }}</td>
+
+            <td>
+                <button>Confirmar</button>
+                <button>Editar</button>
+                <button>Cancelar</button>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
 
 {% endblock %}
