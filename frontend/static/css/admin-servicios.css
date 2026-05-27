@@ -1,0 +1,142 @@
+
+.servicios-cuadro {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e0e0d8;
+    padding: 32px;
+    max-width: 900px;
+}
+
+/* --- Sección agregar --- */
+.Agregar-servicio {
+    margin-bottom: 28px;
+}
+
+button.Agregar {
+    background-color: #2d4a2d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button.Agregar:hover {
+    background-color: #4a7c4a;
+}
+
+.Agregar-servicio form {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 20px;
+    background-color: #f5f5f0;
+    border-radius: 8px;
+    border: 1px solid #e0e0d8;
+}
+
+.Agregar-servicio form.visible {
+    display: flex;
+}
+
+.Agregar-servicio form label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888880;
+}
+
+.Agregar-servicio form input {
+    padding: 10px 14px;
+    border: 1px solid #e0e0d8;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background-color: #ffffff;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.Agregar-servicio form input:focus {
+    border-color: #4a7c4a;
+}
+
+button[name="accion"][value="agregar"] {
+    background-color: #2d4a2d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.2s;
+}
+
+button[name="accion"][value="agregar"]:hover {
+    background-color: #4a7c4a;
+}
+
+/* --- Lista de servicios --- */
+.lista-servicios ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lista-servicios ul li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background-color: #f5f5f0;
+    border-radius: 8px;
+    border: 1px solid #e0e0d8;
+    font-size: 0.9rem;
+    gap: 12px;
+}
+
+.lista-servicios ul li form {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.lista-servicios ul li span {
+    flex: 1;
+    word-break: break-word
+}
+
+button[name="accion"][value="modificar"] {
+    background-color: transparent;
+    border: 1px solid #2d4a2d;
+    color: #2d4a2d;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button[name="accion"][value="modificar"]:hover {
+    background-color: #2d4a2d;
+    color: #ffffff;
+}
+
+button[name="accion"][value="eliminar"] {
+    background-color: transparent;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+button[name="accion"][value="eliminar"]:hover {
+    background-color: #c0392b;
+    color: #ffffff;
+}
