@@ -4,34 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/user.css">
-    <title>Savoria</title>
+    <title>FLAMES JB</title>
 </head>
 <body>
     <div class="portada">
         <img class="imagen_logo" src="../static/Imagenes/foto_logo.png" alt="Logo Flames JB">
         <div>
-        <a href="" class="links_portada">Inicio</a>
-        <a href="" class="links_portada">Nuestro Menú</a>
-        <a href="" class="links_portada">Reseñas</a>
-        <button class="boton_reservar_mesa_portada">Reservar mesa</button></div>
+        <a href="#inicio" class="links_portada">Inicio</a>
+        <a href="#menu" class="links_portada">Nuestro Menú</a>
+        <a href="#reseñas" class="links_portada">Reseñas</a>
+        <a href="#reserva"><button class="boton_reservar_mesa_portada">Reservar mesa</button></a></div>
     </div>
-    <div class="inicio">
+    <div id="inicio" class="inicio">
         <h1> Sabores auténticos,<br>momentos inolvidables</h1>
         <p class="descripcion_restaurante">Descubre nuestra cocina de autor en un ambiente cálido e íntimo.<br>Una experiencia gastronómica diseñada para deleitar todos tus sentidos.</p>
-        <button class="boton_reservar_mesa_inicio">Reservar mesa ahora</button>
+        <a href="#reserva"><button class="boton_reservar_mesa_inicio">Reservar mesa ahora</button></a>
     </div>
-    <div class="menu">
+    <div id="menu" class="menu">
         <h2>Nuestro menú</h2>
         <p>Nuestros platos con sus respectivos ingredientes</p>
         
 
     </div>
-    <div class="reseñas">
+    <div id="reseñas" class="reseñas">
         <h2>Reseñas recientes</h2>
         <p>Opiniones de nuestros clientes</p>
 
     </div>
-    <div>
+    <div id="reserva">
         <h3>Reserva tu mesa</h3>
         <p>Realiza la reserva en pocos pasos</p>
     </div>
@@ -46,6 +46,7 @@
             <p class="ubicacion">📍   Av San juan 1234, Boedo</p>
             <p class="numero">📞   +54 9 11 3435-6787</p>
         </div>
+        <a href="http://127.0.0.1:5001/admin/dashboard"><button class="admin_panel">⚙ Admin Panel</button></a>
     </div>   
 </body>
 </html>
