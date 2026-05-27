@@ -39,7 +39,7 @@ body {
     font-size: 20px;
     font-weight: bold;
     color: #35533c;
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px solid #dddddd;
     background-color: #ffffff;
 }   
 
@@ -77,8 +77,27 @@ body {
 }
 
 .sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid #eeeeee;
+    padding: 20px 40px;
+    border-top: 1px solid #dddddd;
+}
+
+.sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-decoration: none;
+    color: #42526b;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+.sidebar-footer a:hover {
+    color: #35533c;
 }
 
 .sidebar-header {
@@ -108,14 +127,24 @@ body {
 
 .links_dashboard li {
     margin-bottom: 16px;
+    list-style: none;
 }
 
 .links_dashboard a {
     display: flex;
     align-items: center;
     gap: 12px;
+
+    width: 100%;
+    min-width: 230px;
+
+    white-space: nowrap;
+
     text-decoration: none;
-    color: #35533c;
+    color: #24364b;
+
+    padding: 10px 12px;
+    border-radius: 10px;
 }
 
 .nav-icon {

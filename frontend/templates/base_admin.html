@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/admin.css">
-    <title>Savoria admin</title>
+    <title>Flames JB</title>
 </head>
 <body class="admin-layout">
     <aside class="sidebar">
@@ -14,7 +14,7 @@
             class="sidebar-logo">
 
             <span class="sidebar-title">
-                Flames JB
+                Flames JB Admin
             </span>
         </div>
     <nav class="links_dashboard">
@@ -22,7 +22,7 @@
 
             <li>
                 <a href="{{ url_for('admin_dashboard') }}">
-                    <img src="/static/Imagenes/dashboard.png"
+                    <img src="../static/Imagenes/menu1.png"
                          alt=""
                         class="nav-icon">
 
@@ -32,7 +32,7 @@
 
             <li>
                 <a href="{{ url_for('admin_menu') }}">
-                    <img src="/static/Imagenes/menu.png"
+                    <img src="../static/Imagenes/estadisticas.png"
                         alt=""
                         class="nav-icon">
 
@@ -42,7 +42,7 @@
 
             <li>
                 <a href="{{ url_for('admin_resenas') }}">
-                    <img src="/static/Imagenes/star.png"
+                    <img src="../static/Imagenes/star.png"
                         alt=""
                         class="nav-icon">
 
@@ -51,7 +51,7 @@
             </li>
             <li>
                 <a href="{{ url_for('admin_servicios') }}">
-                    <img src="/static/Imagenes/servicios.png"
+                    <img src="../static/Imagenes/servicios.png"
                          alt=""
                          class="nav-icon">
                     Servicios
@@ -60,7 +60,7 @@
 
             <li>
                 <a href="{{ url_for('admin_reservas') }}">
-                    <img src="/static/Imagenes/reservas.png"
+                    <img src="../static/Imagenes/reservas.png"
                         alt=""
                         class="nav-icon">
                     Reservas
@@ -69,7 +69,7 @@
 
             <li>
                 <a href="{{ url_for('admin_estadisticas') }}">
-                    <img src="/static/Imagenes/estadisticas.png"
+                    <img src="../static/Imagenes/dashboard.png"
                          alt=""
                          class="nav-icon">
                     Estadísticas
@@ -79,9 +79,16 @@
         </ul>
 
     </nav>
-        <div class="sidebar-footer">
-            <a href="{{ url_for('inicio') }}">Volver a la Web</a>
-        </div>
+    <div class="sidebar-footer">
+        <a href="{{ url_for('inicio') }}">
+            <img
+                src="../static/Imagenes/back.png"
+                alt=""
+                class="nav-icon"
+            >
+            Volver a la Web
+        </a>
+    </div>
     </aside>
 
     <main class="main-content">
