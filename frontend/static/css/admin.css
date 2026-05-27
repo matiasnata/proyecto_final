@@ -1,0 +1,238 @@
+/* ---------- Reset ---------- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f5f5;
+    color: #24364b;
+}
+
+
+/* ---------- Layout ---------- */
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+    width: 350px;
+    background-color: #ffffff;
+    border-right: 1px solid #dddddd;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.sidebar-header {
+    padding: 28px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #35533c;
+    border-bottom: 1px solid #999999;
+    background-color: #ffffff;
+}   
+
+.sidebar nav {
+    padding: 0px 150px 220px 40px;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-decoration: none;
+    color: #42526b;
+
+    padding: 14px 20px;
+    margin-bottom: 12px;
+
+    border-radius: 14px;
+    transition: 0.2s;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.sidebar nav a:hover {
+    background-color: #d8d7d7;
+}
+
+.sidebar nav a.active {
+    background-color: #3f5f45;
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid #eeeeee;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.sidebar-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #35533c;
+    font-family: "Poppins", sans-serif;
+}
+
+.links_dashboard ul {
+    list-style: none;
+    padding: 0;
+}
+
+.links_dashboard li {
+    margin-bottom: 16px;
+}
+
+.links_dashboard a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #35533c;
+}
+
+.nav-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+
+
+/* ---------- Main ---------- */
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ---------- Topbar ---------- */
+
+.topbar {
+    height: 95px;
+
+    background-color: white;
+    border-bottom: 1px solid #dddddd;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 40px;
+}
+
+.topbar h1 {
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+    background-color: #eceff3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+
+/* ---------- Page container ---------- */
+
+.page-content {
+    padding: 36px;
+}
+
+
+/* ---------- White card ---------- */
+
+.card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 28px;
+
+    box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+}
+
+
+/* ---------- Tabla reseñas ---------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f7f8fa;
+}
+
+th {
+    text-align: left;
+    padding: 14px;
+    font-size: 15px;
+}
+
+td {
+    padding: 14px;
+    border-top: 1px solid #eeeeee;
+}
+
+tbody tr:hover {
+    background-color: #fafafa;
+}
+
+
+/* ---------- Botón ---------- */
+
+button {
+    background-color: #3f5f45;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
