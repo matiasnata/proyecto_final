@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, Blueprint
-from database import db
+from database import conexion
 from mysql.connector import Error
 
 servicios_extra_bp= Blueprint('servicios_extra', __name__)
@@ -10,7 +10,7 @@ def ver_servicios_extras():
     dbs = None
     cursor = None
     try:
-        dbs = db.get_connection()
+        dbs = conexion.get_connection()
         cursor = dbs.cursor(dictionary = True)
         query = """
         SELECT id_servicio, nombre_servicio, descripcion
@@ -70,7 +70,7 @@ def agregar_servicio_extras():
                 }]
         }), 400
     try:
-        dbs = db.get_connection()
+        dbs = conexion.get_connection()
         cursor = dbs.cursor(dictionary=True)
         validacion_query="""
         SELECT id_servicio, nombre_servicio
@@ -128,7 +128,7 @@ def eliminar_servicio_extras(id):
     dbs = None
     cursor = None
     try:
-        dbs = db.get_connection()
+        dbs = conexion.get_connection()
         cursor = dbs.cursor(dictionary = True)
         validacion_query="""
         SELECT id_servicio
@@ -190,7 +190,7 @@ def alta_baja_modificacion_servicio_extras(id):
             }]
         }), 400
     try:
-        dbs = db.get_connection()
+        dbs = conexion.get_connection()
         cursor = dbs.cursor(dictionary = True)
         validacion_query="""
         SELECT id_servicio
@@ -251,7 +251,7 @@ def servicio_extras_por_id(id):
     dbs = None
     cursor = None
     try:
-        dbs = db.get_connection()
+        dbs = conexion.get_connection()
         cursor = dbs.cursor(dictionary=True)
         query = """ 
         SELECT nombre_servicio, descripcion
