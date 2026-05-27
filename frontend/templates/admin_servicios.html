@@ -1,4 +1,13 @@
 {% extends 'base_admin.html' %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-servicios.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/admin_servicios.js') }}"></script>
+{% endblock %}
+
 {% block titulo_seccion%}Admin servicios{% endblock %}
 {% block admin_content %}
 <section class="servicios-cuadro">
@@ -16,7 +25,12 @@
     <ul>
         {% for servicio in servicios %}
         <li>
-            {{ servicio.id_servicio }} {{ servicio.nombre_servicio }} {{ servicio.descripcion }} {{ servicio.activo }}
+            <span>
+                {{ servicio.id_servicio }}
+                {{ servicio.nombre_servicio }}
+                {{ servicio.descripcion }}
+                {{ servicio.activo }}
+            </span>
              <form action="{{ url_for('gestionar_servicios', id=servicio.id_servicio) }}" method="POST">
                 <button type="submit" name="accion" value="modificar">Modificar</button>
                 <button type="submit" name="accion" value="eliminar">Eliminar</button>
