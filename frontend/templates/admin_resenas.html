@@ -1,0 +1,29 @@
+{% extends 'base_admin.html' %}
+{% block titulo_seccion %}Gestión de reseñas{% endblock %}
+{% block admin_content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Puntaje</th>
+            <th>Comentario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Ana</td>
+            <td>5</td>
+            <td>Excelente atención</td>
+            <td>
+                <button>Editar</button>
+                <button>Eliminar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}
