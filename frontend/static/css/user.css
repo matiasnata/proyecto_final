@@ -1,9 +1,18 @@
+body {
+    margin: 0;
+    padding: 0;
+}
 .portada{
     display: flex;
     align-items: center;            
     background-color: white;  
     justify-content: space-between;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
+
 
 
 .menu{
@@ -18,6 +27,7 @@
     display: flex;
     align-items: flex-start;
     height: 50px;
+    cursor: pointer;
 }
 
 h1{
@@ -36,11 +46,12 @@ h2{
     font-size: 35px;
     text-transform: capitalize;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1;   
-      
+    line-height: 1;        
 }
 
-
+.links_portada:hover{
+    color:burlywood
+}
 .links_portada{
     color: rgb(51, 51, 51);
     text-decoration: none;
@@ -59,7 +70,11 @@ h2{
     color: white;
     font-size: 18px;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-
+    cursor: pointer;
+}
+.boton_reservar_mesa_portada:hover {
+    background-color: rgb(180, 130, 70);
+    transition: background-color 0.2s ease;
 }
 
 .boton_reservar_mesa_inicio{
@@ -71,6 +86,11 @@ h2{
     color: white;
     font-size: 18px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    cursor: pointer;
+}
+.boton_reservar_mesa_inicio:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
 }
 
 .inicio{
@@ -143,7 +163,7 @@ h3{
 }
 
 .columna2{
- text-align: center;
+text-align: center;
 }
 
 .contacto{
@@ -164,3 +184,23 @@ h3{
     color: azure;
     font-size: 18px;
 }
+
+.admin_panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(54, 84, 63);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.admin_panel:hover {
+    background-color: rgb(34, 64, 43);;
+    transition: box-shadow 0.2s ease;
+}
+
