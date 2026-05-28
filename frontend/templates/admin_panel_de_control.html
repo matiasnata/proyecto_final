@@ -1,0 +1,42 @@
+{% extends base.html %}
+
+{% block estilos %} <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-panel.css') }}">{% endblock %}
+
+{% block titulo_seccion %}Panel de control{% endblock %}
+
+{% block admin_content %}
+
+<section class="contenedor-metricas">
+    
+    <div class="metrica">
+        <div class="icono-calendario">
+            <img src="{{ url_for('static', filename='imagenes/calendario.png') }}" alt="Icono Calendario">
+        </div>
+        <div class="contenido-metrica">
+            <p class="titulo-metrica">Total Reservas (Mes)</p>
+            <h2 class="valor-metrica">{{ total_reservas }}</h2>
+        </div>
+    </div>
+
+    <div class="metrica">
+        <div class="icono-comensales">
+            <img src="{{ url_for('static', filename='imagenes/comensales.png') }}" alt="Icono Comensales">
+        </div>
+        <div class="contenido-metrica">
+            <p class="titulo-metrica">Comensales Esperados</p>
+            <h2 class="valor-metrica">{{ comensales_esperados }}</h2>
+        </div>
+    </div>
+
+    <div class="metrica">
+        <div class="icono-canceladas">
+           <img src="{{ url_for('static', filename='imagenes/canceladas.png') }}" alt="Icono Cancelado">
+        </div>
+        <div class="contenido-metrica">
+            <p class="titulo-metrica">Cancelaciones</p>
+            <h2 class="valor-metrica">{{ cancelaciones }}</h2>
+        </div>
+    </div>
+
+</section>
+
