@@ -11,11 +11,11 @@ def admin_servicios():
     return render_template('admin_servicios.html', servicios=servicios, usuario_autenticado="Juan")
 
 @app.route('/admin/dashboard')
-def admin_dashboard():
-    return render_template('base_admin.html', usuario_autenticado="Juan")
+def admin_panel():
+    return render_template('admin_panel_de_control.html', usuario_autenticado="Juan")
 
 @app.route('/admin/menu')
-def admin_menu():
+def gestionar_menu():
     return render_template('admin_menu.html', usuario_autenticado="Juan")
 
 @app.route('/admin/resenas')

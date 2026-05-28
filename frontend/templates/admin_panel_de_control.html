@@ -1,4 +1,4 @@
-{% extends base.html %}
+{% extends 'base_admin.html' %}
 
 {% block estilos %} <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-panel.css') }}">{% endblock %}
 
@@ -39,4 +39,6 @@
     </div>
 
 </section>
+
+{% endblock %}
 
