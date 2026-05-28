@@ -1,0 +1,73 @@
+.contenedor-metricas {
+    display: flex;           
+    justify-content: space-between; /* distribuye el espacio entre ellas */
+    gap: 20px;              
+    margin-bottom: 30px;     /* margen inferior para separarlo del gráfico */
+    width: 100%;             /* ocupa todo el ancho disponible */
+}
+
+.metrica {
+    background-color: #ffffff; 
+    flex: 1;                   /* hace que las 3 tarjetas midan exactamente lo mismo */
+    display: flex;             
+    align-items: center;       
+    padding: 24px 30px;        /* espacio interno (arriba/abajo - derecha/izquierda*/
+    border-radius: 12px;       
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
+    border: 1px solid #f0f0f0; 
+}
+
+.contenido-metrica {
+    display: flex;
+    flex-direction: column; 
+    margin-left: 20px;      
+}
+
+.titulo-metrica {
+    font-size: 14px;
+    color: #6b7280;         
+    margin: 0 0 4px 0;      
+    font-weight: 500;
+}
+
+.valor-metrica {
+    font-size: 32px;        
+    font-weight: 700;       
+    color: #1f2937;         
+    margin: 0;              /* elimina márgenes por defecto */
+}
+
+
+.icono-calendario,
+.icono-comensales,
+.icono-canceladas {
+    width: 60px;            
+    height: 60px;           
+    border-radius: 50%;     
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    flex-shrink: 0;          /* evita que el círculo se achique si hay poco espacio */
+}
+
+/* Ajuste del tamaño de las imágenes (png/svg) dentro del círculo */
+.icono-calendario img,
+.icono-comensales img,
+.icono-canceladas img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;    
+}
+
+
+.icono-calendario {
+    background-color: #f3f4f6; 
+}
+
+.icono-comensales {
+    background-color: #fef3c7; 
+}
+
+.icono-canceladas {
+    background-color: #fee2e2; 
+}
