@@ -28,3 +28,20 @@ for (let i = 0; i < 8; i++) {
         fila2.appendChild(div);
     }
 }
+
+const horas = ['13:00', '13:30', '14:00', '20:00', '20:30', '21:00', '21:30', '22:00'];
+
+horas.forEach(function(hora, i) {
+    const div = document.createElement('div');
+    div.classList.add('horario');
+    div.textContent = hora;
+    div.addEventListener('click', function() {
+        document.querySelectorAll('.horario').forEach(h => h.classList.remove('seleccionado'));
+        this.classList.add('seleccionado');
+    });
+    if (i < 4) {
+        fila_hora1.appendChild(div);
+    } else {
+        fila_hora2.appendChild(div);
+    }
+});
