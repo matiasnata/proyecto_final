@@ -204,3 +204,70 @@ text-align: center;
     transition: box-shadow 0.2s ease;
 }
 
+
+
+.reserva {
+    background-color: whitesmoke;
+    padding: 40px;
+    text-align: center;
+}
+
+.formulario_reserva {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 20px;
+}
+
+.calendario {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+h4 {
+    color: rgb(54, 84, 63);
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.dia_calendario {
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: center;
+    background-color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
+    margin: 5px;
+    width: 70px;
+}
+
+.dia_calendario:hover {
+    border-color: burlywood;
+    color: burlywood;
+}
+
+.dia_calendario.seleccionado {
+    border-color: burlywood;
+    color: burlywood;
+    font-weight: bold;
+}
+
+.fila_calendario {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.logo_calendario {
+    height: 25px;
+}
+.icono_calendario {
+    height: 25px;
+    vertical-align: middle;
+}
