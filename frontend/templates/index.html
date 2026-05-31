@@ -31,32 +31,47 @@
         <p>Opiniones de nuestros clientes</p>
 
     </div>
-    <div id="reserva" class="reserva">
-        <h3>Reserva tu mesa</h3>
-        <p>Realiza la reserva en pocos pasos</p>
+<div id="reserva" class="reserva">
+    <h3>Reserva tu mesa</h3>
+    <p>Realiza la reserva en pocos pasos</p>
 
-<div class="formulario_reserva">
-    <h4><img src="../static/Imagenes/reservas.png" class="logo_calendario"> Selecciona la fecha</h4>
-    <div class="calendario" id="calendario">
-        <div class="fila_calendario" id="fila1"></div>
-        <div class="fila_calendario" id="fila2"></div>
-    </div>
-    <h4>🕒Selecciona la hora</h4>
-    <div class="horarios" id="horarios">
-        <div class="fila_calendario" id="fila_hora1"></div>
-        <div class="fila_calendario" id="fila_hora2"></div>
-        <h4><img src="../static/Imagenes/comensales.png" class="logo_comensales"> ¿Cuántas personas?</h4>
+    <div class="formulario_reserva">
+
+        <h4><img src="../static/Imagenes/reservas.png" class="logo_reserva"> Selecciona la fecha</h4>
+        <div class="calendario" id="calendario">
+            <div class="fila_calendario" id="fila1"></div>
+            <div class="fila_calendario" id="fila2"></div>
+        </div>
+
+        <h4>Selecciona la hora</h4>
+        <div class="horarios" id="horarios">
+            <div class="fila_calendario" id="fila_hora1"></div>
+            <div class="fila_calendario" id="fila_hora2"></div>
+        </div>
+
+        <h4><img src="../static/Imagenes/comensales.png" class="logo_reserva"> ¿Cuántas personas?</h4>
         <div class="personas">
-        <button class="boton_personas restar">-</button>
-        <p class="cantidad_personas">2</p>
-        <button class="boton_personas sumar">+</button>
-</div>
-    </div>
-    
+            <button class="boton_personas restar">-</button>
+            <p class="cantidad_personas">2</p>
+            <button class="boton_personas sumar">+</button>
+        </div>
 
-</div>
+        <h4>Resumen de tu reserva</h4>
+        <div class="resumen">
+            <p class="resumen_dato"></p>
+            <p class="resumen_dato"></p>
+            <p class="resumen_dato"></p>
+            <input type="text" class="input_reserva" placeholder="Tu Nombre Completo">
+            <input type="email" class="input_reserva" placeholder="Tu Correo Electrónico">
+            <button class="boton_confirmar">Confirmar Reserva</button>
+        </div>
+
+        <div class="confirmacion">
+            <p>¡Confirmaste tu reserva! Pronto te llegará un código QR al mail.</p>
+        </div>
 
     </div>
+</div>
 </div>
     </div>
     <div class="footer">

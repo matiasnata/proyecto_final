@@ -263,7 +263,7 @@ h4 {
     margin-bottom: 10px;
 }
 
-.logo_calendario {
+.logo_reserva {
     height: 25px;
 }
 
@@ -327,7 +327,46 @@ h4 {
     border-color: burlywood;
 }
 
-.logo_comensales{
-    height: 25px;
 
+.resumen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input_reserva {
+    padding: 15px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 10px;
+    width: 300px;
+}
+
+.boton_confirmar {
+    padding: 15px 30px;
+    background-color: rgb(54, 84, 63);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.boton_confirmar:hover {
+    background-color: rgb(34, 64, 43);
+    transition: background-color 0.2s ease;
+}
+
+.resumen_dato {
+    font-style: normal;
+    font-weight: bold;
+    color: rgb(54, 84, 63);
+}
+
+.confirmacion {
+    display: none;
+    text-align: center;
 }

@@ -20,6 +20,7 @@ for (let i = 0; i < 8; i++) {
     div.addEventListener('click', function() {
         document.querySelectorAll('.dia_calendario').forEach(d => d.classList.remove('seleccionado'));
         this.classList.add('seleccionado');
+        actualizarResumen();
     });
 
     if (i < 4) {
@@ -29,6 +30,8 @@ for (let i = 0; i < 8; i++) {
     }
 }
 
+const fila_hora1 = document.getElementById('fila_hora1');
+const fila_hora2 = document.getElementById('fila_hora2');
 const horas = ['13:00', '13:30', '14:00', '20:00', '20:30', '21:00', '21:30', '22:00'];
 
 horas.forEach(function(hora, i) {
@@ -38,6 +41,7 @@ horas.forEach(function(hora, i) {
     div.addEventListener('click', function() {
         document.querySelectorAll('.horario').forEach(h => h.classList.remove('seleccionado'));
         this.classList.add('seleccionado');
+        actualizarResumen();
     });
     if (i < 4) {
         fila_hora1.appendChild(div);
@@ -51,6 +55,7 @@ document.querySelector('.sumar').addEventListener('click', function() {
     let cantidad = parseInt(p.textContent);
     if (cantidad < 12) {
         p.textContent = cantidad + 1;
+        actualizarResumen();
     }
 });
 
@@ -59,5 +64,38 @@ document.querySelector('.restar').addEventListener('click', function() {
     let cantidad = parseInt(p.textContent);
     if (cantidad > 1) {
         p.textContent = cantidad - 1;
+        actualizarResumen();
     }
 });
+
+document.querySelector('.boton_confirmar').addEventListener('click', function() {
+    const datos = document.querySelectorAll('.resumen_dato');
+    const fechaSeleccionada = document.querySelector('.dia_calendario.seleccionado');
+    const horaSeleccionada = document.querySelector('.horario.seleccionado');
+    const personas = document.querySelector('.cantidad_personas').textContent;
+
+    if (fechaSeleccionada) datos[0].textContent = 'Fecha: ' + fechaSeleccionada.textContent.trim();
+    if (horaSeleccionada) datos[1].textContent = 'Hora: ' + horaSeleccionada.textContent;
+    datos[2].textContent = 'Personas: ' + personas;
+
+    document.querySelector('.calendario').style.display = 'none';
+    document.querySelector('.horarios').style.display = 'none';
+    document.querySelector('.personas').style.display = 'none';
+    document.querySelector('.resumen').style.display = 'none';
+    document.querySelector('.confirmacion').style.display = 'block';
+});
+
+function actualizarResumen() {
+    const fechaSeleccionada = document.querySelector('.dia_calendario.seleccionado');
+    const horaSeleccionada = document.querySelector('.horario.seleccionado');
+    const personas = document.querySelector('.cantidad_personas').textContent;
+    const datos = document.querySelectorAll('.resumen_dato');
+
+    if (fechaSeleccionada) {
+        datos[0].textContent = 'Fecha: ' + fechaSeleccionada.textContent.trim();
+    }
+    if (horaSeleccionada) {
+        datos[1].textContent = 'Hora: ' + horaSeleccionada.textContent;
+    }
+    datos[2].textContent = 'Personas: ' + personas;
+}
