@@ -221,7 +221,7 @@ text-align: center;
 
 .calendario {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -257,7 +257,6 @@ h4 {
     color: burlywood;
     font-weight: bold;
 }
-
 .fila_calendario {
     display: flex;
     justify-content: center;
@@ -267,7 +266,39 @@ h4 {
 .logo_calendario {
     height: 25px;
 }
-.icono_calendario {
-    height: 25px;
-    vertical-align: middle;
+
+.horarios {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.horario {
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 12px;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    background-color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
+    width: 100px;
+    margin: 5px;
+}
+
+.horario:hover {
+    border-color: burlywood;
+    color: burlywood;
+}
+
+.horario.seleccionado {
+    background-color: burlywood;
+    color: white;
+    font-weight: bold;
+    border-color: burlywood;
+}
+
+.reloj{
+    height: 10px;
 }
