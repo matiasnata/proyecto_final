@@ -31,9 +31,18 @@
         <p>Opiniones de nuestros clientes</p>
 
     </div>
-    <div id="reserva">
+    <div id="reserva" class="reserva">
         <h3>Reserva tu mesa</h3>
         <p>Realiza la reserva en pocos pasos</p>
+
+        <div class="formulario_reserva">
+        <h4><img src="../static/Imagenes/reservas.png" class="logo_calendario"> Selecciona la fecha</h4>
+        <div class="calendario" id="calendario"></div>
+        <div class="fila_calendario" id="fila1"></div>
+        <div class="fila_calendario" id="fila2"></div>
+</div>
+    </div>
+</div>
     </div>
     <div class="footer">
         <div class="columna1">
@@ -47,6 +56,8 @@
             <p class="numero">📞   +54 9 11 3435-6787</p>
         </div>
         <a href="http://127.0.0.1:5001/admin/dashboard"><button class="admin_panel">⚙ Admin Panel</button></a>
-    </div>   
+    </div> 
+    
+    <script src="../static/scripts/reservas_inicio.js"></script>
 </body>
 </html>
