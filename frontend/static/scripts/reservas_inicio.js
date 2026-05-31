@@ -45,3 +45,19 @@ horas.forEach(function(hora, i) {
         fila_hora2.appendChild(div);
     }
 });
+
+document.querySelector('.sumar').addEventListener('click', function() {
+    let p = document.querySelector('.cantidad_personas');
+    let cantidad = parseInt(p.textContent);
+    if (cantidad < 12) {
+        p.textContent = cantidad + 1;
+    }
+});
+
+document.querySelector('.restar').addEventListener('click', function() {
+    let p = document.querySelector('.cantidad_personas');
+    let cantidad = parseInt(p.textContent);
+    if (cantidad > 1) {
+        p.textContent = cantidad - 1;
+    }
+});
