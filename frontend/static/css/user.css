@@ -299,6 +299,35 @@ h4 {
     border-color: burlywood;
 }
 
-.reloj{
-    height: 10px;
+.personas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton_personas {
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: white;
+    font-size: 18px;
+    margin: 10px;
+}
+
+.cantidad_personas {
+    font-size: 35px;
+    font-weight: bold;
+    color: rgb(54, 84, 63);
+    margin: 10px;
+}
+
+.boton_personas:hover {
+    color: burlywood;
+    border-color: burlywood;
+}
+
+.logo_comensales{
+    height: 25px;
+
 }
