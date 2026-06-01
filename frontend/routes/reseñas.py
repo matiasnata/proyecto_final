@@ -9,7 +9,7 @@ def admin_resenas():
     email_ingresado = request.args.get('email_buscado')
 
     # Definimos la URL nuestro backend
-    url_backend = 'http://127.0.0.1:5000/api/reseñas'
+    url_backend = 'http://127.0.0.1:5001/api/reseñas'
 
     # Armamos la caja que contiene los parametros para enviar al backend
     parametros_para_backend = {}
@@ -42,7 +42,7 @@ def admin_resenas():
 @reseñas_bp.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar_reseña_frontend(id):
     # 1. Definimos la URL exacta del backend para esa reseña específica
-    url_backend = f'http://127.0.0.1:5000/api/reseñas/{id}'
+    url_backend = f'http://127.0.0.1:5001/api/reseñas/{id}'
     
     try:
         # 2. ¡El Frontend llama al Backend!
