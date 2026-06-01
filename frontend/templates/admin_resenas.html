@@ -1,18 +1,35 @@
 {% extends 'base_admin.html' %}
+{% block estilos %} <link rel="stylesheet" href="{{url_for('static', filename='css/admin-reseñas.css')}}">{% endblock %}
 {% block titulo_seccion %}Gestión de reseñas{% endblock %}
 
 {% block admin_content %}
 
-<table>
+<div>
+    <form method="GET" action="{{ url_for('admin_resenas') }}"> <!--Asocia lo que obtuvimos en este form con la ruta del frontend de admin_resena-->
+        <input type="email" name="email_buscado" placeholder="Buscar por email..." 
+         value="{{ request.args.get('email_buscado', '') }}"> <!--esto es para que en el buscador se guarde lo que buscamos y no se borre una vez buscado-->
+        <button type="submit" class="btn-verde">Buscar</button>
+    </form>
+    
+    <a href="{{ url_for('admin_resenas') }}">Limpiar filtro</a> <!--te retorna al admin resenas sin ninguna query param, aparecen de nuevo todas las reseñas-->
+</div> 
+
+{% if resultado | length == 0 %} <!--analiza el resultado obtenido en caso de que no se haya encontrado nignuna reseña con ese mail envia un mensaje-->
+    <div>
+        No se encontraron reseñas con ese mail asociado.
+    </div>
+
+
+{% else %}
+<table class="tabla-admin">
     <thead>
         <tr>
             <th>ID</th>
             <th>Cliente</th>
             <th>Email</th>
-            <th>Puntaje</th>
+            <th>Estrellas</th>
             <th>Comentario</th>
             <th>Fecha</th>
-            <th>Estado reserva</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -27,22 +44,38 @@
 
             <td>{{ reseña.cliente_email }}</td>
 
-            <td>{{ reseña.puntaje }}</td>
+            <td>{{ reseña.puntaje }}⭐</td>
 
             <td>{{ reseña.comentario }}</td>
 
             <td>{{ reseña.fecha_publicacion }}</td>
 
-            <td>{{ reseña.estado_reserva }}</td>
-
             <td>
-                <button>Eliminar</button>
+                <form action="{{ url_for('eliminar_reseña_frontend', id=reseña.id_reseña) }}" method="POST" class="form-eliminar">
+                    <button type="submit" class="btn-rojo">
+                        Eliminar
+                    </button>
+                </form>
             </td>
         </tr>
-
         {% endfor %}
 
     </tbody>
 </table>
 
+{% endif %}
+
+<div id="ventana-confirmacion" class="ventana-oculta">
+    <div class="caja-confirmacion">
+        <h3>¿Estás seguro?</h3>
+        <p>Esta acción no se puede deshacer y la reseña se borrará permanentemente.</p>
+        
+        <div class="botones-ocultos">
+            <button type="button" id="btn-cancelar" class="btn-gris">Cancelar</button>
+            <button type="button" id="btn-confirmar" class="btn-rojo">Aceptar</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
+
+{% block scripts %} <script src="{{ url_for('static', filename='scripts/admin-reseñas.js') }}"></script> {% endblock %}
