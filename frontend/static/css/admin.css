@@ -50,7 +50,7 @@ body {
 .sidebar nav a {
     display: flex;
     align-items: center;
-    gap: 12px;
+     gap: 12px;
 
     text-decoration: none;
     color: #42526b;
