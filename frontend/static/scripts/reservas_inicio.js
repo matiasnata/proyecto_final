@@ -17,9 +17,15 @@ for (let i = 0; i < 8; i++) {
         <span>${meses[fecha.getMonth()]}</span>
     `;
 
+    const anio = fecha.getFullYear();
+    const mes  = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia  = String(fecha.getDate()).padStart(2, '0');
+    div.dataset.fechaIso = `${anio}-${mes}-${dia}`;
+
     div.addEventListener('click', function() {
         document.querySelectorAll('.dia_calendario').forEach(d => d.classList.remove('seleccionado'));
         this.classList.add('seleccionado');
+        document.getElementById('input_fecha').value = this.dataset.fechaIso;
         actualizarResumen();
     });
 
@@ -41,6 +47,7 @@ horas.forEach(function(hora, i) {
     div.addEventListener('click', function() {
         document.querySelectorAll('.horario').forEach(h => h.classList.remove('seleccionado'));
         this.classList.add('seleccionado');
+        document.getElementById('input_hora').value = hora;
         actualizarResumen();
     });
     if (i < 4) {
@@ -55,6 +62,7 @@ document.querySelector('.sumar').addEventListener('click', function() {
     let cantidad = parseInt(p.textContent);
     if (cantidad < 12) {
         p.textContent = cantidad + 1;
+        document.getElementById('input_personas').value = cantidad + 1;
         actualizarResumen();
     }
 });
@@ -64,32 +72,44 @@ document.querySelector('.restar').addEventListener('click', function() {
     let cantidad = parseInt(p.textContent);
     if (cantidad > 1) {
         p.textContent = cantidad - 1;
+        document.getElementById('input_personas').value = cantidad - 1;
         actualizarResumen();
     }
 });
 
-document.querySelector('.boton_confirmar').addEventListener('click', function() {
-    const datos = document.querySelectorAll('.resumen_dato');
-    const fechaSeleccionada = document.querySelector('.dia_calendario.seleccionado');
-    const horaSeleccionada = document.querySelector('.horario.seleccionado');
-    const personas = document.querySelector('.cantidad_personas').textContent;
+document.getElementById('form_reserva').addEventListener('submit', function(e) {
+    const nombre = document.querySelector('.input_reserva[name="nombre_cliente"]').value.trim();
+    const email  = document.querySelector('.input_reserva[name="cliente_email"]').value.trim();
+    const fecha  = document.getElementById('input_fecha').value;
+    const hora   = document.getElementById('input_hora').value;
 
-    if (fechaSeleccionada) datos[0].textContent = 'Fecha: ' + fechaSeleccionada.textContent.trim();
-    if (horaSeleccionada) datos[1].textContent = 'Hora: ' + horaSeleccionada.textContent;
-    datos[2].textContent = 'Personas: ' + personas;
-
-    document.querySelector('.calendario').style.display = 'none';
-    document.querySelector('.horarios').style.display = 'none';
-    document.querySelector('.personas').style.display = 'none';
-    document.querySelector('.resumen').style.display = 'none';
-    document.querySelector('.confirmacion').style.display = 'block';
+    if (!nombre) {
+        e.preventDefault();
+        alert('Por favor ingresá tu nombre completo.');
+        return;
+    }
+    if (!email || !email.includes('@')) {
+        e.preventDefault();
+        alert('Por favor ingresá un correo electrónico válido.');
+        return;
+    }
+    if (!fecha) {
+        e.preventDefault();
+        alert('Por favor seleccioná una fecha.');
+        return;
+    }
+    if (!hora) {
+        e.preventDefault();
+        alert('Por favor seleccioná un horario.');
+        return;
+    }
 });
 
 function actualizarResumen() {
     const fechaSeleccionada = document.querySelector('.dia_calendario.seleccionado');
-    const horaSeleccionada = document.querySelector('.horario.seleccionado');
-    const personas = document.querySelector('.cantidad_personas').textContent;
-    const datos = document.querySelectorAll('.resumen_dato');
+    const horaSeleccionada  = document.querySelector('.horario.seleccionado');
+    const personas          = document.querySelector('.cantidad_personas').textContent;
+    const datos             = document.querySelectorAll('.resumen_dato');
 
     if (fechaSeleccionada) {
         datos[0].textContent = 'Fecha: ' + fechaSeleccionada.textContent.trim();
