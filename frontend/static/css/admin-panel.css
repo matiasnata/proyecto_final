@@ -1,3 +1,39 @@
+.contenedor-busqueda {
+    display: flex;
+    align-items: center; /* Los centra verticalmente para que queden parejos */
+    gap: 15px; 
+    margin-bottom: 25px; 
+}
+
+/* Hacemos que el input y el botón de buscar también queden prolijos */
+.form-busqueda {
+    display: flex;
+    gap: 10px;
+}
+
+/* -------------------------------------------
+   BOTÓN LIMPIAR FILTRO (Azul)
+------------------------------------------- */
+
+.btn-limpiar {
+    text-decoration: none; /* Le sacamos el subrayado típico de los enlaces <a> */
+    background-color: transparent;
+    border: 1px solid #3498db; 
+    color: #3498db;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer; /* Cambia el cursor al pasar por encima para indicar que es clickeable */
+    transition: all 0.2s;
+    display: inline-block; /* Necesario para que respete el padding siendo un enlace */
+}
+
+.btn-limpiar:hover {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+
 .contenedor-metricas {
     display: flex;           
     justify-content: space-between; /* distribuye el espacio entre ellas */

@@ -1,0 +1,104 @@
+.contenedor-busqueda {
+    display: flex;
+    align-items: center; /* Los centra verticalmente para que queden parejos */
+    gap: 15px; 
+    margin-bottom: 25px; 
+}
+
+/* Hacemos que el input y el botón de buscar también queden prolijos */
+.form-busqueda {
+    display: flex;
+    gap: 10px;
+}
+
+/* -------------------------------------------
+   BOTÓN LIMPIAR FILTRO (Azul)
+------------------------------------------- */
+
+.btn-limpiar {
+    text-decoration: none; /* Le sacamos el subrayado típico de los enlaces <a> */
+    background-color: transparent;
+    border: 1px solid #3498db; 
+    color: #3498db;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer; /* Cambia el cursor al pasar por encima para indicar que es clickeable */
+    transition: all 0.2s;
+    display: inline-block; /* Necesario para que respete el padding siendo un enlace */
+}
+
+.btn-limpiar:hover {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+
+/* Estado inicial: invisible y sin ocupar espacio */
+.ventana-oculta {
+    display: none;
+}
+
+/* Estado activo: fondo semitransparente cubriendo toda la pantalla */
+.ventana-visible {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0 0 0 / 0.5); /* Fondo gris transparente */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /*para que se dibuje por encima de otro elemento, ya que es un elemento flotante, solo funciona si hay un position diferente a stiatic.*/
+}
+
+/* El cartelito blanco*/
+.caja-confirmacion {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px; /* Para que no se estire demasiado en monitores grandes */
+    width: 90%;
+}
+
+/* 2. Textos del modal */
+.caja-confirmacion h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #2c3e50; /* Un azul oscuro/grisáceo muy elegante */
+    font-size: 1.5rem;
+}
+
+.caja-confirmacion p {
+    color: #666666; /* Gris para que no compita con el título */
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* 3. El contenedor de los botones */
+.botones-ocultos {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Esta es la clave para separarlos parejito */
+}
+
+/* Estado normal del botón */
+.btn-rojo {
+    background-color: transparent;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s; /* Esto hace que el cambio de color sea suave */
+}
+
+/* Efecto al pasar el mouse por encima */
+.btn-rojo:hover {
+    background-color: #c0392b;
+    color: #ffffff;
+}
