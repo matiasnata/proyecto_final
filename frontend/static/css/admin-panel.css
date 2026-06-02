@@ -107,3 +107,27 @@
 .icono-canceladas {
     background-color: #fee2e2; 
 }
+
+#graficoReservas {
+    max-height: 250px;
+}
+.grafico-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.grafico-header p {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 4px 0 0 0;
+}
+
+.contenedor-grafico {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+}
