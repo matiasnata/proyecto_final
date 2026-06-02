@@ -60,7 +60,7 @@
             const labels = data.length > 0 ? data.map(d => d.dia) : ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
             const valores = data.length > 0 ? data.map(d => d.reservas) : [14, 18, 20, 25, 4, 23, 35]; 
 
-            const ctx = document.getElementById("graficoReservas").getContext("2d");
+            const ctx = document.getElementById("graficoReservas").getContext("2d");<!-- le doy el contexto a chart.js de que es un grafico en 2d y le paso los estilos-->
             new Chart(ctx, {
                 type: "line",
                 data: {
