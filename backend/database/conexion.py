@@ -4,11 +4,11 @@ def get_connection():
     try:
         connection = mysql.connector.connect(
             host = 'localhost',
-            user = '',
-            password ='', 
-            database = '',
+            user = 'root',
+            password ='1234', 
+            database = 'restaurante',
         )
         return connection 
-    except mysql.connector.Error as e:
+    except Exception as e:
         print(f'Error al conectar a la base de datos: {e}')
         return None

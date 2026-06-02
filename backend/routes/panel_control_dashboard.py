@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint, render_template, request
 from database.conexion import get_connection
-from datetime import datetime
+from datetime import datetime, timedelta
 
 dashboard_bp = Blueprint("dashboard", __name__)
     
@@ -124,6 +124,61 @@ def obtener_promedio_reseñas():
                 "description": f"Error interno del servidor: {e}"
             }]
         }), 500
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
+@dashboard_bp.route('/dashboard/reservas-semana', methods=["GET"])
+def obtener_reservas_semana():
+    conn = None
+    cursor = None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        query = """
+            SELECT 
+                DAYOFWEEK(fecha) as dia_numero,
+                DATE(fecha) as fecha,
+                COUNT(*) as reservas
+            FROM reservas
+            WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+            AND estado_reserva != 'cancelada'
+            GROUP BY DATE(fecha), DAYOFWEEK(fecha)
+            ORDER BY fecha ASC
+        """
+
+        cursor.execute(query)
+        resultado = cursor.fetchall()
+
+        dias_map = {1: "Dom", 2: "Lun", 3: "Mar", 4: "Mié", 5: "Jue", 6: "Vie", 7: "Sáb"}
+
+        data = [
+            {
+                "dia": dias_map.get(row["dia_numero"], "?"),
+                "reservas": row["reservas"]
+            }
+            for row in resultado
+        ]
+
+        return jsonify({
+            "message": "Reservas de los últimos 7 días obtenidas con éxito",
+            "data": data
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "errors": [{
+                "code": "500",
+                "message": "Error al obtener reservas semanales",
+                "level": "error",
+                "description": f"Error interno del servidor: {e}"
+            }]
+        }), 500
+
     finally:
         if cursor:
             cursor.close()
