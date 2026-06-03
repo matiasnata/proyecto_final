@@ -13,11 +13,9 @@ def obtener_resumen_mensual():
         hoy = datetime.now()
         mes_actual = hoy.month
         anio_actual = hoy.year
-
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-       
+        
+        conn = get_connection()        
+        cursor = conn.cursor(dictionary=True)        
         query = """
             SELECT 
             

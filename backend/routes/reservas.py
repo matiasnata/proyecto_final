@@ -217,7 +217,8 @@ def cancelar_reserva_id(id_reservas):
                 'description': 'Fallo interno del servidor'
             }]
         }), 500
-
+        
+@reservas_bp.route("/reservas/disponibilidad", methods=['GET'])
 def consultar_disponiblidad_hora():
     fecha = request.args.get('fecha')
     turnos_fijos = ['11:00', '12:30', '14:00', '15:30', '17:00', '20:00', '21:30', '23:00']
@@ -228,7 +229,7 @@ def consultar_disponiblidad_hora():
         return jsonify({
             "errors":[{
                 "code":"400",
-                "message":"Eija primero la fecha",
+                "message":"Elija primero la fecha",
                 "level":"error",
                 "Description": "Falta el parametro fecha"
             }]
@@ -236,22 +237,21 @@ def consultar_disponiblidad_hora():
     
     try:
         conn = get_connection()
-        cursor = conn.cusor(dictionary=True)
+        cursor = conn.cursor(dictionary=True)
         
-        query = """SELECT hora, COALESCE(SUM(cantidad_personas), o
-        0) as total_personas
+        query = """SELECT hora, COALESCE(SUM(cantidad_personas),0) as total_personas
         FROM reservas
         WHERE fecha=%s AND estado_reserva IN ('pendiente', 'confirmada')
         GROUP BY hora"""
         
         cursor.execute(query,(fecha,))
-        resultados = cursor.fecthall()
+        resultados = cursor.fetchall()
         
         ocupacion_por_hora = {}
         
         for fila in resultados:
             hora_str = str(fila['hora'])[:5]
-            ocupacion_por_hora[hora_str] = int['total_personas']
+            ocupacion_por_hora[hora_str] = int(fila['total_personas'])
             
         turnos_disponibles = []
         
