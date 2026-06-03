@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from flask import Blueprint, render_template, url_for, request, redirect
 import requests
 
@@ -125,6 +125,7 @@ def estadisticas_reseñas():
               
     return render_template(
         'admin_panel_de_control.html',
+        usuario_autenticado="Admin",
         anio_seleccionado=anio_buscar,
         anios_disponibles=anios_disponibles, # PASAMOS LA LISTA AL HTML
         meses_grafico=meses_grafico,
