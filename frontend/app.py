@@ -4,9 +4,11 @@ from routes.menu import menu_bp
 from routes.reservas import reservas_bp
 from routes.reseñas import reseñas_bp
 from routes.admin import admin_bp
+from routes.auth import auth_bp
 
 app = Flask(__name__)
 
+app.register_blueprint(auth_bp)
 app.register_blueprint(inicio_bp)
 app.register_blueprint(menu_bp)
 app.register_blueprint(reservas_bp)
