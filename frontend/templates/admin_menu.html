@@ -2,7 +2,7 @@
 {% block titulo_seccion %}Gestión del Menú{% endblock %}
 
 {% block estilos %}
-<link rel="stylesheet" href="../static/css/admin-menu.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-menu.css') }}">
 {% endblock %}
 
 {% block admin_content %}
