@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from flask import Blueprint, render_template, url_for, request, redirect
 import requests
 
@@ -35,7 +35,7 @@ def admin_resenas():
         lista_resenas = datos.get('resultado', []) #si no encuentra nada devuelve una lista en blanco
         links = datos.get('links', {}) #si no encuentra nada devuelve un diccionario vacio
         
-        url_frontend_base = url_for('admin_resenas')
+        url_frontend_base = url_for('reseñas.admin_resenas')
         
         def corregir_link(link_backend):
             if link_backend and 'href' in link_backend:
@@ -65,6 +65,7 @@ def admin_resenas():
         link_next=link_next,
         link_first=link_first,
         link_last=link_last,
+        usuario_autenticado="Juan",
     )
 
 @reseñas_bp.route('/eliminar/<int:id>', methods=['POST'])
@@ -124,12 +125,13 @@ def estadisticas_reseñas():
         total_reseñas = 0
               
     return render_template(
-        'admin_panel_de_control.html',
+        'admin_reseñas_estadisticas.html',
         anio_seleccionado=anio_buscar,
         anios_disponibles=anios_disponibles, # PASAMOS LA LISTA AL HTML
         meses_grafico=meses_grafico,
         promedios_grafico=promedios_grafico,
         promedio_general=promedio_general,
-        total_reseñas=total_reseñas
+        total_reseñas=total_reseñas,
+        usuario_autenticado="Juan"
     )
     
