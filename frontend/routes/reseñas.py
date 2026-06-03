@@ -1,5 +1,4 @@
 import datetime
-
 from flask import Blueprint, render_template, url_for, request, redirect
 import requests
 
@@ -9,7 +8,7 @@ reseñas_bp = Blueprint('reseñas', __name__,  url_prefix='/admin/resenas')
 def admin_resenas():
     # con el formulario, se le agrega a la url una query param con lo que envio el usuario, el valor se guarda en la variable email_buscSO
     email_ingresado = request.args.get('email_buscado')
-    limit = request.args.get('_limit', 10)   # 10 por defecto si no viene ninguno
+    limit = request.args.get('_limit', 5)   # 10 por defecto si no viene ninguno
     offset = request.args.get('_offset', 0)  # 0 por defecto para la primera página
 
     # Definimos la URL nuestro backend
