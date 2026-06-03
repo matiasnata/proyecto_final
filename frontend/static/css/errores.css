@@ -1,0 +1,85 @@
+/* Centrado del contenedor principal de error dentro del panel */
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 20px;
+}
+
+/* La caja blanca del error */
+.caja-error {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e0e0d8;
+    padding: 48px 40px;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+/* Los números gigantes 404 y 500 */
+.caja-error h1 {
+    font-size: 6rem;
+    margin: 0 0 10px 0;
+    line-height: 1;
+    font-weight: bold;
+}
+
+
+.codigo-404 {
+    color: #2d4a2d;
+}
+
+.codigo-500 {
+    color: #c0392b;
+}
+
+/* Títulos y textos descriptivos */
+.caja-error h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.caja-error p {
+    color: #666666;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+/*  Botones genéricos de error  */
+.btn-volver-error {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+/* Variante Verde  */
+.btn-volver-error.verde {
+    background-color: #2d4a2d;
+    color: #ffffff;
+    border: 1px solid #2d4a2d;
+}
+
+.btn-volver-error.verde:hover {
+    background-color: #4a7c4a;
+    border-color: #4a7c4a;
+}
+
+/* Variante Roja outline */
+.btn-volver-error.rojo {
+    background-color: transparent;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+}
+
+.btn-volver-error.rojo:hover {
+    background-color: #c0392b;
+    color: #ffffff;
+}
