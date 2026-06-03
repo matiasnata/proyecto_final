@@ -42,6 +42,6 @@ CREATE TABLE IF NOT EXISTS menu(
 CREATE TABLE IF NOT EXISTS servicios_extras(
     id_servicio INT AUTO_INCREMENT PRIMARY KEY,
     nombre_servicio VARCHAR(100) NOT NULL,
-    descripción TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE -- esto luego podemos hacer que si esta activo se agregue en el footer de la pagina, pero si no lo esta no se muestre, asi el administrador puede agregar o quitar servicios extras sin necesidad de modificar el codigo del front
 )
