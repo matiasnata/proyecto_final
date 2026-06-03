@@ -13,24 +13,44 @@
         <a href="#inicio" class="links_portada">Inicio</a>
         <a href="#menu" class="links_portada">Nuestro Menú</a>
         <a href="#reseñas" class="links_portada">Reseñas</a>
-        <a href="#reserva"><button class="boton_reservar_mesa_portada">Reservar mesa</button></a></div>
+        <a href="#reserva"><button class="boton_reservar_mesa_portada">Reservar mesa</button></a>
+    </div>
     </div>
     <div id="inicio" class="inicio">
         <h1> Sabores auténticos,<br>momentos inolvidables</h1>
         <p class="descripcion_restaurante">Descubre nuestra cocina de autor en un ambiente cálido e íntimo.<br>Una experiencia gastronómica diseñada para deleitar todos tus sentidos.</p>
         <a href="#reserva"><button class="boton_reservar_mesa_inicio">Reservar mesa ahora</button></a>
     </div>
-    <div id="menu" class="menu">
+  <div id="menu" class="menu">
         <h2>Nuestro menú</h2>
-        <p>Nuestros platos con sus respectivos ingredientes</p>
-
-
+        <p class="subtitulo_secciones">Nuestros platos con sus respectivos ingredientes</p>
+    </div>
+    <div class="platos"> {% for plato in platos %}
+        <div> <h3>{{ plato.nombre_plato }}</h3>
+            <p>{{ plato.descripcion }}</p>
+            <p>{{ plato.precio}}</p>
+            <img src="{{ plato.url_imagen }}" alt="">
+        </div>  
+        {% endfor %}    
     </div>
     <div id="reseñas" class="reseñas">
         <h2>Reseñas recientes</h2>
-        <p>Opiniones de nuestros clientes</p>
-
+        <p class="subtitulo_secciones">Opiniones de nuestros clientes</p>
     </div>
+    <div class="contenedor-reseñas">
+    {% for reseña in reseñas %}
+        <div class="tarjeta-reseña">
+            <h4>{{ reseña.nombre_cliente }}</h4>
+            <div class="puntaje">
+                <span>⭐ {{ reseña.puntaje }}/5</span>
+            </div>
+            
+            <p class="comentario">"{{ reseña.comentario }}"</p>
+            
+            <small class="fecha">{{ reseña.fecha_publicacion }}</small>
+        </div>
+    {% endfor %}
+</div>
     <div id="reserva" class="reserva">
         <h3>Reserva tu mesa</h3>
         <p>Realiza la reserva en pocos pasos</p>
