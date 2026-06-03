@@ -1,0 +1,51 @@
+{% extends 'base_admin.html' %}
+
+{% block titulo_seccion %}Gestión de reservas{% endblock %}
+
+{% block admin_content %}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Email</th>
+            <th>Personas</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for reserva in total_reservas %}
+        <tr>
+            <td>{{ reserva.id_reservas }}</td>
+
+            <td>{{ reserva.nombre_cliente }}</td>
+
+            <td>{{ reserva.cliente_email }}</td>
+
+            <td>{{ reserva.cantidad_personas }}</td>
+
+            <td>{{ reserva.fecha }}</td>
+
+            <td>{{ reserva.hora }}</td>
+
+            <td>{{ reserva.estado_reserva }}</td>
+
+            <td>
+                <button>Confirmar</button>
+                <button>Editar</button>
+                <button>Cancelar</button>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock %}

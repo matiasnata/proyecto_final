@@ -1,43 +1,33 @@
-.inicio{
-    display: flex;
-    justify-content:flex-end; 
-    align-items: center;       
-
-    height: 60px;              
-    padding: 0 40px;           
-    background-color: white;  
+body {
+    margin: 0;
+    padding: 0;
 }
-.links{
-    margin: 18px;
-    color: grey;
-    text-decoration: none;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-style: italic;
-    font-weight: bold;
-}
-.reservar_mesa_2{
-    padding: 10px 20px;
-    background-color:burlywood;
-    border-radius: 30px;
-    text-transform: capitalize;
-    font-weight: bolder;
-    color: white;
-    font-size: 18px;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-
-}
-
-
 .portada{
-    background-image: url("../imagenes/foto_portada.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 1000px;
+    display: flex;
+    align-items: center;            
+    background-color: white;  
+    justify-content: space-between;
 
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+
+
+.menu{
+    background-color: white;
     display: flex;
     flex-direction: column;    
     justify-content: center;   
     align-items: center;
+}
+
+.imagen_logo{
+    display: flex;
+    align-items: flex-start;
+    height: 50px;
+    cursor: pointer;
 }
 
 h1{
@@ -47,20 +37,47 @@ h1{
     text-transform: capitalize;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-bottom: 10px;
-    line-height: 1;
-    
-}
-p{
-    color: white;
-    text-align: center;
-    font-size: 22px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-style: italic;
-    margin-top: 0;
-    margin-bottom: 20px;
+    line-height: 1;   
 }
 
-.reservar_mesa{
+h2{
+    color: rgb(54, 84, 63);
+    text-align: center;
+    font-size: 35px;
+    text-transform: capitalize;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1;        
+}
+
+.links_portada:hover{
+    color:burlywood
+}
+.links_portada{
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    margin: 20px;
+
+}
+.boton_reservar_mesa_portada{
+    padding: 5px 20px;
+    background-color:burlywood;
+    border-radius: 30px;
+    text-transform: capitalize;
+    font-weight: bolder;
+    color: white;
+    font-size: 18px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    cursor: pointer;
+}
+.boton_reservar_mesa_portada:hover {
+    background-color: rgb(180, 130, 70);
+    transition: background-color 0.2s ease;
+}
+
+.boton_reservar_mesa_inicio{
     padding: 18px 30px;
     background-color:burlywood;
     border-radius: 30px;
@@ -69,4 +86,287 @@ p{
     color: white;
     font-size: 18px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    cursor: pointer;
+}
+.boton_reservar_mesa_inicio:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+.inicio{
+    background-image: url("../Imagenes/foto_portada.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+    
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;   
+    align-items: center;
+}
+
+
+.descripcion_restaurante{
+    color: white;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    
+}
+
+p   {
+    color: rgb(79, 79, 79);
+    text-align: center;
+    font-size: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+}
+
+h3{
+    color:rgb(54, 84, 63);
+    text-align: center;
+    font-size: 35px;
+    text-transform: capitalize;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1;   
+    
+}
+
+.reseñas{
+    padding: 8px;
+    background-color: whitesmoke;
+}
+
+.footer{
+    background-color:rgb(54, 84, 63);
+    display: flex;
+    justify-content:space-around
+}
+
+.columna1{
+    text-align: center
+}
+
+.nombre_restaurante{
+    color: aliceblue;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans- ;
+}
+
+.descripcion_breve{
+    
+    color: azure;
+    font-size: 18px;
+    
+}
+
+.columna2{
+text-align: center;
+}
+
+.contacto{
+    
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans- ;
+    color: aliceblue;
+    
+}
+
+.ubicacion{
+    color: azure;
+    font-size: 18px;
+}
+
+.numero{
+    color: azure;
+    font-size: 18px;
+}
+
+.admin_panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(54, 84, 63);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+.admin_panel:hover {
+    background-color: rgb(34, 64, 43);;
+    transition: box-shadow 0.2s ease;
+}
+
+
+
+.reserva {
+    background-color: whitesmoke;
+    padding: 40px;
+    text-align: center;
+}
+
+.formulario_reserva {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 20px;
+}
+
+.calendario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h4 {
+    color: rgb(54, 84, 63);
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.dia_calendario {
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: center;
+    background-color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
+    margin: 5px;
+    width: 70px;
+}
+
+.dia_calendario:hover {
+    border-color: burlywood;
+    color: burlywood;
+}
+
+.dia_calendario.seleccionado {
+    border-color: burlywood;
+    color: burlywood;
+    font-weight: bold;
+}
+.fila_calendario {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.logo_reserva {
+    height: 25px;
+}
+
+.horarios {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.horario {
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 12px;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    background-color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
+    width: 100px;
+    margin: 5px;
+}
+
+.horario:hover {
+    border-color: burlywood;
+    color: burlywood;
+}
+
+.horario.seleccionado {
+    background-color: burlywood;
+    color: white;
+    font-weight: bold;
+    border-color: burlywood;
+}
+
+.personas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton_personas {
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: white;
+    font-size: 18px;
+    margin: 10px;
+}
+
+.cantidad_personas {
+    font-size: 35px;
+    font-weight: bold;
+    color: rgb(54, 84, 63);
+    margin: 10px;
+}
+
+.boton_personas:hover {
+    color: burlywood;
+    border-color: burlywood;
+}
+
+
+.resumen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input_reserva {
+    padding: 15px;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 10px;
+    width: 300px;
+}
+
+.boton_confirmar {
+    padding: 15px 30px;
+    background-color: rgb(54, 84, 63);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.boton_confirmar:hover {
+    background-color: rgb(34, 64, 43);
+    transition: background-color 0.2s ease;
+}
+
+.resumen_dato {
+    font-style: normal;
+    font-weight: bold;
+    color: rgb(54, 84, 63);
+}
+
+.confirmacion {
+    display: none;
+    text-align: center;
 }
