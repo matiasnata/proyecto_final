@@ -12,6 +12,10 @@
     </form>
     
     <a href="{{ url_for('admin_resenas') }}" class="btn-limpiar" >Limpiar filtro</a> <!--te retorna al admin resenas sin ninguna query param, aparecen de nuevo todas las reseñas-->
+
+    <form method="GET" action="{{url_for('estadisticas_reseñas')}}" class="form-estadisticas">
+        <button type="submit" class="btn-azul">Ver estadísticas reseñas</button>
+    </form>
 </div> 
 
 {% if resultado | length == 0 %} <!--analiza el resultado obtenido en caso de que no se haya encontrado nignuna reseña con ese mail envia un mensaje-->
@@ -62,6 +66,25 @@
 
     </tbody>
 </table>
+<div class="contenedor-paginacion">
+    
+    {% if link_first %}
+        <a href="{{ link_first.href }}" class="btn-paginacion">Primera</a>
+    {% endif %}
+
+    {% if link_prev %}
+        <a href="{{ link_prev.href }}" class="btn-paginacion">Anterior</a>
+    {% endif %}
+
+    {% if link_next %}
+        <a href="{{ link_next.href }}" class="btn-paginacion">Siguiente</a>
+    {% endif %}
+
+    {% if link_last %}
+        <a href="{{ link_last.href }}" class="btn-paginacion">Última</a>
+    {% endif %}
+    
+</div>
 
 {% endif %}
 
