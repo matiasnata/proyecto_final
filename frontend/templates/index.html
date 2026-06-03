@@ -56,15 +56,28 @@
             <button class="boton_personas sumar">+</button>
         </div>
 
-        <h4>Resumen de tu reserva</h4>
-        <div class="resumen">
-            <p class="resumen_dato"></p>
-            <p class="resumen_dato"></p>
-            <p class="resumen_dato"></p>
-            <input type="text" class="input_reserva" placeholder="Tu Nombre Completo">
-            <input type="email" class="input_reserva" placeholder="Tu Correo Electrónico">
-            <button class="boton_confirmar">Confirmar Reserva</button>
-        </div>
+    <h4>Resumen de tu reserva</h4>
+
+<form action="http://127.0.0.1:5000/reservas" method="POST" id="form_reserva">
+    <input type="hidden" name="fecha" id="input_fecha">
+    <input type="hidden" name="hora" id="input_hora">
+    <input type="hidden" name="cantidad_personas" id="input_personas" value="2">
+
+    <div class="resumen">
+        <p class="resumen_dato"></p>
+        <p class="resumen_dato"></p>
+        <p class="resumen_dato"></p>
+        <input type="text" name="nombre_cliente" class="input_reserva" placeholder="Tu Nombre Completo">
+        <input type="email" name="cliente_email" class="input_reserva" placeholder="Tu Correo Electrónico">
+        <button type="submit" class="boton_confirmar">Confirmar Reserva</button>
+    </div>
+</form>
+
+<div class="confirmacion">
+    <p>¡Confirmaste tu reserva! Pronto te llegará un código QR al mail.</p>
+</div>
+
+
 
         <div class="confirmacion">
             <p>¡Confirmaste tu reserva! Pronto te llegará un código QR al mail.</p>
@@ -85,7 +98,7 @@
             <p class="ubicacion">📍   Av San juan 1234, Boedo</p>
             <p class="numero">📞   +54 9 11 3435-6787</p>
         </div>
-        <a href="http://127.0.0.1:5000/admin/dashboard"><button class="admin_panel">⚙ Admin Panel</button></a>
+        <a href="http://127.0.0.1:5001/admin/dashboard"><button class="admin_panel">⚙ Admin Panel</button></a>
     </div> 
     
     <script src="../static/scripts/reservas_inicio.js"></script>

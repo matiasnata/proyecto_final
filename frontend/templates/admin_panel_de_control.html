@@ -1,13 +1,9 @@
 {% extends 'base_admin.html' %}
-
 {% block estilos %} <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-panel.css') }}">{% endblock %}
-
 {% block titulo_seccion %}Panel de control{% endblock %}
 
 {% block admin_content %}
-
 <section class="contenedor-metricas">
-    
     <div class="metrica">
         <div class="icono-calendario">
             <img src="{{ url_for('static', filename='Imagenes/calendario.png') }}" alt="Icono Calendario">
@@ -17,7 +13,6 @@
             <h2 class="valor-metrica">{{ total_reservas }}</h2>
         </div>
     </div>
-
     <div class="metrica">
         <div class="icono-comensales">
             <img src="{{ url_for('static', filename='Imagenes/comensales.png') }}" alt="Icono Comensales">
@@ -27,17 +22,74 @@
             <h2 class="valor-metrica">{{ comensales_esperados }}</h2>
         </div>
     </div>
-
     <div class="metrica">
         <div class="icono-canceladas">
-           <img src="{{ url_for('static', filename='Imagenes/cancelacion.png') }}" alt="Icono Cancelado">
+            <img src="{{ url_for('static', filename='Imagenes/cancelacion.png') }}" alt="Icono Cancelado">
         </div>
         <div class="contenido-metrica">
             <p class="titulo-metrica">Cancelaciones</p>
             <h2 class="valor-metrica">{{ cancelaciones }}</h2>
         </div>
     </div>
-
 </section>
 
+<section class="contenedor-grafico">
+    <div class="grafico-header">
+        <div>
+            <h3>Tendencia de Reservas</h3>
+            <p>Últimos 7 días</p>
+        </div>
+    </div>
+    <canvas id="graficoReservas"></canvas>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const labels = {{ labels | tojson }};
+    const valores = {{ valores | tojson }};
+
+    const ctx = document.getElementById("graficoReservas").getContext("2d");
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Reservas",
+                data: valores,
+                borderColor: "#2d6a4f",
+                backgroundColor: "rgba(45, 106, 79, 0.1)",
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => `reservas : ${ctx.parsed.y}`
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: "rgba(0,0,0,0.05)" }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false
+            }
+        }
+    });
+</script>
 {% endblock %}

@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/admin.css')}}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script><!--extraigo la libreria de js, para el grafico en panel de control-->
     <title>Flames JB Admin</title>
-    {% block estilos%} {% endblock %} <!-- Para agregar estilos a cada seccion -->\
+    {% block estilos%} {% endblock %} 
 
 </head>
 <body class="admin-layout">
@@ -22,33 +23,33 @@
     <nav class="links_dashboard">
         <ul>
             <li>
-                <a href="{{ url_for('admin_panel') }}"><img src="{{url_for('static', filename='Imagenes/menu1.png')}}" alt="" class="nav-icon">Panel de Control</a>
+                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/menu1.png')}}" alt="" class="nav-icon">Panel de Control</a>
             </li>
 
             <li>
-                <a href="{{ url_for('gestionar_menu') }}"><img src="{{url_for('static', filename='Imagenes/estadisticas.png')}}" alt="" class="nav-icon">Gestión del Menú</a>
+                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/estadisticas.png')}}" alt="" class="nav-icon">Gestión del Menú</a>
             </li>
 
             <li>
-                <a href="{{ url_for('admin_resenas') }}"><img src="{{url_for('static', filename='Imagenes/star.png')}}" alt="" class="nav-icon">Reseñas</a>
+                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/star.png')}}" alt="" class="nav-icon">Reseñas</a>
             </li>
             <li>
-                <a href="{{ url_for('admin_servicios') }}"><img src="{{url_for('static', filename='Imagenes/servicios.png')}}" alt="" class="nav-icon">Servicios</a>
-            </li>
-
-            <li>
-                <a href="{{ url_for('admin_reservas') }}"><img src="{{url_for('static', filename='Imagenes/reservas.png')}}" alt="" class="nav-icon">Reservas</a>
+                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/servicios.png')}}" alt="" class="nav-icon">Servicios</a>
             </li>
 
             <li>
-                <a href="{{ url_for('admin_estadisticas') }}"><img src="{{url_for('static', filename='Imagenes/dashboard.png')}}" alt="" class="nav-icon">Estadísticas</a>
+                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/reservas.png')}}" alt="" class="nav-icon">Reservas</a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/dashboard.png')}}" alt="" class="nav-icon">Estadísticas</a>
             </li>
 
         </ul>
 
     </nav>
     <div class="sidebar-footer">
-        <a href="{{ url_for('inicio') }}"> <img src="{{url_for('static', filename='Imagenes/back.png')}}" alt="" class="nav-icon">Volver a la Web</a>
+        <a href="{{ url_for('inicio.inicio') }}"> <img src="{{url_for('static', filename='Imagenes/back.png')}}" alt="" class="nav-icon">Volver a la Web</a>
     </div>
     </aside>
 
