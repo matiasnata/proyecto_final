@@ -1,0 +1,70 @@
+{% extends 'base_admin.html' %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/admin-reseñas.css')}}">
+{% endblock %}
+
+{% block titulo_seccion %}Estadísticas de Reseñas{% endblock %}
+
+{% block admin_content %}
+
+<div class="acciones-superiores">
+    <a href="{{ url_for('admin_resenas') }}" class="btn-volver">
+        ⬅ Volver a Reseñas
+    </a>
+</div>
+
+<section class="contenedor-metricas">
+    <div class="metrica">
+        <div class="icono-metrica">
+            <img src="{{ url_for('static', filename='Imagenes/estrella.png') }}" alt="Icono Estrella">
+        </div>
+        <div class="contenido-metrica">
+            <p class="titulo-metrica">Promedio Anual</p>
+            <h2 class="valor-metrica">{{ promedio_general }} ⭐</h2>
+        </div>
+    </div>
+
+    <div class="metrica">
+        <div class="icono-metrica">
+            <img src="{{ url_for('static', filename='Imagenes/estadisticas.png') }}" alt="Icono Estadisticas">
+        </div>
+        <div class="contenido-metrica">
+            <p class="titulo-metrica">Total de Reseñas del año {{ anio_seleccionado }}</p>
+            <h2 class="valor-metrica">{{ total_reseñas }}</h2>
+        </div>
+    </div>
+</section>
+
+<section class="contenedor-grafico">
+    
+    <div class="cabecera-grafico"> 
+        <div class="titulos-grafico">
+            <h3>Tendencia de Reseñas</h3>
+            <p>Promedio mensual</p>
+        </div>
+        
+        <div class="controles-grafico">
+            <form action="{{ url_for('estadisticas_reseñas') }}" method="GET">
+                <select name="anio" id="selectorAnio" class="selector-anio" onchange="this.form.submit()">
+                    {% for anio in anios_disponibles %}
+                        <option value="{{ anio }}" {% if anio_seleccionado == anio %}selected{% endif %}>
+                            {{ anio }}
+                        </option>
+                    {% endfor %} 
+                </select>
+            </form>
+        </div>
+    </div> <div class="cuerpo-grafico">
+        <canvas id="graficoTendencia" 
+                data-meses='{{ meses_grafico | tojson }}' 
+                data-promedios='{{ promedios_grafico | tojson }}'>
+        </canvas>
+    </div>
+
+</section>
+{% endblock %}
+
+{% block scripts %} 
+    <script src="{{ url_for('static', filename='scripts/admin_reseñas_grafico.js') }}"></script>
+{% endblock %}
