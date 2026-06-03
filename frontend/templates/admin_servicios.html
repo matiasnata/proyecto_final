@@ -21,23 +21,90 @@
                 <button type="submit" name="accion" value="agregar">Enviar</button>
             </form>
     </section>
-    <section class="lista-servicios">
-    <ul>
-        {% for servicio in servicios %}
-        <li>
-            <span>
-                {{ servicio.id_servicio }}
-                {{ servicio.nombre_servicio }}
-                {{ servicio.descripcion }}
-                {{ servicio.activo }}
-            </span>
-             <form action="{{ url_for('gestionar_servicios', id=servicio.id_servicio) }}" method="POST">
-                <button type="submit" name="accion" value="modificar">Modificar</button>
-                <button type="submit" name="accion" value="eliminar">Eliminar</button>
-             </form>
-        </li>
-        {% endfor %}
-    </ul>
-    </section>
+   <section class="lista-servicios">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Activo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for servicio in servicios %}
+            <tr>
+                <td>{{ servicio.id_servicio }}</td>
+                <td>{{ servicio.nombre_servicio }}</td>
+                <td>{{ servicio.descripcion }}</td>
+                <td>{{ servicio.activo }}</td>
+                <td>
+                    <button type="button" class="btn-verde-modificar"
+                                data-id="{{ servicio.id_servicio }}"
+                                data-nombre="{{ servicio.nombre_servicio }}"
+                                data-descripcion="{{ servicio.descripcion }}"
+                                data-activo="{{ servicio.activo }}">
+                            Modificar
+                    </button>
+                    <form action="{{ url_for('gestionar_servicios', id=servicio.id_servicio) }}" method="POST"
+                          class="form-eliminar">
+                        <button type="submit" class="btn-rojo">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   </section>
 </section>
+
+<!-- Alertas despues de tocar botones --->
+<div id="ventana-confirmacion" class="ventana-oculta">
+    <div class="caja-confirmacion">
+
+        <h3>¿Estás seguro?</h3>
+        <p>
+            Esta acción no se puede deshacer y la reseña se borrará permanentemente.
+            <strong>(Si se desea solamente apagar el servicio, se puede realizar desde Modificar)</strong>
+        </p>
+
+
+        <div class="botones-ocultos">
+
+            <button type="button" id="btn-cancelar" class="btn-gris">Cancelar</button>
+            <button type="button" id="btn-confirmar" class="btn-rojo">Aceptar</button>
+
+        </div>
+    </div>
+</div>
+<div id="ventana-modificacion" class="ventana-oculta">
+    <div class="caja-confirmacion">
+        <h3>Modificar servicio</h3>
+        <form id="form-modificar" action="{{ url_for('gestionar_servicios') }}"   method="POST">
+
+            <input type="hidden" id="id_modificado" name="id_servicio">
+
+            <label for="nombre_modificado">Nombre</label>
+            <input type="text" id="nombre_modificado" name="nmservicio">
+
+            <label for="descripcion_modificado">Descripcion</label>
+            <input type="text" id="descripcion_modificado" name="dmservicio">
+
+            <label for="activo_modificado">Estado del Servicio</label>
+            <select id="activo_modificado" name="amservicio">
+                <option value="True">Activo (Encendido)</option>
+                <option value="False">Inactivo (Apagado)</option>
+            </select>
+
+            <div class="botones-ocultos">
+
+                <button type="button" id="btn-cancelar-modificar" class="btn-gris">Cancelar</button>
+                <button type="submit" name="accion" value="modificar" class="btn-verde">Guardar</button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
 {% endblock %}

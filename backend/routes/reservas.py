@@ -231,3 +231,71 @@ def cancelar_reserva_id(id_reservas):
                 'description': 'Fallo interno del servidor'
             }]
         }), 500
+        
+@reservas_bp.route("/reservas/disponibilidad", methods=['GET'])
+def consultar_disponiblidad_hora():
+    fecha = request.args.get('fecha')
+    turnos_fijos = ['11:00', '12:30', '14:00', '15:30', '17:00', '20:00', '21:30', '23:00']
+    conn = None
+    cursor = None
+    capacidad_max = 100
+    if not fecha:
+        return jsonify({
+            "errors":[{
+                "code":"400",
+                "message":"Elija primero la fecha",
+                "level":"error",
+                "Description": "Falta el parametro fecha"
+            }]
+        }), 400
+    
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        query = """SELECT hora, COALESCE(SUM(cantidad_personas),0) as total_personas
+        FROM reservas
+        WHERE fecha=%s AND estado_reserva IN ('pendiente', 'confirmada')
+        GROUP BY hora"""
+        
+        cursor.execute(query,(fecha,))
+        resultados = cursor.fetchall()
+        
+        ocupacion_por_hora = {}
+        
+        for fila in resultados:
+            hora_str = str(fila['hora'])[:5]
+            ocupacion_por_hora[hora_str] = int(fila['total_personas'])
+            
+        turnos_disponibles = []
+        
+        for turno in turnos_fijos:
+            ocupacion_actual = ocupacion_por_hora.get(turno, 0)
+            
+            if ocupacion_actual < capacidad_max:
+                turnos_disponibles.append(turno)
+                
+        return jsonify({
+            "fecha": fecha,
+            "horarios_disponibles": turnos_disponibles
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "errors":[{
+                "code": "500",
+                "message": "Error inesperado al conetarse con la base de datos",
+                "level": "error",
+                "description":f"Error interno del servidor: {e}"
+            }]
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+    
+
+      
+    

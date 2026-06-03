@@ -11,9 +11,7 @@
     gap: 10px;
 }
 
-/* -------------------------------------------
-   BOTÓN LIMPIAR FILTRO (Azul)
-------------------------------------------- */
+/* BOTÓN LIMPIAR FILTRO (Azul)*/
 
 .btn-limpiar {
     text-decoration: none; /* Le sacamos el subrayado típico de los enlaces <a> */
@@ -102,3 +100,193 @@
     background-color: #c0392b;
     color: #ffffff;
 }
+
+/* PAGINACIÓN*/
+.contenedor-paginacion {
+    display: flex;
+    justify-content: center; /* Centra los botones */
+    align-items: center;
+    gap: 10px;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.btn-paginacion {
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-paginacion:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+    color: #1f2937;
+}
+
+/* BOTÓN VOLVER*/
+.acciones-superiores {
+    margin-bottom: 20px;
+}
+
+.btn-volver {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-volver:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+/* CONTENEDOR DE MÉTRICAS (Las dos cajas) */
+
+.contenedor-metricas {
+    display: flex;           
+    justify-content: flex-start;
+    gap: 25px;              
+    margin-bottom: 30px;     
+    width: 100%;             
+}
+
+.metrica {
+    background-color: #ffffff; 
+    flex: 1;                   
+    max-width: 400px; /* Evita que se estiren demasiado en pantallas grandes */
+    display: flex;             
+    align-items: center;       
+    padding: 24px 30px;        
+    border-radius: 12px;       
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    border: 1px solid #e5e7eb; 
+}
+
+.contenido-metrica {
+    display: flex;
+    flex-direction: column; 
+    margin-left: 20px;      
+}
+
+.titulo-metrica {
+    font-size: 14px;
+    color: #6b7280;         
+    margin: 0 0 5px 0;      
+    font-weight: 500;
+}
+
+.valor-metrica {
+    font-size: 32px;        
+    font-weight: 700;       
+    color: #1f2937;         
+    margin: 0;              
+}
+
+/* ÍCONOS */
+
+.icono-metrica {
+    width: 60px;            
+    height: 60px;           
+    border-radius: 50%;     
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    flex-shrink: 0;          
+}
+
+.icono-metrica img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;    
+}
+
+/* Colores de fondo personalizados para cada círculo */
+.icono-estrella {
+    background-color: #fef3c7; /* Amarillo suave */
+}
+
+.icono-total {
+    background-color: #e0e7ff; /* Azul suave */
+}
+
+/* CONTENEDOR DEL GRÁFICO*/
+.contenedor-grafico {
+    background-color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    width: 100%;
+    box-sizing: border-box; /* Evita que el padding rompa el ancho */
+}
+
+.cabecera-grafico {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f3f4f6; /* Línea divisoria muy elegante */
+}
+
+.titulos-grafico h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.titulos-grafico p {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.selector-anio {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.selector-anio:hover {
+    border-color: #9ca3af;
+}
+
+.cuerpo-grafico {
+    position: relative;
+    width: 100%;
+    /* Limitamos la altura máxima para que no se estire de más en monitores grandes */
+    height: 350px; 
+}
+
+.contenedor-grafico {
+    background-color: #ffffff;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    width: 100%;
+    box-sizing: border-box;
+    
+    /* min-width: 0 evita que el div crezca más allá del espacio disponible de la pantalla */
+    min-width: 0; 
+}
+

@@ -23,7 +23,7 @@
     <div id="menu" class="menu">
         <h2>Nuestro menú</h2>
         <p>Nuestros platos con sus respectivos ingredientes</p>
-        
+
 
     </div>
     <div id="reseñas" class="reseñas">
@@ -31,76 +31,71 @@
         <p>Opiniones de nuestros clientes</p>
 
     </div>
-<div id="reserva" class="reserva">
-    <h3>Reserva tu mesa</h3>
-    <p>Realiza la reserva en pocos pasos</p>
+    <div id="reserva" class="reserva">
+        <h3>Reserva tu mesa</h3>
+        <p>Realiza la reserva en pocos pasos</p>
 
-    <div class="formulario_reserva">
+        <div class="formulario_reserva">
 
-        <h4><img src="../static/Imagenes/reservas.png" class="logo_reserva"> Selecciona la fecha</h4>
-        <div class="calendario" id="calendario">
-            <div class="fila_calendario" id="fila1"></div>
-            <div class="fila_calendario" id="fila2"></div>
+            <h4><img src="../static/Imagenes/reservas.png" class="logo_reserva"> Selecciona la fecha</h4>
+            <div class="calendario" id="calendario">
+                <div class="fila_calendario" id="fila1"></div>
+                <div class="fila_calendario" id="fila2"></div>
+            </div>
+
+            <h4>Selecciona la hora</h4>
+            <div class="horarios" id="horarios">
+                <div class="fila_calendario" id="fila_hora1"></div>
+                <div class="fila_calendario" id="fila_hora2"></div>
+            </div>
+
+            <h4><img src="../static/Imagenes/comensales.png" class="logo_reserva"> ¿Cuántas personas?</h4>
+            <div class="personas">
+                <button class="boton_personas restar">-</button>
+                <p class="cantidad_personas">2</p>
+                <button class="boton_personas sumar">+</button>
+            </div>
+
+            <h4>Resumen de tu reserva</h4>
+
+            <form action="/reservas" method="POST" id="form_reserva">
+                <input type="hidden" name="fecha" id="input_fecha">
+                <input type="hidden" name="hora" id="input_hora">
+                <input type="hidden" name="cantidad_personas" id="input_personas" value="2">
+
+                <div class="resumen">
+                    <p class="resumen_dato"></p>
+                    <p class="resumen_dato"></p>
+                    <p class="resumen_dato"></p>
+                    <input type="text" name="nombre_cliente" class="input_reserva" placeholder="Tu Nombre Completo">
+                    <input type="email" name="cliente_email" class="input_reserva" placeholder="Tu Correo Electrónico">
+                    <button type="submit" class="boton_confirmar">Confirmar Reserva</button>
+                </div>
+            </form>
+
+            <div class="confirmacion">
+                {% if confirmacion %}
+                    <p>{{ confirmacion }}</p>
+                {% elif error %}
+                    <p style="color:red;">{{ error }}</p>
+                {% endif %}
+            </div>
+
         </div>
-
-        <h4>Selecciona la hora</h4>
-        <div class="horarios" id="horarios">
-            <div class="fila_calendario" id="fila_hora1"></div>
-            <div class="fila_calendario" id="fila_hora2"></div>
-        </div>
-
-        <h4><img src="../static/Imagenes/comensales.png" class="logo_reserva"> ¿Cuántas personas?</h4>
-        <div class="personas">
-            <button class="boton_personas restar">-</button>
-            <p class="cantidad_personas">2</p>
-            <button class="boton_personas sumar">+</button>
-        </div>
-
-    <h4>Resumen de tu reserva</h4>
-
-<form action="http://127.0.0.1:5000/reservas" method="POST" id="form_reserva">
-    <input type="hidden" name="fecha" id="input_fecha">
-    <input type="hidden" name="hora" id="input_hora">
-    <input type="hidden" name="cantidad_personas" id="input_personas" value="2">
-
-    <div class="resumen">
-        <p class="resumen_dato"></p>
-        <p class="resumen_dato"></p>
-        <p class="resumen_dato"></p>
-        <input type="text" name="nombre_cliente" class="input_reserva" placeholder="Tu Nombre Completo">
-        <input type="email" name="cliente_email" class="input_reserva" placeholder="Tu Correo Electrónico">
-        <button type="submit" class="boton_confirmar">Confirmar Reserva</button>
-    </div>
-</form>
-
-<div class="confirmacion">
-    <p>¡Confirmaste tu reserva! Pronto te llegará un código QR al mail.</p>
-</div>
-
-
-
-        <div class="confirmacion">
-            <p>¡Confirmaste tu reserva! Pronto te llegará un código QR al mail.</p>
-        </div>
-
-    </div>
-</div>
-</div>
     </div>
     <div class="footer">
         <div class="columna1">
             <h4 class="nombre_restaurante">Flames JB</h4>
-            <p class="descripcion_breve">Una experiencia gastronómica inolvidable donde <br> los ingredientes locales se encuentran con técnicas <br> modernas en un ambiente cálido e invitador.    
-            </p>
+            <p class="descripcion_breve">Una experiencia gastronómica inolvidable donde <br> los ingredientes locales se encuentran con técnicas <br> modernas en un ambiente único.</p>
         </div>
         <div class="columna2">
             <h4 class="contacto">Contacto</h4>
-            <p class="ubicacion">📍   Av San juan 1234, Boedo</p>
-            <p class="numero">📞   +54 9 11 3435-6787</p>
+            <p class="ubicacion">📍    Av San juan 1234, Boedo</p>
+            <p class="numero">📞    +54 9 11 3435-6787</p>
         </div>
-        <a href="http://127.0.0.1:5001/admin/dashboard"><button class="admin_panel">⚙ Admin Panel</button></a>
-    </div> 
-    
+        <a href="/admin"><button class="admin_panel">⚙ Admin Panel</button></a>
+    </div>
+
     <script src="../static/scripts/reservas_inicio.js"></script>
 </body>
 </html>

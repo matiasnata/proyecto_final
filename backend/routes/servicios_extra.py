@@ -40,6 +40,40 @@ def ver_servicios_extras():
             cursor.close()
         if dbs and dbs.is_connected():
             dbs.close()
+@servicios_extra_bp.route("/restaurante/admin/servicios-extra", methods=['GET'])
+def ver_servicios_extras_admin():
+    dbs = None
+    cursor = None
+    try:
+        dbs = conexion.get_connection()
+        cursor = dbs.cursor(dictionary=True)
+        query = """
+        SELECT id_servicio, nombre_servicio, descripcion, activo
+        FROM servicios_extras
+        """
+        cursor.execute(query)
+        servicios_extras = cursor.fetchall()
+
+        if not servicios_extras:
+            return jsonify([]), 200
+        return jsonify(servicios_extras), 200
+
+    except Error as e:
+        return jsonify({
+            "Error": [{
+                "code": 500,
+                "message": "Error con la conexion a la base de datos",
+                "level": "error",
+                "description": f"Fallo interno del servidor, {str(e)}"
+            }]
+        }), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if dbs and dbs.is_connected():
+            dbs.close()
+
 
 @servicios_extra_bp.route("/restaurante/admin/servicios-extra", methods =['POST'])
 def agregar_servicio_extras():
