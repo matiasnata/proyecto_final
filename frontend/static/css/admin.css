@@ -19,6 +19,7 @@ body {
     display: flex;
     min-height: 100vh;
     width: 100%;
+    max-height: 100vh; /* asi el contenido de dentro se adapta a este espacio maximo, si no la barra lateral cuando pasaba a la parte de estadisticas reseñas, al ocupar mas de esta altura maximo hacia parecer la barra lateral mas chica */
 }
 
 
