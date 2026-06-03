@@ -8,12 +8,12 @@ reseñas_bp = Blueprint('reseñas', __name__, url_prefix="/reseñas")
 @reseñas_bp.route('', methods=["GET"])
 def obtener_reseñas():
     try:
-        limit = int(request.args.get('_limit', 10))
+        limit = int(request.args.get('_limit', 5))
         offset = int(request.args.get('_offset', 0))
     
     except ValueError:
         offset = 0
-        limit = 10
+        limit = 5
     
     email = request.args.get('email',"")
     

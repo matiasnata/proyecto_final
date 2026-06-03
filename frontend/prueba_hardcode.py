@@ -50,7 +50,7 @@ def gestionar_menu():
 def admin_resenas():
     # con el formulario, se le agrega a la url una query param con lo que envio el usuario, el valor se guarda en la variable email_buscSO
     email_ingresado = request.args.get('email_buscado')
-    limit = request.args.get('_limit', 10)   # 10 por defecto si no viene ninguno
+    limit = request.args.get('_limit', 5)   # 5 por defecto si no viene ninguno
     offset = request.args.get('_offset', 0)  # 0 por defecto para la primera página
 
     # Definimos la URL nuestro backend
