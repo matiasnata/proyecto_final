@@ -9,7 +9,7 @@
 {% block admin_content %}
 
 <div class="acciones-superiores">
-    <a href="{{ url_for('admin_resenas') }}" class="btn-volver">
+    <a href="{{ url_for('reseñas.admin_resenas') }}" class="btn-volver">
         ⬅ Volver a Reseñas
     </a>
 </div>
@@ -45,7 +45,7 @@
         </div>
         
         <div class="controles-grafico">
-            <form action="{{ url_for('estadisticas_reseñas') }}" method="GET">
+            <form action="{{ url_for('reseñas.estadisticas_reseñas') }}" method="GET">
                 <select name="anio" id="selectorAnio" class="selector-anio" onchange="this.form.submit()">
                     {% for anio in anios_disponibles %}
                         <option value="{{ anio }}" {% if anio_seleccionado == anio %}selected{% endif %}>

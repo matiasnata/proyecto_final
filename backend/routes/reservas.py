@@ -119,14 +119,19 @@ def crear_reserva():
 
 @reservas_bp.route("/reservas/admin", methods = ["GET"])
 def mostrar_reservas_dashboard():
-    conn = get_connection()
-    cursor = conn.cursor()
-    query = "SELECT nombre_cliente, cantidad_personas, fecha, hora, estado_reserva FROM reservas"
-    cursor.execute(query)
-    reservas = cursor.fetchall()
-    cursor.close()
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True) 
+        query = "SELECT id_reservas, nombre_cliente, cliente_email, cantidad_personas, fecha, hora, estado_reserva FROM reservas"
+        cursor.execute(query)
+        reservas = cursor.fetchall()
+        cursor.close()
+        conn.close()
 
-    return render_template("admin.html", total_reservas = reservas)
+        return jsonify({"data": reservas}), 200
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @reservas_bp.route('/reservas/<int:id_reservas>', methods=['PUT'])

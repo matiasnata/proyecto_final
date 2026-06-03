@@ -13,7 +13,7 @@
 <section class="servicios-cuadro">
     <section class="Agregar-servicio">
         <button class="Agregar">Agregar servicio</button>
-            <form action="{{ url_for('gestionar_servicios') }}" method="POST">
+            <form action="{{ url_for('servicios_extra.agregar_servicio') }}" method="POST">
                 <label for="nombre">Nombre</label>
                 <input type="text" id="nombre" name="nservicio" placeholder="Nombre del servicio">
                 <label for="descripcion"> Descripcion</label>
@@ -38,7 +38,13 @@
                 <td>{{ servicio.id_servicio }}</td>
                 <td>{{ servicio.nombre_servicio }}</td>
                 <td>{{ servicio.descripcion }}</td>
-                <td>{{ servicio.activo }}</td>
+                <td>
+                    {% if servicio.activo == 1 %}
+                         Activo
+                    {% else %}
+                         Inactivo
+                    {% endif %}
+                </td>
                 <td>
                     <button type="button" class="btn-verde-modificar"
                                 data-id="{{ servicio.id_servicio }}"
@@ -47,7 +53,7 @@
                                 data-activo="{{ servicio.activo }}">
                             Modificar
                     </button>
-                    <form action="{{ url_for('gestionar_servicios', id=servicio.id_servicio) }}" method="POST"
+                    <form action="{{ url_for('servicios_extra.eliminar_servicio', id=servicio.id_servicio) }}" method="POST"
                           class="form-eliminar">
                         <button type="submit" class="btn-rojo">Eliminar</button>
                     </form>
@@ -81,7 +87,7 @@
 <div id="ventana-modificacion" class="ventana-oculta">
     <div class="caja-confirmacion">
         <h3>Modificar servicio</h3>
-        <form id="form-modificar" action="{{ url_for('gestionar_servicios') }}"   method="POST">
+        <form id="form-modificar" action="{{ url_for('servicios_extra.modificar_servicio') }}"   method="POST">
 
             <input type="hidden" id="id_modificado" name="id_servicio">
 
