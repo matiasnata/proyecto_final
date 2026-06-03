@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 import requests
 
-inicio_bp = Blueprint("inicio", _name_)
+inicio_bp = Blueprint("inicio", __name__)
 
 @inicio_bp.route("/")
 def inicio():
