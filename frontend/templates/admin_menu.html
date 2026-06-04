@@ -52,12 +52,14 @@
                     <td>{{ plato.id_plato }}</td>
                     <td>{{ plato.nombre_plato }}</td>
                     <td>{{ plato.descripcion }}</td>
-                    <td>${{ "%.2f"|format(plato.precio) }}</td>
+                    <td>${{ plato.precio }}</td>
                     <td>{{ plato.restricciones if plato.restricciones else '—' }}</td>
                     <td>{{ 'Sí' if plato.plato_disponible else 'No' }}</td>
                     <td>
-                        <form action="{{ url_for('gestionar_menu', id=plato.id_plato) }}" method="POST">
+                        <form action="{{ url_for('menu.modificar_plato', id=plato.id_plato) }}" method="POST">
                             <button type="submit" name="accion" value="modificar">Modificar</button>
+                        </form>
+                        <form action="{{ url_for('menu.eliminar_plato', id=plato.id_plato) }}" method="POST" class="form-eliminar">
                             <button type="submit" name="accion" value="eliminar">Eliminar</button>
                         </form>
                     </td>
