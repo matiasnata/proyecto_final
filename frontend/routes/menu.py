@@ -7,7 +7,18 @@ menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
 def admin_menu():
     try:
         respuesta = requests.get("http://127.0.0.1:5001/platos")
-        lista_platos = respuesta.json()
+        datos = respuesta.json()
+        
+        # valido si la API devolvió un diccionario de error o si no devolvió una lista válida
+        if isinstance(datos, dict) and 'error' in datos:
+            print(f"La API devolvió un error: {datos['error']}")
+            lista_platos = []
+        elif not isinstance(datos, list):
+            print("La API no devolvió un formato de lista válido.")
+            lista_platos = []
+        else:
+            lista_platos = datos  # si todo está bien, asigno la lista de platos
+            
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
         lista_platos = []
