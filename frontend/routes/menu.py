@@ -6,7 +6,7 @@ menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
 @menu_bp.route('', methods=['GET'])
 def admin_menu():
     try:
-        respuesta = requests.get("http://127.0.0.1:5001/admin/menu")
+        respuesta = requests.get("http://127.0.0.1:5001/platos")
         lista_platos = respuesta.json()
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
@@ -18,7 +18,7 @@ def admin_menu():
 @menu_bp.route('/agregar', methods=['POST'])
 def agregar_plato():
     try:
-        requests.post("http://127.0.0.1:5001/admin/menu", json={
+        requests.post("http://127.0.0.1:5001/platos", json={
             "nombre_plato": request.form.get('nombre_plato'),
             "descripcion": request.form.get('descripcion'),
             "precio": float(request.form.get('precio')),
@@ -35,7 +35,7 @@ def agregar_plato():
 @menu_bp.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar_plato(id):
     try:
-        requests.delete(f"http://127.0.0.1:5001/admin/menu/{id}")
+        requests.delete(f"http://127.0.0.1:5001/platos/{id}")
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
 
@@ -45,7 +45,7 @@ def eliminar_plato(id):
 @menu_bp.route('/modificar/<int:id>', methods=['POST'])
 def modificar_plato(id):
     try:
-        requests.put(f"http://127.0.0.1:5001/admin/menu/{id}", json={
+        requests.put(f"http://127.0.0.1:5001/platos/{id}", json={
             "nombre_plato": request.form.get('nombre_plato'),
             "descripcion": request.form.get('descripcion'),
             "precio": float(request.form.get('precio')),
