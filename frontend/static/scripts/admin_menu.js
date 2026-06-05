@@ -37,3 +37,18 @@ function cerrarModalModificar() {
     // oculta la ventana
     document.getElementById('modal-modificar').style.display = 'none';
 }
+
+function abrirModalEliminar(id) {
+    // apunto el formulario interno a la ruta correspondiente a ese plato
+    const form = document.getElementById('form-confirmar-eliminar');
+    form.action = `/admin/menu/eliminar/${id}`;
+
+    // muestro el cartel en pantalla
+    const modal = document.getElementById('modal-eliminar');
+    modal.style.display = 'flex';
+}
+
+function cerrarModalEliminar() {
+    // oculto el cartel si se arrepiente
+    document.getElementById('modal-eliminar').style.display = 'none';
+}

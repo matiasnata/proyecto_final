@@ -73,9 +73,7 @@
                             '{{ plato.plato_disponible }}'
                         )">Modificar</button>
                         
-                        <form action="{{ url_for('menu.eliminar_plato', id=plato.id_plato) }}" method="POST" class="form-eliminar">
-                            <button type="submit" name="accion" value="eliminar">Eliminar</button>
-                        </form>
+                        <button type="button" class="btn-eliminar" onclick="abrirModalEliminar('{{ plato.id_plato }}')">Eliminar</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -123,6 +121,19 @@
                 <button type="submit" class="btn-guardar">Guardar</button>
             </div>
         </form>
+    </div>
+</div>
+
+<div id="modal-eliminar" class="modal-fondo" style="display: none;">
+    <div class="modal-contenido modal-alerta"> <h3>¿Estás seguro?</h3>
+        <p class="descripcion-alerta">Esta acción no se puede deshacer y el plato se borrará permanentemente de la lista del menú.</p>
+        <p class="advertencia-texto">(Si se desea solamente ocultar el plato o marcarlo como agotado, se puede realizar cambiando su disponibilidad desde Modificar)</p>
+        
+        <div class="modal-botones-alerta"> <button type="button" class="btn-cancelar-alerta" onclick="cerrarModalEliminar()">Cancelar</button>
+            <form id="form-confirmar-eliminar" method="POST" action="" style="display: inline;">
+                <button type="submit" class="btn-aceptar-alerta">Aceptar</button>
+            </form>
+        </div>
     </div>
 </div>
 </section>
