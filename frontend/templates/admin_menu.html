@@ -5,6 +5,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-menu.css') }}">
 {% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/admin_menu.js') }}"></script>
+{% endblock %}
+
 {% block admin_content %}
 
 <section class="menu-cuadro">
@@ -27,7 +31,10 @@
             <input type="text" id="restricciones" name="restricciones" placeholder="Ej: sin gluten, vegano">
 
             <label for="plato_disponible">Disponible</label>
-            <input type="checkbox" id="plato_disponible" name="plato_disponible" checked>
+            <select id="plato_disponible" name="plato_disponible">
+                <option value="True" selected>Sí (Disponible)</option>
+                <option value="False">No (Oculto/Agotado)</option>
+            </select>
 
             <button type="submit" name="accion" value="agregar">Enviar</button>
         </form>

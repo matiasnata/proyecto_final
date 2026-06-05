@@ -48,7 +48,8 @@ button.Agregar:hover {
 }
 
 .agregar-plato form input[type="text"],
-.agregar-plato form input[type="number"] {
+.agregar-plato form input[type="number"],
+.agregar-plato form select {
     padding: 10px 14px;
     border: 1px solid #e0e0d8;
     border-radius: 6px;
@@ -56,9 +57,11 @@ button.Agregar:hover {
     background-color: #ffffff;
     outline: none;
     transition: border 0.2s;
+    cursor: pointer;
 }
 
-.agregar-plato form input:focus {
+.agregar-plato form input:focus,
+.agregar-plato form select:focus {
     border-color: #4a7c4a;
 }
 
