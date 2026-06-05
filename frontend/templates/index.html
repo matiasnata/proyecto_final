@@ -28,6 +28,7 @@
     <div class="platos"> {% for plato in platos %}
         <div> <h3>{{ plato.nombre_plato }}</h3>
             <p>{{ plato.descripcion }}</p>
+
             <p>{{ plato.precio}}</p>
             <img src="{{ plato.url_imagen }}" alt="">
         </div>  
@@ -48,6 +49,19 @@
             <p class="comentario">"{{ reseña.comentario }}"</p>
             
             <small class="fecha">{{ reseña.fecha_publicacion }}</small>
+        </div>
+    {% endfor %}
+    </div>
+    <div class="servicios_extra">
+    <h3>Servicios extra</h3>
+    <p>Aca podes encontrar los servicios que ofrecemos</p>
+</div>
+
+<div class="contender_servicios_extra">
+    {% for servicio in servicios_extra %}
+        <div class="servicio-card">
+            <h4>{{ servicio.nombre_servicio }}</h4>
+            <p>{{ servicio.descripcion }}</p>
         </div>
     {% endfor %}
 </div>
