@@ -63,9 +63,16 @@
                     <td>{{ plato.restricciones if plato.restricciones else '—' }}</td>
                     <td>{{ 'Sí' if plato.plato_disponible else 'No' }}</td>
                     <td>
-                        <form action="{{ url_for('menu.modificar_plato', id=plato.id_plato) }}" method="POST">
-                            <button type="submit" name="accion" value="modificar">Modificar</button>
-                        </form>
+                        <button type="button" class="btn-modificar" onclick="abrirModalModificar(
+                            '{{ plato.id_plato }}', 
+                            '{{ plato.nombre_plato }}', 
+                            '{{ plato.descripcion }}', 
+                            '{{ plato.precio }}', 
+                            '{{ plato.url_imagen }}', 
+                            '{{ plato.restricciones }}', 
+                            '{{ plato.plato_disponible }}'
+                        )">Modificar</button>
+                        
                         <form action="{{ url_for('menu.eliminar_plato', id=plato.id_plato) }}" method="POST" class="form-eliminar">
                             <button type="submit" name="accion" value="eliminar">Eliminar</button>
                         </form>
@@ -75,6 +82,49 @@
             </tbody>
         </table>
     </section>
+
+    <div id="modal-modificar" class="modal-fondo" style="display: none;">
+    <div class="modal-contenido ancho">
+        <h3>Modificar plato</h3>
+        
+        <form id="form-modificar" method="POST" action="">
+            <div class="grid-2-columnas">
+                <div class="campo">
+                    <label for="mod_nombre">Nombre</label>
+                    <input type="text" id="mod_nombre" name="nombre_plato" required>
+                </div>
+                <div class="campo">
+                    <label for="mod_descripcion">Descripción</label>
+                    <input type="text" id="mod_descripcion" name="descripcion" required>
+                </div>
+                <div class="campo">
+                    <label for="mod_precio">Precio</label>
+                    <input type="number" id="mod_precio" name="precio" required>
+                </div>
+                <div class="campo">
+                    <label for="mod_imagen">URL Imagen</label>
+                    <input type="text" id="mod_imagen" name="url_imagen">
+                </div>
+                <div class="campo">
+                    <label for="mod_disponible">Disponible</label>
+                    <select id="mod_disponible" name="plato_disponible">
+                        <option value="True">Sí (Disponible)</option>
+                        <option value="False">No (Oculto / Agotado)</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="mod_restricciones">Restricciones</label>
+                    <input type="text" id="mod_restricciones" name="restricciones">
+                </div>
+            </div>
+            
+            <div class="modal-botones">
+                <button type="button" class="btn-cancelar" onclick="cerrarModalModificar()">Cancelar</button>
+                <button type="submit" class="btn-guardar">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
 </section>
 
 {% endblock %}

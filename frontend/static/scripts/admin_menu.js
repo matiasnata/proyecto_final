@@ -14,3 +14,26 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
 })
+
+function abrirModalModificar(id, nombre, descripcion, precio, imagen, restricciones, disponible) {
+    // rellena los campos con los datos del plato elegido
+    document.getElementById('mod_nombre').value = nombre;
+    document.getElementById('mod_descripcion').value = descripcion;
+    document.getElementById('mod_precio').value = precio;
+    document.getElementById('mod_imagen').value = imagen !== 'None' ? imagen : '';
+    document.getElementById('mod_restricciones').value = restricciones !== 'None' ? restricciones : '';
+    document.getElementById('mod_disponible').value = disponible;
+
+    // apunta el formulario a la ruta correcta 
+    const form = document.getElementById('form-modificar');
+    form.action = `/admin/menu/modificar/${id}`;
+
+    // muestra la ventana
+    const modal = document.getElementById('modal-modificar');
+    modal.style.display = 'flex';
+}
+
+function cerrarModalModificar() {
+    // oculta la ventana
+    document.getElementById('modal-modificar').style.display = 'none';
+}
