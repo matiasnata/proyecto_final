@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS reseñas(
     fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     comentario TEXT,
     FOREIGN KEY (id_reserva) REFERENCES reservas(id_reservas)
-)
+);
 
 CREATE TABLE IF NOT EXISTS menu(
     id_plato int AUTO_INCREMENT PRIMARY KEY,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS menu(
     url_imagen VARCHAR(255),
     restricciones VARCHAR(255), -- por ejemplo: "sin gluten, vegano", esto lo podemos mostrar en el front para que el usuario sepa si el plato tiene alguna restriccion alimentaria
     plato_disponible BOOLEAN NOT NULL DEFAULT TRUE
-)
+);
 
 CREATE TABLE IF NOT EXISTS servicios_extras(
     id_servicio INT AUTO_INCREMENT PRIMARY KEY,

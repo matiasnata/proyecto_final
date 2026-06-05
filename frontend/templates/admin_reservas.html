@@ -19,33 +19,73 @@
     </thead>
 
     <tbody>
-
         {% for reserva in total_reservas %}
         <tr>
             <td>{{ reserva.id_reservas }}</td>
-
             <td>{{ reserva.nombre_cliente }}</td>
-
             <td>{{ reserva.cliente_email }}</td>
-
             <td>{{ reserva.cantidad_personas }}</td>
-
             <td>{{ reserva.fecha }}</td>
-
             <td>{{ reserva.hora }}</td>
-
             <td>{{ reserva.estado_reserva }}</td>
-
             <td>
-                <button>Confirmar</button>
-                <button>Editar</button>
-                <button>Cancelar</button>
+                <form action="{{ url_for('reservas.admin_confirmar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
+                    <button type="submit" style="background-color: #5cb85c; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Confirmar</button>
+                </form>
+
+                <button type="button" 
+                        style="background-color: #f0ad4e; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;"
+                        data-id="{{ reserva.id_reservas }}"
+                        data-nombre="{{ reserva.nombre_cliente }}"
+                        data-personas="{{ reserva.cantidad_personas }}"
+                        data-fecha="{{ reserva.fecha }}"
+                        data-hora="{{ reserva.hora }}"
+                        data-estado="{{ reserva.estado_reserva }}"
+                        onclick="abrirModal(this)">
+                    Editar
+                </button>
+                
+                <form action="{{ url_for('reservas.admin_cancelar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');" style="background-color: #d9534f; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Cancelar</button>
+                </form>
             </td>
         </tr>
-
         {% endfor %}
-
     </tbody>
 </table>
+
+<div id="modalEditar" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="background: white; width: 400px; margin: 100px auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <h3>Editar Reserva <span id="modal_id_texto"></span></h3>
+        
+        <form id="formEditar" method="POST">
+            <label>Nombre:</label><br>
+            <input type="text" id="edit_nombre" name="nombre_cliente" required style="width: 100%;"><br><br>
+
+            <label>Cantidad de Personas:</label><br>
+            <input type="number" id="edit_personas" name="cantidad_personas" required style="width: 100%;"><br><br>
+
+            <label>Fecha:</label><br>
+            <input type="date" id="edit_fecha" name="fecha" required style="width: 100%;"><br><br>
+
+            <label>Hora:</label><br>
+            <input type="time" id="edit_hora" name="hora" required style="width: 100%;"><br><br>
+
+            <label>Estado:</label><br>
+            <select id="edit_estado" name="estado_reserva" style="width: 100%;">
+                <option value="pendiente">Pendiente</option>
+                <option value="confirmada">Confirmada</option>
+                <option value="cancelada">Cancelada</option>
+            </select><br><br>
+
+            <div style="text-align: right;">
+                <button type="button" onclick="cerrarModal()" style="background: #ccc; padding: 8px; border: none; cursor: pointer;">Cancelar</button>
+                <button type="submit" style="background: #5cb85c; color: white; padding: 8px; border: none; cursor: pointer;">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='scripts/admin_reservas.js') }}"></script>
 
 {% endblock %}
