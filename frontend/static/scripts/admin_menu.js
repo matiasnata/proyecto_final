@@ -52,3 +52,24 @@ function cerrarModalEliminar() {
     // oculto el cartel si se arrepiente
     document.getElementById('modal-eliminar').style.display = 'none';
 }
+
+function filtrarPlatos() {
+    // tomo lo que escribe el usuario y lo pasamos a minúsculas
+    const textoBuscado = document.getElementById('buscador-platos').value.toLowerCase();
+    
+    // apunto a todas las filas del cuerpo de la tabla
+    const filas = document.querySelectorAll('table tbody tr');
+
+    filas.forEach(fila => {
+        // extraigo solo las celdas de ID y Nombre 
+        const id = fila.children[0] ? fila.children[0].textContent.toLowerCase().trim() : '';
+        const nombre = fila.children[1] ? fila.children[1].textContent.toLowerCase().trim() : '';
+
+        // evaluo si coincide con el ID exacto o si el nombre contiene el texto
+        if (id === textoBuscado || nombre.includes(textoBuscado)) {
+            fila.style.display = ''; // muestra la fila
+        } else {
+            fila.style.display = 'none'; // oculta la fila si no coincide
+        }
+    });
+}

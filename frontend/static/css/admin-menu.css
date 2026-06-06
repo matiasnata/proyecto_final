@@ -283,3 +283,25 @@ button[name="accion"][value="eliminar"]:hover {
     background-color: #dc2626;
     color: #ffffff;
 }
+
+.contenedor-buscador {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px; 
+}
+
+#buscador-platos {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+#buscador-platos:focus {
+    border-color: #3b82f6; 
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}

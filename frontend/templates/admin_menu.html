@@ -16,13 +16,13 @@
         <button class="Agregar">Agregar plato</button>
         <form action="{{ url_for('menu.agregar_plato') }}" method="POST">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre_plato" placeholder="Nombre del plato">
+            <input type="text" id="nombre" name="nombre_plato" placeholder="Nombre del plato" required>
 
             <label for="descripcion">Descripción</label>
-            <input type="text" id="descripcion" name="descripcion" placeholder="Descripción del plato">
+            <input type="text" id="descripcion" name="descripcion" placeholder="Descripción del plato" required>
 
             <label for="precio">Precio</label>
-            <input type="number" id="precio" name="precio" step="0.01" min="0" placeholder="0.00">
+            <input type="number" id="precio" name="precio" step="0.01" min="0" placeholder="0.00" required>
 
             <label for="url_imagen">URL de imagen</label>
             <input type="text" id="url_imagen" name="url_imagen" placeholder="https://...">
@@ -39,7 +39,9 @@
             <button type="submit" name="accion" value="agregar">Enviar</button>
         </form>
     </section>
-
+    <div class="contenedor-buscador">
+    <input type="text" id="buscador-platos" placeholder="🔍 Buscar plato por nombre o ID..." onkeyup="filtrarPlatos()">
+    </div>
     <section class="lista-platos">
         <table>
             <thead>
