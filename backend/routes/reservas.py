@@ -251,7 +251,18 @@ def mostrar_reservas_dashboard():
         reservas = cursor.fetchall()
         cursor.close()
         conn.close()
+
+        for reserva in reservas:
+            if reserva.get('fecha') is not None:
+                reserva['fecha'] = str(reserva['fecha'])  # str(datetime.date) devuelve "2024-06-15"
+            if reserva.get('hora') is not None:
+                total_seg = int(reserva['hora'].total_seconds())  # convierte timedelta a segundos
+                horas = total_seg // 3600
+                minutos = (total_seg % 3600) // 60
+                reserva['hora'] = f"{horas:02d}:{minutos:02d}"  # 19:00
+
         return jsonify({"data": reservas}), 200
+    
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
