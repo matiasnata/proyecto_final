@@ -271,14 +271,8 @@ def mostrar_reservas_dashboard():
 def actualizar_reserva_id(id_reservas):
     data = request.json
 
-    if not data or 'nombre_cliente' not in data or 'cantidad_personas' not in data or 'fecha' not in data or 'hora' not in data:
-        return jsonify({
-            'errors':[{
-                'code': '400',
-                'message': 'Parametros invalidos',
-                'description': 'Corroborar datos ingresados'
-            }]
-        }), 400
+    if not data:
+        return jsonify({'errors': [{'code': '400', 'message': 'Sin datos en el body'}]}), 400
 
     conn = None
     cursor = None
@@ -288,58 +282,42 @@ def actualizar_reserva_id(id_reservas):
         cursor = conn.cursor(dictionary=True)
 
         cursor.execute("SELECT * FROM reservas WHERE id_reservas = %s", (id_reservas,))
-        actualizar = cursor.fetchone()
+        actual = cursor.fetchone()
 
-        if actualizar:
-            nuevo_estado = data.get("estado_reserva", actualizar["estado_reserva"])
-            estado_anterior = actualizar["estado_reserva"]
+        if not actual:
+            return jsonify({'errors': [{'code': '404', 'message': 'Reserva no encontrada'}]}), 404
 
-            query_update = "UPDATE reservas SET nombre_cliente = %s, cantidad_personas = %s, fecha = %s, hora = %s, estado_reserva = %s WHERE id_reservas = %s"
-            valores_update = (
-                data["nombre_cliente"],
-                data["cantidad_personas"],
-                data["fecha"],
-                data["hora"],
-                nuevo_estado,
-                id_reservas
+        # usa el valor del body si viene, y si falta algun dato, usa el valor existente en la DB
+        nuevo_nombre   = data.get("nombre_cliente",    actual["nombre_cliente"])
+        nuevas_personas= data.get("cantidad_personas", actual["cantidad_personas"])
+        nueva_fecha    = data.get("fecha",             str(actual["fecha"]))
+        nueva_hora     = data.get("hora",              str(actual["hora"]))
+        nuevo_estado   = data.get("estado_reserva",    actual["estado_reserva"])
+        estado_anterior = actual["estado_reserva"]
+
+        cursor.execute(
+            "UPDATE reservas SET nombre_cliente=%s, cantidad_personas=%s, fecha=%s, hora=%s, estado_reserva=%s WHERE id_reservas=%s",
+            (nuevo_nombre, nuevas_personas, nueva_fecha, nueva_hora, nuevo_estado, id_reservas)
+        )
+        conn.commit()
+
+        if nuevo_estado != estado_anterior and nuevo_estado in ('confirmada', 'cancelada'):
+            enviar_email_cambio_estado(
+                nombre=actual["nombre_cliente"],
+                email_cliente=actual["cliente_email"],
+                estado=nuevo_estado,
+                fecha=str(nueva_fecha),
+                hora=str(nueva_hora)
             )
-            cursor.execute(query_update, valores_update)
-            conn.commit()
 
-            if nuevo_estado != estado_anterior and nuevo_estado in ('confirmada', 'cancelada'):
-                enviar_email_cambio_estado(
-                    nombre=actualizar["nombre_cliente"],
-                    email_cliente=actualizar["cliente_email"],
-                    estado=nuevo_estado,
-                    fecha=data["fecha"],
-                    hora=data["hora"]
-                )
-
-            return jsonify({"message": "La reserva fue modificada con exito"}), 200
-
-        else:
-            return jsonify({
-                'errors': [{
-                    'code': '404',
-                    'message': 'Dato inexistente',
-                    'description': f'No se encontro ninguna reserva con el id {id_reservas} para modificar.'
-                }]
-            }), 404
+        return jsonify({"message": "La reserva fue modificada con exito"}), 200
 
     except Exception as e:
-        return jsonify({
-            'errors': [{
-                'code': '500',
-                'message': "Error interno del servidor",
-                'description': f'Fallo interno del servidor: {e}'
-            }]
-        }), 500
+        return jsonify({'errors': [{'code': '500', 'message': str(e)}]}), 500
 
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        if cursor: cursor.close()
+        if conn: conn.close()
 
 
 @reservas_bp.route('/reservas/<int:id_reservas>', methods=['DELETE'])
