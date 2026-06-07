@@ -51,8 +51,8 @@ def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, to
             <p>Adjuntamos tu código QR. Presentalo al llegar al restaurante.</p>
             <br>
             <a href="http://127.0.0.1:5001/reservas/cancelar/{token_qr}"
-               style="background-color: #c0392b; color: white; padding: 12px 24px;
-                      text-decoration: none; border-radius: 6px; font-size: 16px;">
+            style="background-color: #c0392b; color: white; padding: 12px 24px;
+                text-decoration: none; border-radius: 6px; font-size: 16px;">
                 Cancelar mi reserva
             </a>
             <br><br>
