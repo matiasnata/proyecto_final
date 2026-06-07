@@ -47,10 +47,12 @@
                     Editar
                 </button>
                 
+                {% if reserva.estado_reserva != 'cancelada' %}
                 <form action="{{ url_for('reservas.admin_cancelar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');" style="background-color: #d9534f; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Cancelar</button>
                 </form>
-            </td>
+                {% endif %}
+                
         </tr>
         {% endfor %}
     </tbody>
