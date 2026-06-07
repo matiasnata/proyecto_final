@@ -3,75 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/user.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
     <title>FLAMES JB</title>
 </head>
 <body>
     <div class="portada">
-        <img class="imagen_logo" src="../static/Imagenes/foto_logo.png" alt="Logo Flames JB">
+        <img class="imagen_logo" src="{{ url_for('static', filename='Imagenes/foto_logo.png') }}" alt="Logo Flames JB">
         <div>
-        <a href="#inicio" class="links_portada">Inicio</a>
-        <a href="#menu" class="links_portada">Nuestro Menú</a>
-        <a href="#reseñas" class="links_portada">Reseñas</a>
-        <a href="#reserva"><button class="boton_reservar_mesa_portada">Reservar mesa</button></a>
+            <a href="#inicio" class="links_portada">Inicio</a>
+            <a href="#menu" class="links_portada">Nuestro Menú</a>
+            <a href="#reseñas" class="links_portada">Reseñas</a>
+            <a href="#reserva"><button class="boton_reservar_mesa_portada">Reservar mesa</button></a>
+        </div>
     </div>
-    </div>
+
     <div id="inicio" class="inicio">
-        <h1> Sabores auténticos,<br>momentos inolvidables</h1>
+        <h1>Sabores auténticos,<br>momentos inolvidables</h1>
         <p class="descripcion_restaurante">Descubre nuestra cocina de autor en un ambiente cálido e íntimo.<br>Una experiencia gastronómica diseñada para deleitar todos tus sentidos.</p>
         <a href="#reserva"><button class="boton_reservar_mesa_inicio">Reservar mesa ahora</button></a>
     </div>
-  <div id="menu" class="menu">
+
+    <div id="menu" class="menu">
         <h2>Nuestro menú</h2>
         <p class="subtitulo_secciones">Nuestros platos con sus respectivos ingredientes</p>
     </div>
-    <div class="platos"> {% for plato in platos %}
-        <div> <h3>{{ plato.nombre_plato }}</h3>
+    <div class="platos">
+        {% for plato in platos %}
+        <div>
+            <h3>{{ plato.nombre_plato }}</h3>
             <p>{{ plato.descripcion }}</p>
-
-            <p>{{ plato.precio}}</p>
-            <img src="{{ plato.url_imagen }}" alt="">
-        </div>  
-        {% endfor %}    
+            <p>{{ plato.precio }}</p>
+            <img src="{{ plato.url_imagen }}" alt="{{ plato.nombre_plato }}">
+        </div>
+        {% endfor %}
     </div>
+
     <div id="reseñas" class="reseñas">
         <h2>Reseñas recientes</h2>
         <p class="subtitulo_secciones">Opiniones de nuestros clientes</p>
     </div>
     <div class="contenedor-reseñas">
-    {% for reseña in reseñas %}
+        {% for reseña in reseñas %}
         <div class="tarjeta-reseña">
             <h4>{{ reseña.nombre_cliente }}</h4>
             <div class="puntaje">
                 <span>⭐ {{ reseña.puntaje }}/5</span>
             </div>
-            
             <p class="comentario">"{{ reseña.comentario }}"</p>
-            
             <small class="fecha">{{ reseña.fecha_publicacion }}</small>
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
-    <div class="servicios_extra">
-    <h3>Servicios extra</h3>
-    <p>Aca podes encontrar los servicios que ofrecemos</p>
-</div>
 
-<div class="contender_servicios_extra">
-    {% for servicio in servicios_extra %}
+    <div class="servicios_extra">
+        <h3>Servicios extra</h3>
+        <p>Acá podés encontrar los servicios que ofrecemos</p>
+    </div>
+    <div class="contender_servicios_extra">
+        {% for servicio in servicios_extra %}
         <div class="servicio-card">
             <h4>{{ servicio.nombre_servicio }}</h4>
             <p>{{ servicio.descripcion }}</p>
         </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
+
     <div id="reserva" class="reserva">
         <h3>Reserva tu mesa</h3>
         <p>Realiza la reserva en pocos pasos</p>
 
         <div class="formulario_reserva">
 
-            <h4><img src="../static/Imagenes/reservas.png" class="logo_reserva"> Selecciona la fecha</h4>
+            <h4><img src="{{ url_for('static', filename='Imagenes/reservas.png') }}" class="logo_reserva"> Selecciona la fecha</h4>
             <div class="calendario" id="calendario">
                 <div class="fila_calendario" id="fila1"></div>
                 <div class="fila_calendario" id="fila2"></div>
@@ -83,7 +86,7 @@
                 <div class="fila_calendario" id="fila_hora2"></div>
             </div>
 
-            <h4><img src="../static/Imagenes/comensales.png" class="logo_reserva"> ¿Cuántas personas?</h4>
+            <h4><img src="{{ url_for('static', filename='Imagenes/comensales.png') }}" class="logo_reserva"> ¿Cuántas personas?</h4>
             <div class="personas">
                 <button class="boton_personas restar">-</button>
                 <p class="cantidad_personas">2</p>
@@ -92,7 +95,7 @@
 
             <h4>Resumen de tu reserva</h4>
 
-            <form action="/reservas" method="POST" id="form_reserva">
+            <form action="{{ url_for('reservas.crear_reserva') }}" method="POST" id="form_reserva">
                 <input type="hidden" name="fecha" id="input_fecha">
                 <input type="hidden" name="hora" id="input_hora">
                 <input type="hidden" name="cantidad_personas" id="input_personas" value="2">
@@ -117,6 +120,7 @@
 
         </div>
     </div>
+
     <div class="footer">
         <div class="columna1">
             <h4 class="nombre_restaurante">Flames JB</h4>
@@ -124,12 +128,12 @@
         </div>
         <div class="columna2">
             <h4 class="contacto">Contacto</h4>
-            <p class="ubicacion">📍    Av San juan 1234, Boedo</p>
-            <p class="numero">📞    +54 9 11 3435-6787</p>
+            <p class="ubicacion">📍 Av San juan 1234, Boedo</p>
+            <p class="numero">📞 +54 9 11 3435-6787</p>
         </div>
-        <a href="/admin"><button class="admin_panel">⚙ Admin Panel</button></a>
+        <a href="{{ url_for('admin.admin') }}"><button class="admin_panel">⚙ Admin Panel</button></a>
     </div>
 
-    <script src="../static/scripts/reservas_inicio.js"></script>
+    <script src="{{ url_for('static', filename='scripts/reservas_inicio.js') }}"></script>
 </body>
 </html>
