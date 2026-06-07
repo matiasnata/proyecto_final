@@ -27,22 +27,22 @@
             </li>
 
             <li>
-                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/estadisticas.png')}}" alt="" class="nav-icon">Gestión del Menú</a>
+                <a href="{{ url_for('menu.admin_menu') }}"><img src="{{url_for('static', filename='Imagenes/estadisticas.png')}}" alt="" class="nav-icon">Gestión del Menú</a>
             </li>
 
             <li>
                 <a href="{{ url_for('reseñas.admin_resenas') }}"><img src="{{url_for('static', filename='Imagenes/star.png')}}" alt="" class="nav-icon">Reseñas</a>
             </li>
             <li>
-                <a href="{{ url_for('reseñas.estadisticas_reseñas') }}"><img src="{{url_for('static', filename='Imagenes/servicios.png')}}" alt="" class="nav-icon">Servicios</a>
+                <a href="{{ url_for('servicios_extra.admin_servicios') }}"><img src="{{url_for('static', filename='Imagenes/servicios.png')}}" alt="" class="nav-icon">Servicios</a>
             </li>
 
             <li>
-                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/reservas.png')}}" alt="" class="nav-icon">Reservas</a>
+                <a href="{{ url_for('reservas.admin_reservas') }}"><img src="{{url_for('static', filename='Imagenes/reservas.png')}}" alt="" class="nav-icon">Reservas</a>
             </li>
 
             <li>
-                <a href="{{ url_for('admin.admin') }}"><img src="{{url_for('static', filename='Imagenes/dashboard.png')}}" alt="" class="nav-icon">Estadísticas</a>
+                <a href="{{ url_for('reseñas.estadisticas_reseñas') }}"><img src="{{url_for('static', filename='Imagenes/dashboard.png')}}" alt="" class="nav-icon">Estadísticas</a>
             </li>
 
         </ul>

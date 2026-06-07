@@ -5,20 +5,24 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-menu.css') }}">
 {% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/admin_menu.js') }}"></script>
+{% endblock %}
+
 {% block admin_content %}
 
 <section class="menu-cuadro">
     <section class="agregar-plato">
         <button class="Agregar">Agregar plato</button>
-        <form action="{{ url_for('gestionar_menu') }}" method="POST">
+        <form action="{{ url_for('menu.agregar_plato') }}" method="POST">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre_plato" placeholder="Nombre del plato">
+            <input type="text" id="nombre" name="nombre_plato" placeholder="Nombre del plato" required>
 
             <label for="descripcion">Descripción</label>
-            <input type="text" id="descripcion" name="descripcion" placeholder="Descripción del plato">
+            <input type="text" id="descripcion" name="descripcion" placeholder="Descripción del plato" required>
 
             <label for="precio">Precio</label>
-            <input type="number" id="precio" name="precio" step="0.01" min="0" placeholder="0.00">
+            <input type="number" id="precio" name="precio" step="0.01" min="0" placeholder="0.00" required>
 
             <label for="url_imagen">URL de imagen</label>
             <input type="text" id="url_imagen" name="url_imagen" placeholder="https://...">
@@ -27,12 +31,17 @@
             <input type="text" id="restricciones" name="restricciones" placeholder="Ej: sin gluten, vegano">
 
             <label for="plato_disponible">Disponible</label>
-            <input type="checkbox" id="plato_disponible" name="plato_disponible" checked>
+            <select id="plato_disponible" name="plato_disponible">
+                <option value="True" selected>Sí (Disponible)</option>
+                <option value="False">No (Oculto/Agotado)</option>
+            </select>
 
             <button type="submit" name="accion" value="agregar">Enviar</button>
         </form>
     </section>
-
+    <div class="contenedor-buscador">
+    <input type="text" id="buscador-platos" placeholder="🔍 Buscar plato por nombre o ID..." onkeyup="filtrarPlatos()">
+    </div>
     <section class="lista-platos">
         <table>
             <thead>
@@ -52,20 +61,83 @@
                     <td>{{ plato.id_plato }}</td>
                     <td>{{ plato.nombre_plato }}</td>
                     <td>{{ plato.descripcion }}</td>
-                    <td>${{ "%.2f"|format(plato.precio) }}</td>
+                    <td>${{ plato.precio }}</td>
                     <td>{{ plato.restricciones if plato.restricciones else '—' }}</td>
                     <td>{{ 'Sí' if plato.plato_disponible else 'No' }}</td>
                     <td>
-                        <form action="{{ url_for('gestionar_menu', id=plato.id_plato) }}" method="POST">
-                            <button type="submit" name="accion" value="modificar">Modificar</button>
-                            <button type="submit" name="accion" value="eliminar">Eliminar</button>
-                        </form>
+                        <button type="button" class="btn-modificar" onclick="abrirModalModificar(
+                            '{{ plato.id_plato }}', 
+                            '{{ plato.nombre_plato }}', 
+                            '{{ plato.descripcion }}', 
+                            '{{ plato.precio }}', 
+                            '{{ plato.url_imagen }}', 
+                            '{{ plato.restricciones }}', 
+                            '{{ plato.plato_disponible }}'
+                        )">Modificar</button>
+                        
+                        <button type="button" class="btn-eliminar" onclick="abrirModalEliminar('{{ plato.id_plato }}')">Eliminar</button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
+
+    <div id="modal-modificar" class="modal-fondo" style="display: none;">
+    <div class="modal-contenido ancho">
+        <h3>Modificar plato</h3>
+        
+        <form id="form-modificar" method="POST" action="">
+            <div class="grid-2-columnas">
+                <div class="campo">
+                    <label for="mod_nombre">Nombre</label>
+                    <input type="text" id="mod_nombre" name="nombre_plato" required>
+                </div>
+                <div class="campo">
+                    <label for="mod_descripcion">Descripción</label>
+                    <input type="text" id="mod_descripcion" name="descripcion" required>
+                </div>
+                <div class="campo">
+                    <label for="mod_precio">Precio</label>
+                    <input type="number" id="mod_precio" name="precio" required>
+                </div>
+                <div class="campo">
+                    <label for="mod_imagen">URL Imagen</label>
+                    <input type="text" id="mod_imagen" name="url_imagen">
+                </div>
+                <div class="campo">
+                    <label for="mod_disponible">Disponible</label>
+                    <select id="mod_disponible" name="plato_disponible">
+                        <option value="True">Sí (Disponible)</option>
+                        <option value="False">No (Oculto / Agotado)</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="mod_restricciones">Restricciones</label>
+                    <input type="text" id="mod_restricciones" name="restricciones">
+                </div>
+            </div>
+            
+            <div class="modal-botones">
+                <button type="button" class="btn-cancelar" onclick="cerrarModalModificar()">Cancelar</button>
+                <button type="submit" class="btn-guardar">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-eliminar" class="modal-fondo" style="display: none;">
+    <div class="modal-contenido modal-alerta"> <h3>¿Estás seguro?</h3>
+        <p class="descripcion-alerta">Esta acción no se puede deshacer y el plato se borrará permanentemente de la lista del menú.</p>
+        <p class="advertencia-texto">(Si se desea solamente ocultar el plato o marcarlo como agotado, se puede realizar cambiando su disponibilidad desde Modificar)</p>
+        
+        <div class="modal-botones-alerta"> <button type="button" class="btn-cancelar-alerta" onclick="cerrarModalEliminar()">Cancelar</button>
+            <form id="form-confirmar-eliminar" method="POST" action="" style="display: inline;">
+                <button type="submit" class="btn-aceptar-alerta">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>
 </section>
 
 {% endblock %}

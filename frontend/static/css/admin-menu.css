@@ -48,7 +48,8 @@ button.Agregar:hover {
 }
 
 .agregar-plato form input[type="text"],
-.agregar-plato form input[type="number"] {
+.agregar-plato form input[type="number"],
+.agregar-plato form select {
     padding: 10px 14px;
     border: 1px solid #e0e0d8;
     border-radius: 6px;
@@ -56,9 +57,11 @@ button.Agregar:hover {
     background-color: #ffffff;
     outline: none;
     transition: border 0.2s;
+    cursor: pointer;
 }
 
-.agregar-plato form input:focus {
+.agregar-plato form input:focus,
+.agregar-plato form select:focus {
     border-color: #4a7c4a;
 }
 
@@ -142,4 +145,163 @@ button[name="accion"][value="eliminar"] {
 button[name="accion"][value="eliminar"]:hover {
     background-color: #c0392b;
     color: #ffffff;
+}
+
+/* fija el fondo oscuro cubriendo toda la pantalla */
+.modal-fondo {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* la caja blanca del formulario */
+.modal-contenido.ancho {
+    background-color: #ffffff;
+    padding: 30px; 
+    border-radius: 12px; 
+    width: 650px; 
+    max-width: 95%;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+}
+
+/* distribución de las dos columnas */
+.grid-2-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dos columnas iguales */
+    gap: 20px 25px; 
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+/* cada contenedor de etiqueta + input */
+.grid-2-columnas .campo {
+    display: flex;
+    flex-direction: column;
+}
+
+/* correccion del espaciado para que no quede apilado*/
+.grid-2-columnas .campo label {
+    font-weight: 600; 
+    margin-bottom: 8px; 
+    color: #334155; 
+}
+
+
+.grid-2-columnas .campo input,
+.grid-2-columnas .campo select {
+    padding: 8px 10px; 
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* ajustes para los botones del modal */
+.modal-botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* contenedor específico para el cartel de advertencia */
+.modal-contenido.modal-alerta {
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 24px; 
+    width: 500px; 
+    max-width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center; 
+}
+
+/* titulo del cartel */
+.modal-contenido.modal-alerta h3 {
+    font-size: 26px;
+    color: #1e293b;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+
+.descripcion-alerta {
+    font-size: 16px;
+    color: #475569;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+
+.advertencia-texto {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.4;
+    margin-bottom: 25px;
+}
+
+
+.modal-botones-alerta {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* boton Cancelar */
+.btn-cancelar-alerta {
+    background-color: #e2e8f0;
+    color: #475569;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-cancelar-alerta:hover {
+    background-color: #cbd5e1;
+}
+
+/* botón Aceptar */
+.btn-aceptar-alerta {
+    background-color: #ffffff;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-aceptar-alerta:hover {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.contenedor-buscador {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px; 
+}
+
+#buscador-platos {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+#buscador-platos:focus {
+    border-color: #3b82f6; 
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }

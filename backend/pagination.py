@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from database.db import get_connection
+from database.conexion import get_connection
 from mysql.connector import Error
 
  
