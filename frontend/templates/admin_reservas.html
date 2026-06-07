@@ -29,10 +29,13 @@
             <td>{{ reserva.hora }}</td>
             <td>{{ reserva.estado_reserva }}</td>
             <td>
+                {% if reserva.estado_reserva == 'pendiente' %}
                 <form action="{{ url_for('reservas.admin_confirmar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
                     <button type="submit" style="background-color: #5cb85c; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Confirmar</button>
                 </form>
+                {% endif %}
 
+                {% if reserva.estado_reserva != 'cancelada' %}
                 <button type="button" 
                         style="background-color: #f0ad4e; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;"
                         data-id="{{ reserva.id_reservas }}"
@@ -44,11 +47,14 @@
                         onclick="abrirModal(this)">
                     Editar
                 </button>
+                {% endif %}
                 
+                {% if reserva.estado_reserva != 'cancelada' %}
                 <form action="{{ url_for('reservas.admin_cancelar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');" style="background-color: #d9534f; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Cancelar</button>
                 </form>
-            </td>
+                {% endif %}
+                
         </tr>
         {% endfor %}
     </tbody>
