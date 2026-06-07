@@ -62,7 +62,7 @@ def modificar_plato(id):
             "precio": float(request.form.get('precio')),
             "url_imagen": request.form.get('url_imagen') or None,
             "restricciones": request.form.get('restricciones') or None,
-            "plato_disponible": request.form.get('plato_disponible') == 'on'
+            "plato_disponible": request.form.get('plato_disponible') == 'True'
         })
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
