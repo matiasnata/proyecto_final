@@ -125,7 +125,7 @@ def estadisticas_reseñas():
         total_reseñas = 0
               
     return render_template(
-        'admin_panel_de_control.html',
+        'admin_reseñas_estadisticas.html',
         anio_seleccionado=anio_buscar,
         anios_disponibles=anios_disponibles, # PASAMOS LA LISTA AL HTML
         meses_grafico=meses_grafico,
