@@ -29,9 +29,11 @@
             <td>{{ reserva.hora }}</td>
             <td>{{ reserva.estado_reserva }}</td>
             <td>
+                {% if reserva.estado_reserva == 'pendiente' %}
                 <form action="{{ url_for('reservas.admin_confirmar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
                     <button type="submit" style="background-color: #5cb85c; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Confirmar</button>
                 </form>
+                {% endif %}
 
                 <button type="button" 
                         style="background-color: #f0ad4e; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;"
