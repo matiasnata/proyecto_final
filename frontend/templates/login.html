@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flames JB - Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    {% block estilos %}{% endblock %}
 </head>
 <body>
     <div class="login-container">
+        {% block contenedor%}
         <div class="login-card">
             <div class="login-header">
                 <img src="{{ url_for('static', filename='Imagenes/fondo.jpg') }}" alt="Logo Flames" class="login-logo">
@@ -32,6 +34,7 @@
                 </div>
                 <button type="submit" class="btn-login">Ingresar</button>
             </form>
+            {% endblock %}
         </div>
     </div>
 </body>

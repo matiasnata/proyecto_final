@@ -1,12 +1,14 @@
-{% extends 'base_admin.html' %}
+{% extends 'login.html' %}
 
 {% block estilos %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/errores.css') }}">
 {% endblock %}
 
-{% block titulo_seccion %}Página no encontrada{% endblock %}
-
-{% block admin_content %}
+{% block contenedor %}
+<div class="login-header">
+    <img src="{{ url_for('static', filename='Imagenes/fondo.jpg') }}" alt="Logo Flames" class="login-logo">
+    <h1>Flames JB Admin</h1>
+</div>
 <section class="error-container">
     <div class="caja-error">
         <h1 class="codigo-404">404</h1>
