@@ -29,12 +29,14 @@
     </div>
     <div class="platos">
         {% for plato in platos %}
+        {% if plato.plato_disponible == 1 %}
         <div>
             <h3>{{ plato.nombre_plato }}</h3>
             <p>{{ plato.descripcion }}</p>
             <p>{{ plato.precio }}</p>
             <img src="{{ plato.url_imagen }}" alt="{{ plato.nombre_plato }}">
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 
