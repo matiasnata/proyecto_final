@@ -1,0 +1,24 @@
+{% extends 'base_admin.html' %}
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-scanner.css') }}">
+{% endblock %}
+{% block titulo_seccion %}Escanear QR{% endblock %}
+
+{% block admin_content %}
+<section class="contenedor-scanner">
+    <div class="scanner-card">
+        <h3>Escaneá el código QR de la reserva</h3>
+        <p>Apuntá la cámara al QR del cliente para confirmar su reserva</p>
+        <div class="camara-contenedor">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <div id="resultado" class="resultado"></div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="{{ url_for('static', filename='scripts/admin-scanner.js') }}"></script>
+{% endblock %}
