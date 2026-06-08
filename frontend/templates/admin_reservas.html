@@ -1,97 +1,101 @@
 {% extends 'base_admin.html' %}
 
+{% block estilos %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin-reservas.css') }}">
+{% endblock %}
+
 {% block titulo_seccion %}Gestión de reservas{% endblock %}
 
 {% block admin_content %}
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Email</th>
-            <th>Personas</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
+<div class="reservas-cuadro">
+    <div class="lista-reservas">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Personas</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserva in total_reservas %}
+                <tr>
+                    <td>{{ reserva.id_reservas }}</td>
+                    <td>{{ reserva.nombre_cliente }}</td>
+                    <td>{{ reserva.cliente_email }}</td>
+                    <td>{{ reserva.cantidad_personas }}</td>
+                    <td>{{ reserva.fecha }}</td>
+                    <td>{{ reserva.hora }}</td>
+                    <td>{{ reserva.estado_reserva }}</td>
+                    <td>
+                        {% if reserva.estado_reserva == 'confirmada' %}
+                        <form action="{{ url_for('reservas.admin_confirmar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-asistio">Asistió</button>
+                        </form>
+                        {% endif %}
 
-    <tbody>
-        {% for reserva in total_reservas %}
-        <tr>
-            <td>{{ reserva.id_reservas }}</td>
-            <td>{{ reserva.nombre_cliente }}</td>
-            <td>{{ reserva.cliente_email }}</td>
-            <td>{{ reserva.cantidad_personas }}</td>
-            <td>{{ reserva.fecha }}</td>
-            <td>{{ reserva.hora }}</td>
-            <td>{{ reserva.estado_reserva }}</td>
-            <td>
-                {% if reserva.estado_reserva == 'pendiente' %}
-                <form action="{{ url_for('reservas.admin_confirmar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
-                    <button type="submit" style="background-color: #5cb85c; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Confirmar</button>
-                </form>
-                {% endif %}
+                        {% if reserva.estado_reserva != 'cancelada' and reserva.estado_reserva != 'asistio' %}
+                        <button type="button"
+                                class="btn-editar"
+                                data-id="{{ reserva.id_reservas }}"
+                                data-nombre="{{ reserva.nombre_cliente }}"
+                                data-personas="{{ reserva.cantidad_personas }}"
+                                data-fecha="{{ reserva.fecha }}"
+                                data-hora="{{ reserva.hora }}"
+                                data-estado="{{ reserva.estado_reserva }}"
+                                onclick="abrirModal(this)">
+                            Editar
+                        </button>
+                        {% endif %}
 
-                {% if reserva.estado_reserva != 'cancelada' %}
-                <button type="button" 
-                        style="background-color: #f0ad4e; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;"
-                        data-id="{{ reserva.id_reservas }}"
-                        data-nombre="{{ reserva.nombre_cliente }}"
-                        data-personas="{{ reserva.cantidad_personas }}"
-                        data-fecha="{{ reserva.fecha }}"
-                        data-hora="{{ reserva.hora }}"
-                        data-estado="{{ reserva.estado_reserva }}"
-                        onclick="abrirModal(this)">
-                    Editar
-                </button>
-                {% endif %}
-                
-                {% if reserva.estado_reserva != 'cancelada' %}
-                <form action="{{ url_for('reservas.admin_cancelar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');" style="background-color: #d9534f; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Cancelar</button>
-                </form>
-                {% endif %}
-                
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                        {% if reserva.estado_reserva != 'cancelada' and reserva.estado_reserva != 'asistio' %}
+                        <form action="{{ url_for('reservas.admin_cancelar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn-cancelar" onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');">Cancelar</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<div id="modalEditar" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-    <div style="background: white; width: 400px; margin: 100px auto; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+<div id="modalEditar" class="modal-overlay">
+    <div class="modal-caja">
         <h3>Editar Reserva <span id="modal_id_texto"></span></h3>
-        
         <form id="formEditar" method="POST">
-            <label>Nombre:</label><br>
-            <input type="text" id="edit_nombre" name="nombre_cliente" required style="width: 100%;"><br><br>
 
-            <label>Cantidad de Personas:</label><br>
-            <input type="number" id="edit_personas" name="cantidad_personas" required style="width: 100%;"><br><br>
+            <label>Nombre:</label>
+            <input type="text" id="edit_nombre" name="nombre_cliente" required>
 
-            <label>Fecha:</label><br>
-            <input type="date" id="edit_fecha" name="fecha" required style="width: 100%;"><br><br>
+            <label>Cantidad de Personas:</label>
+            <input type="number" id="edit_personas" name="cantidad_personas" required>
 
-            <label>Hora:</label><br>
-            <input type="time" id="edit_hora" name="hora" required style="width: 100%;"><br><br>
+            <label>Fecha:</label>
+            <input type="date" id="edit_fecha" name="fecha" required>
 
-            <label>Estado:</label><br>
-            <select id="edit_estado" name="estado_reserva" style="width: 100%;">
-                <option value="pendiente">Pendiente</option>
-                <option value="confirmada">Confirmada</option>
-                <option value="cancelada">Cancelada</option>
-            </select><br><br>
+            <label>Hora:</label>
+            <input type="time" id="edit_hora" name="hora" required>
 
-            <div style="text-align: right;">
-                <button type="button" onclick="cerrarModal()" style="background: #ccc; padding: 8px; border: none; cursor: pointer;">Cancelar</button>
-                <button type="submit" style="background: #5cb85c; color: white; padding: 8px; border: none; cursor: pointer;">Guardar Cambios</button>
+            <input type="hidden" id="edit_estado" name="estado_reserva">
+
+            <div class="modal-botones">
+                <button type="button" class="btn-gris" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar">Guardar Cambios</button>
             </div>
         </form>
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='scripts/admin_reservas.js') }}"></script>
+{% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/admin_reservas.js') }}"></script>
 {% endblock %}

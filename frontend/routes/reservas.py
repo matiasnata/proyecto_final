@@ -42,9 +42,9 @@ def admin_reservas():
 @reservas_bp.route("/admin/reservas/confirmar/<int:id_reserva>", methods=["POST"])
 def admin_confirmar_reserva(id_reserva):
     try:
-        requests.put(f"http://localhost:5001/reservas/{id_reserva}", json={"estado_reserva": "confirmada"})
+        requests.put(f"http://localhost:5001/reservas/{id_reserva}", json={"estado_reserva": "asistio"})
     except Exception as e:
-        print("Error confirmando:", e)
+        print("Error confirmando asistencia:", e)
     return redirect(url_for("reservas.admin_reservas"))
 
 @reservas_bp.route("/admin/reservas/cancelar/<int:id_reserva>", methods=["POST"])
