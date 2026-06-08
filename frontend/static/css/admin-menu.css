@@ -110,12 +110,15 @@ button[name="accion"][value="agregar"]:hover {
     background-color: #fafaf8;
 }
 
-.lista-platos td form {
+/* esto agarra la columna de acciones y separa los botones */
+.lista-platos td:last-child {
     display: flex;
-    gap: 8px;
+    gap: 12px;
+    align-items: center;
 }
 
-button[name="accion"][value="modificar"] {
+/* botón Modificar */
+.btn-modificar {
     background-color: transparent;
     border: 1px solid #2d4a2d;
     color: #2d4a2d;
@@ -126,12 +129,13 @@ button[name="accion"][value="modificar"] {
     transition: all 0.2s;
 }
 
-button[name="accion"][value="modificar"]:hover {
+.btn-modificar:hover {
     background-color: #2d4a2d;
     color: #ffffff;
 }
 
-button[name="accion"][value="eliminar"] {
+/* botón Eliminar */
+.btn-eliminar {
     background-color: transparent;
     border: 1px solid #c0392b;
     color: #c0392b;
@@ -142,7 +146,7 @@ button[name="accion"][value="eliminar"] {
     transition: all 0.2s;
 }
 
-button[name="accion"][value="eliminar"]:hover {
+.btn-eliminar:hover {
     background-color: #c0392b;
     color: #ffffff;
 }
