@@ -137,7 +137,7 @@ def crear_reseña():
                 }]
             }), 404
         
-        if reserva['estado_reserva'] != 'asistio':
+        if reserva['estado_reserva'] != 'confirmada':
             return jsonify({
                 "errors":[{
                     "code": "403",

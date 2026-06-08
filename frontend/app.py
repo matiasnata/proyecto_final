@@ -5,6 +5,7 @@ from routes.reservas import reservas_bp
 from routes.reseñas import reseñas_bp
 from routes.admin import admin_bp
 from routes.auth import auth_bp
+from routes.scanner import scanner_bp
 from routes.servicios_extra import servicios_extra_bp
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ app.register_blueprint(reservas_bp)
 app.register_blueprint(reseñas_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(servicios_extra_bp)
+app.register_blueprint(scanner_bp)
 
 @app.errorhandler(404)
 def pagina_no_encontrada(e):

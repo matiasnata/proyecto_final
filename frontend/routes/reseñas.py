@@ -135,3 +135,22 @@ def estadisticas_reseñas():
         usuario_autenticado="Juan"
     )
     
+@reseñas_bp.route('/resena/<int:id_reserva>', methods=['GET'])
+def formulario_resena(id_reserva):
+    return render_template('resena.html', id_reserva=id_reserva)
+
+@reseñas_bp.route('/resena/<int:id_reserva>', methods=['POST'])
+def enviar_resena(id_reserva):
+    data = {
+        'id_reserva': id_reserva,
+        'puntaje': request.form.get('puntaje'),
+        'comentario': request.form.get('comentario')
+    }
+    try:
+        response = requests.post('http://127.0.0.1:5001/reseñas', json=data)
+        if response.status_code == 201:
+            return render_template('resena.html', id_reserva=id_reserva, exito='¡Gracias por tu reseña!')
+        else:
+            return render_template('resena.html', id_reserva=id_reserva, error='Hubo un error, intentá de nuevo.')
+    except Exception as e:
+        return render_template('resena.html', id_reserva=id_reserva, error='No se pudo conectar con el servidor.')

@@ -29,6 +29,7 @@ def generar_qr_bytes(token_qr):
     return buffer.getvalue()
 
 def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, token_qr):
+    print(f"Intentando enviar mail a {email_cliente}")
     try:
         qr_bytes = generar_qr_bytes(token_qr)
 
@@ -69,27 +70,31 @@ def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, to
             data=qr_bytes
         )
         mail.send(msg)
+        print("Mail enviado con exito")
         return True
     except Exception as e:
-        print(f'Error al enviar email de reserva creada: {e}')
+        print(f"Error al enviar email: {type(e).__name__}: {e}")
         return False
 
-def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora):
+def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_reserva=None):
     try:
         if estado == 'confirmada':
             asunto = 'Tu reserva en Flames JB fue confirmada'
             html = f'''
             <html>
-            <body style="font-family: Arial, sans-serif; color: #333;">
+            <body>
                 <h2>Hola {nombre},</h2>
                 <p>¡Buenas noticias! Tu reserva fue confirmada por nuestro equipo.</p>
                 <ul>
-                    <li>📅 <strong>Fecha:</strong> {fecha}</li>
-                    <li>🕐 <strong>Hora:</strong> {hora}</li>
+                    <li>Fecha: {fecha}</li>
+                    <li>Hora: {hora}</li>
                 </ul>
-                <p>¡Te esperamos en Flames JB!<br>
+                <p>¿Cómo fue tu experiencia? Dejanos tu reseña:</p>
+                <a href="http://127.0.0.1:5000/resena/{id_reserva}">Dejar reseña</a>
+                <br><br>
+                <p>Flames JB<br>
                 Av San Juan 1234, Boedo<br>
-                📞 +54 9 11 3435-6787</p>
+                +54 9 11 3435-6787</p>
             </body>
             </html>
             '''
@@ -97,13 +102,13 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora):
             asunto = 'Tu reserva en Flames JB fue cancelada'
             html = f'''
             <html>
-            <body style="font-family: Arial, sans-serif; color: #333;">
+            <body>
                 <h2>Hola {nombre},</h2>
-                <p>Tu reserva del <strong>{fecha}</strong> a las <strong>{hora}</strong> fue cancelada.</p>
+                <p>Tu reserva del {fecha} a las {hora} fue cancelada.</p>
                 <p>Si tenés alguna duda, comunicate con nosotros.</p>
                 <p>Flames JB<br>
                 Av San Juan 1234, Boedo<br>
-                📞 +54 9 11 3435-6787</p>
+                +54 9 11 3435-6787</p>
             </body>
             </html>
             '''
@@ -121,7 +126,6 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora):
     except Exception as e:
         print(f'Error al enviar email de cambio de estado: {e}')
         return False
-
 
 @reservas_bp.route('/reservas/<int:id_reservas>', methods=['GET'])
 def buscar_reserva_por_id(id_reservas):
