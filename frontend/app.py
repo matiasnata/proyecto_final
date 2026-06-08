@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, session, redirect, url_for
 from routes.inicio import inicio_bp
 from routes.menu import menu_bp
 from routes.reservas import reservas_bp
@@ -9,6 +9,18 @@ from routes.scanner import scanner_bp
 from routes.servicios_extra import servicios_extra_bp
 
 app = Flask(__name__)
+# secret_key es necesaria para usar session en Flask
+# session permite recordar que el admin está logueado mientras navega por el panel
+app.secret_key = 'clave_proyecto_final_flames'
+
+@app.before_request
+def verificar_sesion_admin():
+    # verifica si la URL a la que el usuario quiere entrar empieza con "/admin"
+    if request.path.startswith('/admin'):
+        # si es una ruta de admin, verificamos si no tiene la sesión iniciada
+        if 'admin' not in session:
+            # si no está logueado, lo mando al login
+            return redirect(url_for('auth.login'))
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(inicio_bp)
