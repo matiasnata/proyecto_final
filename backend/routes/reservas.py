@@ -512,7 +512,7 @@ def verificar_qr():
         )
 
         return jsonify({
-            'message': 'Reserva confirmada con exito',
+            'message': 'Asistencia confirmada con exito',
             'reserva': {
                 'nombre_cliente': reserva['nombre_cliente'],
                 'fecha': str(reserva['fecha']),
