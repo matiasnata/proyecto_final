@@ -87,7 +87,7 @@ def obtener_reseñas():
         if conn:
             conn.close()
 
-@reseñas_bp.route("", methods=['POST'])
+@reseñas_bp.route('', methods=['POST'])
 def crear_reseña():
     data = request.get_json()
     conn = None
@@ -104,10 +104,10 @@ def crear_reseña():
         }), 400
     
     puntaje = data.get('puntaje')
-    id_reserva = data.get('id_reserva')
     comentario = data.get('comentario')
+    id_reserva = data.get('id_reserva')
     
-    if not puntaje or not id_reserva or not comentario:
+    if not puntaje:
         return jsonify({
             "errors":[{
                 "code":"400",
@@ -137,7 +137,7 @@ def crear_reseña():
                 }]
             }), 404
         
-        if reserva['estado_reserva'] != 'confirmada':
+        if reserva['estado_reserva'] != 'asistio':
             return jsonify({
                 "errors":[{
                     "code": "403",
