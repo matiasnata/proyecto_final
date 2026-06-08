@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseña</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crear-reseña.css') }}">
+</head>
+<body data-exito="{{ exito|default('') }}" data-error="{{ error|default('') }}">
+
+    <div id="contenedor-formulario" class="contenedor-reseña">
+        <h2>¡Gracias por visitarnos!</h2>
+        <p>¿Qué te pareció la experiencia? Tu opinión nos ayuda a mejorar.</p>
+        
+        <form action="{{ url_for('reseñas.enviar_resena')}}" method="POST">
+            <input type="hidden" name="id_reserva" value="{{ id_reserva }}">
+
+            <div class="grupo-form">
+                <label for="puntaje">Puntuación:</label>
+                <select name="puntaje" id="puntaje" required>
+                    <option value="" disabled selected>Elige una clasificación</option>
+                    <option value="5">5 ⭐ - ¡Excelente!</option>
+                    <option value="4">4 ⭐ - Muy bueno</option>
+                    <option value="3">3 ⭐ - Bueno</option>
+                    <option value="2">2 ⭐ - Regular</option>
+                    <option value="1">1 ⭐ - Malo</option>
+                </select>
+            </div>
+
+            <div class="grupo-form">
+                <label for="comentario">Déjanos tu comentario:</label>
+                <textarea name="comentario" id="comentario" rows="5" placeholder="Escribe tu opinión aquí" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-enviar">Enviar Reseña</button>
+        </form>
+    </div>
+
+    <div id="ventana-exito" class="ventana-oculta">
+        <div class="ventana-contenido">
+            <h3>Reseña publicada correctamente</h3>
+            <p>{{ exito }}</p>
+            <a href="{{ url_for('inicio.inicio') }}"  id="btn-cerrar-exito" class="btn-cerrar" >Aceptar</a>
+        </div>
+    </div>
+
+    <div id="ventana-error" class="ventana-oculta">
+        <div class="ventana-contenido">
+            <h3>Algo salió mal</h3>
+            <p>{{ error }}</p>
+            <button id="btn-cerrar-error" class="btn-cerrar">Volver a intentar</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts/ventana_reseñas.js') }}"></script>
+</body>
+</html>
