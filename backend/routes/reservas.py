@@ -112,8 +112,32 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_re
             </body>
             </html>
             '''
+         
+        elif estado == 'asistio':
+            asunto = 'Cuentanos como fue tu experiencia en nuestro restaurante Flames jb'
+            link_reseña = f"http://127.0.0.1:5000/crear/reseña/{id_reserva}" #este es el link del frontend que nos devuelve el template de crear_reseña
+            html = f'''
+            <html>
+            <body style="font-family: Arial, sans-serif; color: #333;">
+                <h2>Hola {nombre},</h2>
+                <p>Esperamos que hayas disfrutado tu experiencia en Flames JB el {fecha}.</p>
+                <p>Tu opinión nos ayuda a seguir mejorando. Por favor, tomate un minuto para dejarnos tu reseña:</p>
+                <br>
+                <a href="{link_reseña}"
+                   style="background-color: #27ae60; color: white; padding: 12px 24px;
+                          text-decoration: none; border-radius: 6px; font-size: 16px;">
+                    Dejar mi reseña
+                </a>
+                <br><br>
+                <p>¡Te esperamos pronto!<br>
+                Flames JB</p>
+            </body>
+            </html>
+            '''    
         else:
             return False
+        
+        
 
         msg = Message(
             subject=asunto,
@@ -274,7 +298,7 @@ def mostrar_reservas_dashboard():
 
 @reservas_bp.route('/reservas/<int:id_reservas>', methods=['PUT'])
 def actualizar_reserva_id(id_reservas):
-    data = request.json
+    data = request.get_json()
 
     if not data:
         return jsonify({'errors': [{'code': '400', 'message': 'Sin datos en el body'}]}), 400
@@ -306,13 +330,14 @@ def actualizar_reserva_id(id_reservas):
         )
         conn.commit()
 
-        if nuevo_estado != estado_anterior and nuevo_estado in ('confirmada', 'cancelada'):
+        if nuevo_estado != estado_anterior and nuevo_estado in ('asistio', 'cancelada'):
             enviar_email_cambio_estado(
                 nombre=actual["nombre_cliente"],
                 email_cliente=actual["cliente_email"],
                 estado=nuevo_estado,
                 fecha=str(nueva_fecha),
-                hora=str(nueva_hora)
+                hora=str(nueva_hora),
+                id_reserva=id_reservas
             )
 
         return jsonify({"message": "La reserva fue modificada con exito"}), 200
@@ -387,73 +412,9 @@ def cancelar_reserva_id(id_reservas):
         if conn:
             conn.close()
 
-
-@reservas_bp.route("/reservas/disponibilidad", methods=['GET'])
-def consultar_disponiblidad_hora():
-    fecha = request.args.get('fecha')
-    turnos_fijos = ['11:00', '12:30', '14:00', '15:30', '17:00', '20:00', '21:30', '23:00']
-    conn = None
-    cursor = None
-    capacidad_max = 100
-
-    if not fecha:
-        return jsonify({
-            "errors":[{
-                "code": "400",
-                "message": "Elija primero la fecha",
-                "level": "error",
-                "Description": "Falta el parametro fecha"
-            }]
-        }), 400
-
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        query = """SELECT hora, COALESCE(SUM(cantidad_personas), 0) as total_personas
-        FROM reservas
-        WHERE fecha=%s AND estado_reserva IN ('pendiente', 'confirmada')
-        GROUP BY hora"""
-
-        cursor.execute(query, (fecha,))
-        resultados = cursor.fetchall()
-
-        ocupacion_por_hora = {}
-        for fila in resultados:
-            hora_str = str(fila['hora'])[:5]
-            ocupacion_por_hora[hora_str] = int(fila['total_personas'])
-
-        turnos_disponibles = []
-        for turno in turnos_fijos:
-            ocupacion_actual = ocupacion_por_hora.get(turno, 0)
-            if ocupacion_actual < capacidad_max:
-                turnos_disponibles.append(turno)
-
-        return jsonify({
-            "fecha": fecha,
-            "horarios_disponibles": turnos_disponibles
-        }), 200
-
-    except Exception as e:
-        return jsonify({
-            "errors":[{
-                "code": "500",
-                "message": "Error inesperado al conectarse con la base de datos",
-                "level": "error",
-                "description": f"Error interno del servidor: {e}"
-            }]
-        }), 500
-
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-
 @reservas_bp.route("/reservas/verificar_qr", methods=['POST'])
 def verificar_qr():
-    data = request.json
+    data = request.get_json()
 
     if not data or 'token_qr' not in data:
         return jsonify({
@@ -483,9 +444,9 @@ def verificar_qr():
                 }]
             }), 404
 
-        if reserva['estado_reserva'] == 'confirmada':
+        if reserva['estado_reserva'] == 'asistio':
             return jsonify({
-                'message': 'Esta reserva ya fue confirmada anteriormente',
+                'message': 'Este qr ya fue escaneado anteriormente',
                 'reserva': reserva
             }), 200
 
@@ -500,16 +461,17 @@ def verificar_qr():
 
         cursor.execute(
             "UPDATE reservas SET estado_reserva = %s WHERE token_qr = %s",
-            ('confirmada', data['token_qr'])
+            ('asistio', data['token_qr'])
         )
         conn.commit()
 
         enviar_email_cambio_estado(
             nombre=reserva["nombre_cliente"],
             email_cliente=reserva["cliente_email"],
-            estado='confirmada',
+            estado='asistio',
             fecha=str(reserva["fecha"]),
-            hora=str(reserva["hora"])
+            hora=str(reserva["hora"]),
+            id_reserva=reserva["id_reservas"]
         )
 
         return jsonify({
