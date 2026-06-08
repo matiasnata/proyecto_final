@@ -184,8 +184,9 @@ def crear_reserva():
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
+        
 
-        query_busqueda = "SELECT cliente_email FROM reservas WHERE cliente_email = %s"
+        query_busqueda = "SELECT cliente_email FROM reservas WHERE cliente_email = %s AND estado_reserva = 'confirmada'"
         cursor.execute(query_busqueda, (data['cliente_email'],))
         email_buscado = cursor.fetchone()
 
@@ -199,7 +200,7 @@ def crear_reserva():
             }), 409
 
         token_qr = str(uuid.uuid4())
-        guarda_valores = "INSERT INTO reservas(nombre_cliente, cliente_email, cantidad_personas, fecha, hora, token_qr, estado_reserva) VALUES (%s,%s,%s,%s,%s,%s,'pendiente')"
+        guarda_valores = "INSERT INTO reservas(nombre_cliente, cliente_email, cantidad_personas, fecha, hora, token_qr, estado_reserva) VALUES (%s,%s,%s,%s,%s,%s,'confirmada')"
         valores = (
             data["nombre_cliente"],
             data["cliente_email"],
