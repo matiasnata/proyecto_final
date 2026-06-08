@@ -29,13 +29,13 @@
             <td>{{ reserva.hora }}</td>
             <td>{{ reserva.estado_reserva }}</td>
             <td>
-                {% if reserva.estado_reserva == 'pendiente' %}
+                {% if reserva.estado_reserva == 'confirmada' %}
                 <form action="{{ url_for('reservas.admin_confirmar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
-                    <button type="submit" style="background-color: #5cb85c; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Confirmar</button>
+                    <button type="submit" style="background-color: #5cb85c; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Asistió</button>
                 </form>
                 {% endif %}
 
-                {% if reserva.estado_reserva != 'cancelada' %}
+                {% if reserva.estado_reserva != 'cancelada' and reserva.estado_reserva != 'asistio' %}
                 <button type="button" 
                         style="background-color: #f0ad4e; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;"
                         data-id="{{ reserva.id_reservas }}"
@@ -49,7 +49,7 @@
                 </button>
                 {% endif %}
                 
-                {% if reserva.estado_reserva != 'cancelada' %}
+                {% if reserva.estado_reserva != 'cancelada' and reserva.estado_reserva != 'asistio' %}
                 <form action="{{ url_for('reservas.admin_cancelar_reserva', id_reserva=reserva.id_reservas) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('¿Seguro que deseas cancelar esta reserva?');" style="background-color: #d9534f; color: white; cursor: pointer; border: none; padding: 5px; margin: 2px;">Cancelar</button>
                 </form>
@@ -79,8 +79,8 @@
 
             <label>Estado:</label><br>
             <select id="edit_estado" name="estado_reserva" style="width: 100%;">
-                <option value="pendiente">Pendiente</option>
                 <option value="confirmada">Confirmada</option>
+                <option value="asistio">Asistió</option>
                 <option value="cancelada">Cancelada</option>
             </select><br><br>
 
