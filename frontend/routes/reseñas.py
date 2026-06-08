@@ -2,9 +2,9 @@ from datetime import datetime
 from flask import Blueprint, render_template, url_for, request, redirect
 import requests
 
-reseñas_bp = Blueprint('reseñas', __name__,  url_prefix='/admin/resenas')
+reseñas_bp = Blueprint('reseñas', __name__,)
 
-@reseñas_bp.route('', methods=['GET'])
+@reseñas_bp.route('/admin/resenas', methods=['GET'])
 def admin_resenas():
     # con el formulario, se le agrega a la url una query param con lo que envio el usuario, el valor se guarda en la variable email_buscSO
     email_ingresado = request.args.get('email_buscado')
@@ -68,7 +68,7 @@ def admin_resenas():
         usuario_autenticado="Juan",
     )
 
-@reseñas_bp.route('/eliminar/<int:id>', methods=['POST'])
+@reseñas_bp.route('/admin/resenas/eliminar/<int:id>', methods=['POST'])
 def eliminar_reseña_frontend(id):
     # 1. Definimos la URL exacta del backend para esa reseña específica
     url_backend = f'http://127.0.0.1:5001/reseñas/{id}'
@@ -86,7 +86,7 @@ def eliminar_reseña_frontend(id):
     # Esto hará que se vuelva a hacer el GET y la tabla se muestre sin la reseña eliminada
     return redirect(url_for('reseñas.admin_resenas'))
 
-@reseñas_bp.route('/estadisticas', methods=['GET'])
+@reseñas_bp.route('/admin/resenas/estadisticas', methods=['GET'])
 def estadisticas_reseñas():
     anio_actual = datetime.now().year
     
@@ -135,22 +135,25 @@ def estadisticas_reseñas():
         usuario_autenticado="Juan"
     )
     
-@reseñas_bp.route('/resena/<int:id_reserva>', methods=['GET'])
+@reseñas_bp.route('/crear/reseña/<int:id_reserva>', methods=['GET'])
 def formulario_resena(id_reserva):
-    return render_template('resena.html', id_reserva=id_reserva)
+    return render_template('crear_reseña.html', id_reserva=id_reserva)
 
-@reseñas_bp.route('/resena/<int:id_reserva>', methods=['POST'])
-def enviar_resena(id_reserva):
+@reseñas_bp.route('/resena', methods=['POST'])
+def enviar_resena():
     data = {
-        'id_reserva': id_reserva,
-        'puntaje': request.form.get('puntaje'),
+        'id_reserva': request.form.get('id_reserva'),
+        'puntaje': int(request.form.get('puntaje')),
         'comentario': request.form.get('comentario')
     }
+    
+    id_reserva = request.form.get('id_reserva')
+    
     try:
         response = requests.post('http://127.0.0.1:5001/reseñas', json=data)
         if response.status_code == 201:
-            return render_template('resena.html', id_reserva=id_reserva, exito='¡Gracias por tu reseña!')
+            return render_template('crear_reseña.html', id_reserva=id_reserva, exito='¡Gracias por tu reseña!')
         else:
-            return render_template('resena.html', id_reserva=id_reserva, error='Hubo un error, intentá de nuevo.')
+            return render_template('crear_reseña.html', id_reserva=id_reserva, error='Hubo un error,quizas ya hiciste una reseña, si no es asi intenta de nuevo')
     except Exception as e:
-        return render_template('resena.html', id_reserva=id_reserva, error='No se pudo conectar con el servidor.')
+        return render_template('crear_reseña.html', id_reserva=id_reserva, error='No se pudo conectar con el servidor, intenta mas tarde.')
