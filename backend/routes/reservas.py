@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from database.conexion import get_connection
 from flask_mail import Mail, Message
 import qrcode
@@ -13,6 +13,7 @@ def init_mail(mail_instance):
     global mail
     mail = mail_instance
 
+# ── QR ────────────────────────────────────────────────────────
 def generar_qr_bytes(token_qr):
     qr = qrcode.QRCode(
         version=1,
@@ -28,6 +29,7 @@ def generar_qr_bytes(token_qr):
     buffer.seek(0)
     return buffer.getvalue()
 
+# ── EMAILS ────────────────────────────────────────────────────
 def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, token_qr):
     print(f"Intentando enviar mail a {email_cliente}")
     try:
@@ -38,36 +40,20 @@ def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, to
             sender=mail.default_sender,
             recipients=[email_cliente]
         )
-
-        msg.html = f'''
-        <html>
-        <body style="font-family: Arial, sans-serif; color: #333;">
-            <h2>Hola {nombre},</h2>
-            <p>Tu reserva fue creada con éxito. Acá están los detalles:</p>
-            <ul>
-                <li>📅 <strong>Fecha:</strong> {fecha}</li>
-                <li>🕐 <strong>Hora:</strong> {hora}</li>
-                <li>👥 <strong>Personas:</strong> {personas}</li>
-            </ul>
-            <p>Adjuntamos tu código QR. Presentalo al llegar al restaurante.</p>
-            <br>
-            <a href="http://127.0.0.1:5001/reservas/cancelar/{token_qr}"
-            style="background-color: #c0392b; color: white; padding: 12px 24px;
-                text-decoration: none; border-radius: 6px; font-size: 16px;">
-                Cancelar mi reserva
-            </a>
-            <br><br>
-            <p>¡Te esperamos en Flames JB!<br>
-            Av San Juan 1234, Boedo<br>
-            📞 +54 9 11 3435-6787</p>
-        </body>
-        </html>
-        '''
-
+        msg.html = render_template(
+            'emails/reserva_creada.html',
+            nombre=nombre,
+            fecha=fecha,
+            hora=hora,
+            personas=personas,
+            token_qr=token_qr
+        )
         msg.attach(
-            filename='reserva_qr.png',
+            filename='qr.png',
             content_type='image/png',
-            data=qr_bytes
+            data=qr_bytes,
+            disposition='inline',
+            headers={'Content-ID': '<qr_reserva>'}
         )
         mail.send(msg)
         print("Mail enviado con exito")
@@ -76,68 +62,36 @@ def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, to
         print(f"Error al enviar email: {type(e).__name__}: {e}")
         return False
 
+
 def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_reserva=None):
     try:
         if estado == 'confirmada':
             asunto = 'Tu reserva en Flames JB fue confirmada'
-            html = f'''
-            <html>
-            <body>
-                <h2>Hola {nombre},</h2>
-                <p>¡Buenas noticias! Tu reserva fue confirmada por nuestro equipo.</p>
-                <ul>
-                    <li>Fecha: {fecha}</li>
-                    <li>Hora: {hora}</li>
-                </ul>
-                <p>¿Cómo fue tu experiencia? Dejanos tu reseña:</p>
-                <a href="http://127.0.0.1:5000/resena/{id_reserva}">Dejar reseña</a>
-                <br><br>
-                <p>Flames JB<br>
-                Av San Juan 1234, Boedo<br>
-                +54 9 11 3435-6787</p>
-            </body>
-            </html>
-            '''
+            html = render_template(
+                'emails/reserva_confirmada.html',
+                nombre=nombre,
+                fecha=fecha,
+                hora=hora,
+                id_reserva=id_reserva
+            )
         elif estado == 'cancelada':
             asunto = 'Tu reserva en Flames JB fue cancelada'
-            html = f'''
-            <html>
-            <body>
-                <h2>Hola {nombre},</h2>
-                <p>Tu reserva del {fecha} a las {hora} fue cancelada.</p>
-                <p>Si tenés alguna duda, comunicate con nosotros.</p>
-                <p>Flames JB<br>
-                Av San Juan 1234, Boedo<br>
-                +54 9 11 3435-6787</p>
-            </body>
-            </html>
-            '''
-         
+            html = render_template(
+                'emails/reserva_cancelada.html',
+                nombre=nombre,
+                fecha=fecha,
+                hora=hora
+            )
         elif estado == 'asistio':
-            asunto = 'Cuentanos como fue tu experiencia en nuestro restaurante Flames jb'
-            link_reseña = f"http://127.0.0.1:5000/crear/reseña/{id_reserva}" #este es el link del frontend que nos devuelve el template de crear_reseña
-            html = f'''
-            <html>
-            <body style="font-family: Arial, sans-serif; color: #333;">
-                <h2>Hola {nombre},</h2>
-                <p>Esperamos que hayas disfrutado tu experiencia en Flames JB el {fecha}.</p>
-                <p>Tu opinión nos ayuda a seguir mejorando. Por favor, tomate un minuto para dejarnos tu reseña:</p>
-                <br>
-                <a href="{link_reseña}"
-                   style="background-color: #27ae60; color: white; padding: 12px 24px;
-                          text-decoration: none; border-radius: 6px; font-size: 16px;">
-                    Dejar mi reseña
-                </a>
-                <br><br>
-                <p>¡Te esperamos pronto!<br>
-                Flames JB</p>
-            </body>
-            </html>
-            '''    
+            asunto = 'Contanos cómo fue tu experiencia en Flames JB'
+            html = render_template(
+                'emails/reserva_asistio.html',
+                nombre=nombre,
+                fecha=fecha,
+                id_reserva=id_reserva
+            )
         else:
             return False
-        
-        
 
         msg = Message(
             subject=asunto,
@@ -151,6 +105,8 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_re
         print(f'Error al enviar email de cambio de estado: {e}')
         return False
 
+
+# ── ENDPOINTS ─────────────────────────────────────────────────
 @reservas_bp.route('/reservas/<int:id_reservas>', methods=['GET'])
 def buscar_reserva_por_id(id_reservas):
     if id_reservas <= 0:
@@ -212,7 +168,6 @@ def crear_reserva():
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
-        
 
         query_busqueda = "SELECT cliente_email FROM reservas WHERE cliente_email = %s AND estado_reserva = 'confirmada'"
         cursor.execute(query_busqueda, (data['cliente_email'],))
@@ -250,59 +205,29 @@ def crear_reserva():
         )
 
         return jsonify({
-            'message': 'La reserva fue creada con exito',
-            'token_qr': token_qr
+            "message": "Reserva creada con exito",
+            "token_qr": token_qr
         }), 201
 
     except Exception as e:
-        print(f'ERROR DETALLADO: {e}')
+        if conn:
+            conn.rollback()
         return jsonify({
             'errors': [{
-                'code': 500,
+                'code': '500',
                 'message': "Error interno del servidor",
-                'description': f'Fallo interno del servidor: {e}'
+                'description': str(e)
             }]
         }), 500
+
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-
-@reservas_bp.route("/reservas/admin", methods=["GET"])
-def mostrar_reservas_dashboard():
-    try:
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-        query = "SELECT id_reservas, nombre_cliente, cliente_email, cantidad_personas, fecha, hora, estado_reserva FROM reservas"
-        cursor.execute(query)
-        reservas = cursor.fetchall()
-        cursor.close()
-        conn.close()
-
-        for reserva in reservas:
-            if reserva.get('fecha') is not None:
-                reserva['fecha'] = str(reserva['fecha'])  # str(datetime.date) devuelve "2024-06-15"
-            if reserva.get('hora') is not None:
-                total_seg = int(reserva['hora'].total_seconds())  # convierte timedelta a segundos
-                horas = total_seg // 3600
-                minutos = (total_seg % 3600) // 60
-                reserva['hora'] = f"{horas:02d}:{minutos:02d}"  # 19:00
-
-        return jsonify({"data": reservas}), 200
-    
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        if cursor: cursor.close()
+        if conn: conn.close()
 
 
 @reservas_bp.route('/reservas/<int:id_reservas>', methods=['PUT'])
-def actualizar_reserva_id(id_reservas):
+def editar_reserva(id_reservas):
     data = request.get_json()
-
-    if not data:
-        return jsonify({'errors': [{'code': '400', 'message': 'Sin datos en el body'}]}), 400
-
     conn = None
     cursor = None
 
@@ -314,18 +239,21 @@ def actualizar_reserva_id(id_reservas):
         actual = cursor.fetchone()
 
         if not actual:
-            return jsonify({'errors': [{'code': '404', 'message': 'Reserva no encontrada'}]}), 404
+            return jsonify({
+                'errors': [{'code': '404', 'message': 'Reserva no encontrada'}]
+            }), 404
 
-        # usa el valor del body si viene, y si falta algun dato, usa el valor existente en la DB
-        nuevo_nombre   = data.get("nombre_cliente",    actual["nombre_cliente"])
-        nuevas_personas= data.get("cantidad_personas", actual["cantidad_personas"])
-        nueva_fecha    = data.get("fecha",             str(actual["fecha"]))
-        nueva_hora     = data.get("hora",              str(actual["hora"]))
-        nuevo_estado   = data.get("estado_reserva",    actual["estado_reserva"])
-        estado_anterior = actual["estado_reserva"]
+        nuevo_nombre    = data.get('nombre_cliente',    actual['nombre_cliente'])
+        nuevas_personas = data.get('cantidad_personas', actual['cantidad_personas'])
+        nueva_fecha     = data.get('fecha',             actual['fecha'])
+        nueva_hora      = data.get('hora',              actual['hora'])
+        nuevo_estado    = data.get('estado_reserva',    actual['estado_reserva'])
+        estado_anterior = actual['estado_reserva']
 
         cursor.execute(
-            "UPDATE reservas SET nombre_cliente=%s, cantidad_personas=%s, fecha=%s, hora=%s, estado_reserva=%s WHERE id_reservas=%s",
+            """UPDATE reservas
+               SET nombre_cliente=%s, cantidad_personas=%s, fecha=%s, hora=%s, estado_reserva=%s
+               WHERE id_reservas=%s""",
             (nuevo_nombre, nuevas_personas, nueva_fecha, nueva_hora, nuevo_estado, id_reservas)
         )
         conn.commit()
@@ -407,10 +335,9 @@ def cancelar_reserva_id(id_reservas):
         }), 500
 
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        if cursor: cursor.close()
+        if conn: conn.close()
+
 
 @reservas_bp.route("/reservas/verificar_qr", methods=['POST'])
 def verificar_qr():
@@ -494,10 +421,8 @@ def verificar_qr():
         }), 500
 
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        if cursor: cursor.close()
+        if conn: conn.close()
 
 
 @reservas_bp.route('/reservas/cancelar/<string:token_qr>', methods=['GET'])
@@ -512,24 +437,10 @@ def cancelar_por_token(token_qr):
         reserva = cursor.fetchone()
 
         if not reserva:
-            return '''
-            <html>
-            <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-                <h2>❌ Reserva no encontrada</h2>
-                <p>No encontramos ninguna reserva asociada a este link.</p>
-            </body>
-            </html>
-            ''', 404
+            return render_template('cancelar/cancelar_no_encontrada.html'), 404
 
         if reserva['estado_reserva'] == 'cancelada':
-            return '''
-            <html>
-            <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-                <h2>ℹ️ Tu reserva ya estaba cancelada.</h2>
-                <p>Si tenés alguna duda escribinos.</p>
-            </body>
-            </html>
-            ''', 200
+            return render_template('cancelar/cancelar_ya_cancelada.html'), 200
 
         cursor.execute(
             "UPDATE reservas SET estado_reserva = %s WHERE token_qr = %s",
@@ -545,20 +456,11 @@ def cancelar_por_token(token_qr):
             hora=str(reserva["hora"])
         )
 
-        return '''
-        <html>
-        <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
-            <h2>✅ Reserva cancelada con éxito</h2>
-            <p>Pronto te llegará un mail confirmando la cancelación.</p>
-        </body>
-        </html>
-        ''', 200
+        return render_template('cancelar/cancelar_exitosa.html'), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        if cursor: cursor.close()
+        if conn: conn.close()

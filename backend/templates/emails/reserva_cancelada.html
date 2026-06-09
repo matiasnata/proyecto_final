@@ -1,0 +1,20 @@
+{% extends 'emails/base_email.html' %}
+
+{% block contenido %}
+
+<h2 style="color: rgb(54, 84, 63); font-size: 22px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0 0 8px 0;">¡Hola, {{ nombre }}!</h2>
+<p style="color: rgb(79, 79, 79); font-size: 16px; font-style: italic; margin: 0 0 24px 0;">
+    Te informamos que tu reserva fue <strong>cancelada</strong>.
+</p>
+
+<!-- DETALLES -->
+<div style="background-color: whitesmoke; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+    <p style="margin: 0 0 10px 0; color: rgb(79, 79, 79); font-size: 16px; font-style: italic;">📅 <strong>Fecha:</strong> {{ fecha }}</p>
+    <p style="margin: 0; color: rgb(79, 79, 79); font-size: 16px; font-style: italic;">🕐 <strong>Hora:</strong> {{ hora }}</p>
+</div>
+
+<p style="color: rgb(79, 79, 79); font-size: 16px; font-style: italic; text-align: center; margin: 0;">
+    Si tenés alguna duda o querés hacer una nueva reserva, no dudes en contactarnos.
+</p>
+
+{% endblock %}
