@@ -1,0 +1,43 @@
+{% extends 'emails/base_email.html' %}
+
+{% block contenido %}
+
+<h2 style="color: rgb(54, 84, 63); font-size: 22px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0 0 8px 0;">¡Hola, {{ nombre }}!</h2>
+<p style="color: rgb(79, 79, 79); font-size: 16px; font-style: italic; margin: 0 0 24px 0;">
+    Tu reserva fue creada con éxito. Acá están los detalles:
+</p>
+
+<!-- DETALLES -->
+<div style="background-color: whitesmoke; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+    <p style="margin: 0 0 10px 0; color: rgb(79, 79, 79); font-size: 16px; font-style: italic;">📅 <strong>Fecha:</strong> {{ fecha }}</p>
+    <p style="margin: 0 0 10px 0; color: rgb(79, 79, 79); font-size: 16px; font-style: italic;">🕐 <strong>Hora:</strong> {{ hora }}</p>
+    <p style="margin: 0; color: rgb(79, 79, 79); font-size: 16px; font-style: italic;">👥 <strong>Personas:</strong> {{ personas }}</p>
+</div>
+
+<!-- QR -->
+<h4 style="color: rgb(54, 84, 63); font-size: 18px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 0 0 12px 0;">
+    Presentá este código QR al llegar al restaurante
+</h4>
+
+<div style="text-align: center; background-color: #ffffff; border: 2px solid burlywood; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+    <img
+        src="cid:qr_reserva"
+        alt="Código QR de tu reserva"
+        width="180"
+        height="180"
+        style="display: block; margin: 0 auto;"
+    />
+    <p style="margin: 10px 0 0 0; font-size: 11px; color: #aaaaaa; font-family: monospace; font-style: normal;">{{ token_qr }}</p>
+</div>
+
+<!-- BOTÓN CANCELAR -->
+<div style="text-align: center;">
+    <a href="http://127.0.0.1:5001/reservas/cancelar/{{ token_qr }}"
+    style="display: inline-block; background-color: #c0392b; color: white; padding: 12px 30px;
+            text-decoration: none; border-radius: 30px; font-size: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold;">
+        Cancelar mi reserva
+    </a>
+</div>
+
+{% endblock %}

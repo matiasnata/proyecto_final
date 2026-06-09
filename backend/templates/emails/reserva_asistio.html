@@ -1,0 +1,21 @@
+{% extends 'emails/base_email.html' %}
+
+{% block contenido %}
+
+<h2 style="color: rgb(54, 84, 63); font-size: 22px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0 0 8px 0;">¡Hola, {{ nombre }}!</h2>
+<p style="color: rgb(79, 79, 79); font-size: 16px; font-style: italic; margin: 0 0 24px 0;">
+    Esperamos que hayas disfrutado tu visita a Flames JB el <strong>{{ fecha }}</strong>.
+    Tu opinión nos ayuda a seguir mejorando. ¡Tomate un minuto para dejarnos tu reseña!
+</p>
+
+<!-- BOTÓN RESEÑA -->
+<div style="text-align: center;">
+    <a href="http://127.0.0.1:5000/crear/reseña/{{ id_reserva }}"
+    style="display: inline-block; background-color: rgb(54, 84, 63); color: white; padding: 12px 30px;
+            text-decoration: none; border-radius: 30px; font-size: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold;">
+        Dejar mi reseña ⭐
+    </a>
+</div>
+
+{% endblock %}
