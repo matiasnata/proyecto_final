@@ -104,10 +104,10 @@ def crear_reseña():
         }), 400
     
     puntaje = data.get('puntaje')
-    comentario = data.get('comentario')
+    comentario = data.get('comentario', "")
     id_reserva = data.get('id_reserva')
     
-    if not puntaje:
+    if not puntaje or not id_reserva:
         return jsonify({
             "errors":[{
                 "code":"400",
@@ -307,12 +307,17 @@ def grafico_tendencia_reseñas():
 
 @reseñas_bp.route('/promedio', methods=['GET'])
 def obtener_promedio_reseñas():
-    # Capturamos la fecha desde la URL, ej: ?fecha_desde=2024-01-01
-    anio = request.args.get('anio')
+    conn = None
+    cursor = None
 
-    # 1. Validación de seguridad: Comprobar que la fecha tenga el formato correcto
-    if anio:
-        if not (anio.isdigit() and len(anio) == 4):
+    anio_str = request.args.get('anio')
+    anio = None #definimos esto en caso de que no se le pase un año en la query
+    
+    if anio_str:
+        if len(anio_str) == 4 and anio_str.isdigit(): #comprobamos que tenga una longitud de 4 digitos y que sea del tipo "2022"
+            anio = int(anio_str)
+        else:
+            # Si mandaron algo que no es un año válido, frenamos acá y devolvemos 400
             return jsonify({
                 "errors": [{
                     "code": "400",
@@ -321,8 +326,8 @@ def obtener_promedio_reseñas():
                     "description": "El parámetro anio debe ser un número de 4 dígitos, ej: 2024"
                 }]
             }), 400
-    conn = None
-    cursor = None
+    
+    
     try:
         conn = conexion.get_connection()
         cursor = conn.cursor(dictionary=True)
@@ -348,9 +353,11 @@ def obtener_promedio_reseñas():
 
         promedio = resultado['promedio'] if resultado['promedio'] is not None else 0.0
         total = resultado['total_reseñas']
+        
+        mensaje_anio = f"para el año {str(anio)}" if anio else "de todas las reseñas"
 
         return jsonify({
-            "message": f"Promedio calculado {'para el año ' + anio if anio else 'de todas las reseñas'}",
+            "message": f"Promedio calculado {mensaje_anio}",
             "promedio_general": promedio,
             "total_reseñas": total
         }), 200
