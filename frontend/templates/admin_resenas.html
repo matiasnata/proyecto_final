@@ -8,20 +8,18 @@
     <form method="GET" action="{{ url_for('reseñas.admin_resenas') }}" class="form-busqueda"> <!--Asocia lo que obtuvimos en este form con la ruta del frontend de admin_resena-->
         <input type="email" name="email_buscado" placeholder="Buscar por email..." 
          value="{{ request.args.get('email_buscado', '') }}"> <!--esto es para que en el buscador se guarde lo que buscamos y no se borre una vez buscado-->
-        <button type="submit" class="btn-verde">Buscar</button>
+        <button type="submit">Buscar</button>
     </form>
     
     <a href="{{ url_for('reseñas.admin_resenas') }}" class="btn-limpiar" >Limpiar filtro</a> <!--te retorna al admin resenas sin ninguna query param, aparecen de nuevo todas las reseñas-->
 
-    <form method="GET" action="{{url_for('reseñas.estadisticas_reseñas')}}" class="form-estadisticas">
-        <button type="submit" class="btn-azul">Ver estadísticas reseñas</button>
-    </form>
+    <a href="{{url_for('reseñas.estadisticas_reseñas')}}" class="btn-verde"> Ver estadísticas </a>
 </div> 
 
 {% if resultado | length == 0 %} <!--analiza el resultado obtenido en caso de que no se haya encontrado nignuna reseña con ese mail envia un mensaje-->
-    <div>
+    <p>
         No se encontraron reseñas con ese mail asociado.
-    </div>
+    </p>
 
 
 {% else %}
@@ -94,7 +92,7 @@
         <p>Esta acción no se puede deshacer y la reseña se borrará permanentemente.</p>
         
         <div class="botones-ocultos">
-            <button type="button" id="btn-cancelar" class="btn-gris">Cancelar</button>
+            <button type="button" id="btn-cancelar">Cancelar</button>
             <button type="button" id="btn-confirmar" class="btn-rojo">Aceptar</button>
         </div>
     </div>
