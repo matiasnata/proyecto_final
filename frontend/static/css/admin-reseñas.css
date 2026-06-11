@@ -20,7 +20,7 @@
     color: #3498db;
     padding: 6px 14px;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 13px;
     cursor: pointer; /* Cambia el cursor al pasar por encima para indicar que es clickeable */
     transition: all 0.2s;
     display: inline-block; /* Necesario para que respete el padding siendo un enlace */
@@ -31,6 +31,24 @@
     color: #ffffff;
 }
 
+.btn-verde {
+    background-color: #3f5f45;
+    color: white;
+
+    border: none;
+    border-radius: 6px;
+
+    cursor: pointer;
+    padding: 6px 14px;
+
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+}
+
+.btn-verde:hover {
+    background-color: rgb(63 95 69 / 0.9);
+}
 
 /* Estado inicial: invisible y sin ocupar espacio */
 .ventana-oculta {
@@ -66,12 +84,12 @@
     margin-top: 0;
     margin-bottom: 10px;
     color: #2c3e50; /* Un azul oscuro/grisáceo muy elegante */
-    font-size: 1.5rem;
+    font-size: 24px;
 }
 
 .caja-confirmacion p {
     color: #666666; /* Gris para que no compita con el título */
-    font-size: 0.95rem;
+    font-size: 15px;
     line-height: 1.5;
     margin-bottom: 25px;
 }
@@ -118,7 +136,7 @@
     color: #374151;
     padding: 8px 16px;
     border-radius: 6px;
-    font-size: 0.9rem;
+    font-size: 15px;
     font-weight: 500;
     transition: all 0.2s;
 }
