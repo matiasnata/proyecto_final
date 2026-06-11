@@ -65,7 +65,7 @@ def admin_resenas():
         link_next=link_next,
         link_first=link_first,
         link_last=link_last,
-        usuario_autenticado="Juan",
+        usuario_autenticado="Admin"
     )
 
 @reseñas_bp.route('/admin/resenas/eliminar/<int:id>', methods=['POST'])
@@ -132,7 +132,7 @@ def estadisticas_reseñas():
         promedios_grafico=promedios_grafico,
         promedio_general=promedio_general,
         total_reseñas=total_reseñas,
-        usuario_autenticado="Juan"
+        usuario_autenticado="Admin"
     )
     
 @reseñas_bp.route('/crear/reseña/<int:id_reserva>', methods=['GET'])
