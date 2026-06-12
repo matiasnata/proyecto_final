@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, request, render_template
+from flask import Blueprint, redirect, url_for, request, render_template, abort
 import requests
 
 reservas_bp = Blueprint("reservas", __name__)
@@ -33,10 +33,12 @@ def admin_reservas():
     total_reservas = []
     try:
         response = requests.get("http://localhost:5001/reservas/admin")
+        response.raise_for_status()
         if response.status_code == 200:
             total_reservas = response.json().get("data", [])
     except Exception as e:
         print("Error al buscar reservas:", e)
+        abort(500)
     return render_template("admin_reservas.html", usuario_autenticado="Admin", total_reservas=total_reservas)
 
 @reservas_bp.route("/admin/reservas/confirmar/<int:id_reserva>", methods=["POST"])

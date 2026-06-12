@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, abort
 import requests
 
 menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
@@ -7,6 +7,7 @@ menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
 def admin_menu():
     try:
         respuesta = requests.get("http://127.0.0.1:5001/platos")
+        respuesta.raise_for_status()
         datos = respuesta.json()
         
         # valido si la API devolvió un diccionario de error o si no devolvió una lista válida
@@ -21,7 +22,7 @@ def admin_menu():
             
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
-        lista_platos = []
+        abort(500)
 
     return render_template('admin_menu.html', platos=lista_platos, usuario_autenticado="Admin")
 

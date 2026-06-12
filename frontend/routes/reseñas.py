@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, render_template, url_for, request, redirect
+from flask import Blueprint, render_template, url_for, request, redirect, abort
 import requests
 
 reseñas_bp = Blueprint('reseñas', __name__,)
@@ -27,6 +27,7 @@ def admin_resenas():
     try:
         # con request.get ya automaticmente armamos la url correspondiente  para el bakckend con la query param en caso de que se la hayan pasado, si no se la pasaron simplemente nos da la url limpia
         respuesta = requests.get(url_backend, params=parametros_para_backend)
+        respuesta.raise_for_status()
         
         #convertio la respuesta que nos da el backend en un diccionario de python.
         datos = respuesta.json()
@@ -54,8 +55,7 @@ def admin_resenas():
     except Exception as e:
         # Por si te olvidaste de encender el backend o hay un error de conexión
         print(f"Error al conectar con el backend: {e}")
-        lista_resenas = [] # Mandamos una lista vacía para que la página no se rompa
-        link_prev = link_next = link_first = link_last = {}
+        abort(500)
 
     # Pasamos la lista de reseñas al HTML (Jinja2) asi ejeutara el for para estas reseñas obtenidas.
     return render_template(
@@ -102,6 +102,7 @@ def estadisticas_reseñas():
     
     try:
         respuesta_grafico = requests.get(url_grafico, params={'anio': anio_buscar})
+        respuesta_grafico.raise_for_status()
         datos_grafico = respuesta_grafico.json()
     
         meses_grafico = datos_grafico.get('meses', [])
@@ -110,8 +111,7 @@ def estadisticas_reseñas():
     except Exception as e:
         # Por si te olvidaste de encender el backend o hay un error de conexión
         print(f"Error al conectar con el backend: {e}")
-        meses_grafico = []
-        promedios_grafico = []
+        abort(500)
     
     try:
         respuesta_promedio = requests.get(url_promedio, params={'anio': anio_buscar})
