@@ -33,11 +33,13 @@ app.register_blueprint(scanner_bp)
 
 @app.errorhandler(404)
 def pagina_no_encontrada(e):
-    return render_template('404.html', usuario_autenticado="Juan"), 404
+    usuario = session.get('admin') or None
+    return render_template('404.html', usuario_autenticado=usuario), 404
 
 @app.errorhandler(500)
 def error_interno_servidor(e):
-    return render_template('500.html', usuario_autenticado="Juan"), 500
+    usuario = session.get('admin') or None
+    return render_template('500.html', usuario_autenticado=usuario), 500
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
