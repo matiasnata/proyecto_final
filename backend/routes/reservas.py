@@ -4,6 +4,7 @@ from flask_mail import Mail, Message
 import qrcode
 import uuid
 import io
+from utils import generar_paginacion
 
 reservas_bp = Blueprint("reservas", __name__)
 
@@ -469,10 +470,23 @@ def cancelar_por_token(token_qr):
 @reservas_bp.route("/reservas/admin", methods=["GET"])
 def mostrar_reservas_dashboard():
     try:
+        limit = int(request.args.get('_limit', 5))
+        offset = int(request.args.get('_offset', 0))
+    
+    except ValueError:
+        offset = 0
+        limit = 5
+    
+    
+    
+    try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
-        query = "SELECT id_reservas, nombre_cliente, cliente_email, cantidad_personas, fecha, hora, estado_reserva FROM reservas"
-        cursor.execute(query)
+        query_conteo = "SELECT COUNT(*) as total FROM reservas"
+        cursor.execute(query_conteo)
+        total = cursor.fetchone()["total"]
+        query = "SELECT id_reservas, nombre_cliente, cliente_email, cantidad_personas, fecha, hora, estado_reserva FROM reservas LIMIT %s OFFSET %s"
+        cursor.execute(query,(limit, offset))
         reservas = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -485,8 +499,13 @@ def mostrar_reservas_dashboard():
                 horas = total_seg // 3600
                 minutos = (total_seg % 3600) // 60
                 reserva['hora'] = f"{horas:02d}:{minutos:02d}"  # 19:00
+        
+        links = generar_paginacion(limit, offset, request, total)
 
-        return jsonify({"data": reservas}), 200
+        return jsonify({
+            "data": reservas,
+            "links": links
+            }), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
