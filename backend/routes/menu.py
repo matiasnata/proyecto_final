@@ -5,6 +5,8 @@ menu_bp = Blueprint("menu",__name__)
 
 @menu_bp.route("/platos", methods=["GET"])
 def obtener_menu():
+    conn = None
+    cursor = None
     try:
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
@@ -14,15 +16,16 @@ def obtener_menu():
 
         menu = cursor.fetchall()
 
-        cursor.close()
-        conn.close()
-
         return jsonify(menu), 200
 
     except Exception as e:
-        return jsonify({
-            "error": str(e)
-        }), 500
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
 
 
 @menu_bp.route("/platos", methods=["POST"])
