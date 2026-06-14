@@ -1,3 +1,5 @@
+import os
+import logging
 from flask import Blueprint, request, jsonify, render_template
 from database.conexion import get_connection
 from flask_mail import Mail, Message
@@ -5,6 +7,8 @@ import qrcode
 import uuid
 import io
 from utils import generar_paginacion
+
+logger = logging.getLogger(__name__)
 
 reservas_bp = Blueprint("reservas", __name__)
 
@@ -32,9 +36,11 @@ def generar_qr_bytes(token_qr):
 
 # ── EMAILS ────────────────────────────────────────────────────
 def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, token_qr):
-    print(f"Intentando enviar mail a {email_cliente}")
+    logger.info(f"Intentando enviar mail a {email_cliente}")
     try:
         qr_bytes = generar_qr_bytes(token_qr)
+        api_base_url = os.getenv('API_BASE_URL', 'http://127.0.0.1:5001')
+        url_cancelar = f"{api_base_url}/reservas/cancelar/{token_qr}"
 
         msg = Message(
             subject='¡Tu reserva en Flames JB está confirmada!',
@@ -47,7 +53,8 @@ def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, to
             fecha=fecha,
             hora=hora,
             personas=personas,
-            token_qr=token_qr
+            token_qr=token_qr,
+            url_cancelar=url_cancelar
         )
         msg.attach(
             filename='qr.png',
@@ -57,10 +64,11 @@ def enviar_email_reserva_creada(nombre, email_cliente, fecha, hora, personas, to
             headers={'Content-ID': '<qr_reserva>'}
         )
         mail.send(msg)
-        print("Mail enviado con exito")
+        logger.info("Mail enviado con exito")
         return True
     except Exception as e:
-        print(f"Error al enviar email: {type(e).__name__}: {e}")
+        logger.error(f"Error al enviar email: {type(e).__name__}: {e}")
+        return False
         return False
 
 
@@ -103,7 +111,7 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_re
         mail.send(msg)
         return True
     except Exception as e:
-        print(f'Error al enviar email de cambio de estado: {e}')
+        logger.error(f'Error al enviar email de cambio de estado: {e}')
         return False
 
 
@@ -253,8 +261,8 @@ def editar_reserva(id_reservas):
 
         cursor.execute(
             """UPDATE reservas
-               SET nombre_cliente=%s, cantidad_personas=%s, fecha=%s, hora=%s, estado_reserva=%s
-               WHERE id_reservas=%s""",
+            SET nombre_cliente=%s, cantidad_personas=%s, fecha=%s, hora=%s, estado_reserva=%s
+            WHERE id_reservas=%s""",
             (nuevo_nombre, nuevas_personas, nueva_fecha, nueva_hora, nuevo_estado, id_reservas)
         )
         conn.commit()
