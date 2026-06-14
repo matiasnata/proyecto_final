@@ -1,3 +1,5 @@
+import os
+import logging
 from flask import Flask
 from flask_mail import Mail
 from routes.menu import menu_bp
@@ -7,10 +9,13 @@ from routes.servicios_extra import servicios_extra_bp
 from routes.reseñas import reseñas_bp
 from routes.auth import auth_bp
 from dotenv import load_dotenv
-import os
 
-load_dotenv()  
+load_dotenv()
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 app = Flask(__name__)
 
