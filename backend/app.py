@@ -6,17 +6,20 @@ from routes.panel_control_dashboard import dashboard_bp
 from routes.servicios_extra import servicios_extra_bp
 from routes.reseñas import reseñas_bp
 from routes.auth import auth_bp
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  
+
 
 app = Flask(__name__)
 
-# ── Configuración Flask-Mail ──────────────────────────────────
-# Reemplazá con tu email y contraseña de aplicación de Gmail
-app.config['MAIL_SERVER']         = 'smtp.gmail.com'
-app.config['MAIL_PORT']           = 587
-app.config['MAIL_USE_TLS']        = True
-app.config['MAIL_USERNAME']       = 'flamesjbresto@gmail.com'       # ← tu email
-app.config['MAIL_PASSWORD']       = 'mwaa mojn yjvr klwg' # ← clave de 16 caracteres
-app.config['MAIL_DEFAULT_SENDER'] = 'flamesjbresto@gmail.com'       # ← tu email
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
 
 mail = Mail(app)
 

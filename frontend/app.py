@@ -7,12 +7,14 @@ from routes.admin import admin_bp
 from routes.auth import auth_bp
 from routes.scanner import scanner_bp
 from routes.servicios_extra import servicios_extra_bp
+from dotenv import load_dotenv
+import os
+load_dotenv()  
 
 app = Flask(__name__)
 # secret_key es necesaria para usar session en Flask
 # session permite recordar que el admin está logueado mientras navega por el panel
-app.secret_key = 'clave_proyecto_final_flames'
-
+app.secret_key = os.getenv('SECRET_KEY')
 @app.before_request
 def verificar_sesion_admin():
     # verifica si la URL a la que el usuario quiere entrar empieza con "/admin"
