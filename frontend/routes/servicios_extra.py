@@ -1,16 +1,14 @@
 from flask import Flask, jsonify, request, Blueprint, render_template, redirect, abort, url_for
 import requests
-
+from config import API_BASE_URL
 servicios_extra_bp= Blueprint('servicios_extra', __name__, url_prefix='/admin/servicios')
 
-# Definimos dónde está corriendo tu API backend (ajustá el puerto según el tuyo)
-URL_API_BACKEND = "http://127.0.0.1:5001"
 
 @servicios_extra_bp.route('', methods=['GET'])
 def admin_servicios():
     try:
 
-        url_completa = f"{URL_API_BACKEND}/restaurante/admin/servicios-extra"
+        url_completa = f"{API_BASE_URL}/restaurante/admin/servicios-extra"
         respuesta = requests.get(url_completa)
 
         lista_servicios = respuesta.json()
@@ -33,7 +31,7 @@ def agregar_servicio():
     nombre = request.form.get('nservicio')
     descripcion = request.form.get('dservicio')
 
-    url_backend = f"{URL_API_BACKEND}/restaurante/admin/servicios-extra"
+    url_backend = f"{API_BASE_URL}/restaurante/admin/servicios-extra"
 
     try:
         respuesta = requests.post(url_backend, json={
@@ -49,7 +47,7 @@ def agregar_servicio():
 
 @servicios_extra_bp.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar_servicio(id):
-    url_backend = f"{URL_API_BACKEND}/restaurante/admin/servicios-extra/{id}"
+    url_backend = f"{API_BASE_URL}/restaurante/admin/servicios-extra/{id}"
 
     try:
         requests.delete(url_backend)
@@ -65,7 +63,7 @@ def modificar_servicio():
     descripcion = request.form.get('dmservicio')
     activo = request.form.get('amservicio')
 
-    url_backend = f"{URL_API_BACKEND}/restaurante/admin/servicios-extra/{id}"
+    url_backend = f"{API_BASE_URL}/restaurante/admin/servicios-extra/{id}"
 
     try:
         requests.patch(url_backend, json={
@@ -78,5 +76,3 @@ def modificar_servicio():
     return redirect(url_for('servicios_extra.admin_servicios'))
 
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)

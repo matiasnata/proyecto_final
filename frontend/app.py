@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 # secret_key es necesaria para usar session en Flask
 # session permite recordar que el admin está logueado mientras navega por el panel
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.getenv('SECRET_KEY', 'clave_super_secreta')
 @app.before_request
 def verificar_sesion_admin():
     # verifica si la URL a la que el usuario quiere entrar empieza con "/admin"
