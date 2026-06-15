@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 import requests
+from config import API_BASE_URL
 
 menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
 
 @menu_bp.route('', methods=['GET'])
 def admin_menu():
     try:
-        respuesta = requests.get("http://127.0.0.1:5001/platos")
+        respuesta = requests.get(f"{API_BASE_URL}/platos")
         datos = respuesta.json()
         
         # valido si la API devolvió un diccionario de error o si no devolvió una lista válida
@@ -25,10 +26,10 @@ def admin_menu():
 
     return render_template('admin_menu.html', platos=lista_platos, usuario_autenticado="Admin")
 
-
+@menu_bp.route('', methods=['POST'])
 def agregar_plato():
     try:
-        response = requests.post("http://127.0.0.1:5001/platos", json={
+        response = requests.post(f"{API_BASE_URL}/platos", json={
             "nombre_plato": request.form.get('nombre_plato'),
             "descripcion": request.form.get('descripcion'),
             "precio": float(request.form.get('precio')),
@@ -49,7 +50,7 @@ def agregar_plato():
 @menu_bp.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar_plato(id):
     try:
-        requests.delete(f"http://127.0.0.1:5001/platos/{id}")
+        requests.delete(f"{API_BASE_URL}/platos/{id}")
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
 
@@ -59,7 +60,7 @@ def eliminar_plato(id):
 @menu_bp.route('/modificar/<int:id>', methods=['POST'])
 def modificar_plato(id):
     try:
-        requests.put(f"http://127.0.0.1:5001/platos/{id}", json={
+        requests.put(f"{API_BASE_URL}/platos/{id}", json={
             "nombre_plato": request.form.get('nombre_plato'),
             "descripcion": request.form.get('descripcion'),
             "precio": float(request.form.get('precio')),

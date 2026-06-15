@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 import requests
+from config import API_BASE_URL
+
 auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login")
@@ -17,7 +19,7 @@ def login_post():
 
     try:
         # llamo al backend con las credenciales
-        respuesta = requests.post("http://127.0.0.1:5001/auth/login", json={
+        respuesta = requests.post(f"{API_BASE_URL}/auth/login", json={
             "email": email,
             "password": password
         })

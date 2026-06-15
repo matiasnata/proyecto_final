@@ -1,6 +1,7 @@
 import logging
 from flask import Blueprint, render_template
 import requests
+from config import API_BASE_URL
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ def admin():
     error_semana = False
 
     try:
-        response = requests.get("http://localhost:5001/dashboard/estadisticas")
+        response = requests.get(f"{API_BASE_URL}/dashboard/estadisticas")
         if response.status_code == 200:
             resultado = response.json()
             datos = resultado["data"]
@@ -30,7 +31,7 @@ def admin():
         error_estadisticas = True
 
     try:
-        response_semana = requests.get("http://localhost:5001/dashboard/reservas-semana")
+        response_semana = requests.get(f"{API_BASE_URL}/dashboard/reservas-semana")
         if response_semana.status_code == 200:
             semana = response_semana.json()["data"]
             if len(semana) > 0:

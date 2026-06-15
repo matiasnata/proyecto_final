@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 import requests
-
+from config import API_BASE_URL
 scanner_bp = Blueprint("scanner", __name__)
 
 @scanner_bp.route("/admin/scanner")
@@ -12,7 +12,7 @@ def verificar_qr():
     data = request.get_json()
     try:
         response = requests.post(
-            "http://localhost:5001/reservas/verificar_qr",
+            f"{API_BASE_URL}/reservas/verificar_qr",
             json={"token_qr": data["token_qr"]}
         )
         return response.json(), response.status_code

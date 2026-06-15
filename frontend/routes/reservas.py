@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, url_for, request, render_template
 import requests
+from config import API_BASE_URL
 
 reservas_bp = Blueprint("reservas", __name__)
 
@@ -16,7 +17,7 @@ def crear_reserva():
 
     # Usamos la librería requests para llamar a la API del backend
     try:
-        response = requests.post('http://127.0.0.1:5001/reservas', json=data)
+        response = requests.post(f'{API_BASE_URL}/reservas', json=data)
 
         if response.status_code == 201:
             return render_template('index.html', confirmacion='¡Reserva creada con éxito! Pronto recibirás un código QR por mail.')
@@ -32,7 +33,7 @@ def crear_reserva():
 def admin_reservas():
     limit = request.args.get('_limit', 5)   
     offset = request.args.get('_offset', 0)
-    url_backend = "http:///127.0.0.1:5001/reservas/admin"
+    url_backend = f"{API_BASE_URL}/reservas/admin"
     
     parametros_para_backend = {
         '_limit': limit,
@@ -46,7 +47,7 @@ def admin_reservas():
     link_last = {}
     
     try:
-        response = requests.get("http://127.0.0.1:5001/reservas/admin", params=parametros_para_backend)
+        response = requests.get(f"{API_BASE_URL}/reservas/admin", params=parametros_para_backend)
         if response.status_code == 200:
             total_reservas = response.json().get("data", [])
             links = response.json().get("links", [])
@@ -56,7 +57,7 @@ def admin_reservas():
         def corregir_link(link_backend):
             if link_backend and 'href' in link_backend:
                 # Reemplazamos el dominio del backend por el del frontend
-                link_backend['href'] = link_backend['href'].replace('http://127.0.0.1:5001/reservas/admin', url_frontend_base)
+                link_backend['href'] = link_backend['href'].replace(f'{API_BASE_URL}/reservas/admin', url_frontend_base)
             return link_backend
         
         
@@ -72,7 +73,7 @@ def admin_reservas():
 @reservas_bp.route("/admin/reservas/confirmar/<int:id_reserva>", methods=["POST"])
 def admin_confirmar_reserva(id_reserva):
     try:
-        requests.put(f"http://localhost:5001/reservas/{id_reserva}", json={"estado_reserva": "asistio"})
+        requests.put(f"{API_BASE_URL}/reservas/{id_reserva}", json={"estado_reserva": "asistio"})
     except Exception as e:
         print("Error confirmando asistencia:", e)
     return redirect(url_for("reservas.admin_reservas"))
@@ -80,7 +81,7 @@ def admin_confirmar_reserva(id_reserva):
 @reservas_bp.route("/admin/reservas/cancelar/<int:id_reserva>", methods=["POST"])
 def admin_cancelar_reserva(id_reserva):
     try:
-        requests.delete(f"http://localhost:5001/reservas/{id_reserva}")
+        requests.delete(f"{API_BASE_URL}/reservas/{id_reserva}")
     except Exception as e:
         print("Error cancelando:", e)
     return redirect(url_for("reservas.admin_reservas"))
@@ -95,7 +96,7 @@ def admin_guardar_edicion_reserva(id_reserva):
         "estado_reserva": request.form.get("estado_reserva")
     }
     try:
-        requests.put(f"http://localhost:5001/reservas/{id_reserva}", json=datos_actualizados)
+        requests.put(f"{API_BASE_URL}/reservas/{id_reserva}", json=datos_actualizados)
     except Exception as e:
         print("Error actualizando:", e)
     return redirect(url_for("reservas.admin_reservas"))

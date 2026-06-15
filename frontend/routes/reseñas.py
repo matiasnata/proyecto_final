@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, render_template, url_for, request, redirect
 import requests
+from config import API_BASE_URL
 
 reseñas_bp = Blueprint('reseñas', __name__,)
 
@@ -12,7 +13,7 @@ def admin_resenas():
     offset = request.args.get('_offset', 0)  # 0 por defecto para la primera página
 
     # Definimos la URL nuestro backend
-    url_backend = 'http://127.0.0.1:5001/reseñas'
+    url_backend = f'{API_BASE_URL}/reseñas'
 
     # Armamos la caja que contiene los parametros para enviar al backend
     parametros_para_backend = {
@@ -40,7 +41,7 @@ def admin_resenas():
         def corregir_link(link_backend):
             if link_backend and 'href' in link_backend:
                 # Reemplazamos el dominio del backend por el del frontend
-                link_backend['href'] = link_backend['href'].replace('http://127.0.0.1:5001/reseñas', url_frontend_base)
+                link_backend['href'] = link_backend['href'].replace(f'{API_BASE_URL}/reseñas', url_frontend_base)
                 # Reemplazamos 'email=' por 'email_buscado=' para mantener el filtro en el HTML
                 link_backend['href'] = link_backend['href'].replace('email=', 'email_buscado=')
             return link_backend
@@ -71,7 +72,7 @@ def admin_resenas():
 @reseñas_bp.route('/admin/resenas/eliminar/<int:id>', methods=['POST'])
 def eliminar_reseña_frontend(id):
     # 1. Definimos la URL exacta del backend para esa reseña específica
-    url_backend = f'http://127.0.0.1:5001/reseñas/{id}'
+    url_backend = f'{API_BASE_URL}/reseñas/{id}'
     
     try:
         # 2. ¡El Frontend llama al Backend!
@@ -97,8 +98,8 @@ def estadisticas_reseñas():
     # NUEVO: Generamos la lista de años (desde el actual hasta 2024, de reversa)
     anios_disponibles = list(range(anio_actual, 2023, -1)) 
     
-    url_grafico = 'http://127.0.0.1:5001/reseñas/grafico-resenas'
-    url_promedio = 'http://127.0.0.1:5001/reseñas/promedio'
+    url_grafico = f'{API_BASE_URL}/reseñas/grafico-resenas'
+    url_promedio = f'{API_BASE_URL}/reseñas/promedio'
     
     try:
         respuesta_grafico = requests.get(url_grafico, params={'anio': anio_buscar})
@@ -150,7 +151,7 @@ def enviar_resena():
     id_reserva = request.form.get('id_reserva')
     
     try:
-        response = requests.post('http://127.0.0.1:5001/reseñas', json=data)
+        response = requests.post(f'{API_BASE_URL}/reseñas', json=data)
         if response.status_code == 201:
             return render_template('crear_reseña.html', id_reserva=id_reserva, exito='¡Gracias por tu reseña!')
         else:
