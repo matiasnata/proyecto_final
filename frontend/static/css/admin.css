@@ -33,8 +33,7 @@ body {
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    flex-shrink: 0; /* 👈 ¡ESTO EVITA QUE SE APLASTE ANTE CUALQUIER EMPUJE! */
+    flex-shrink: 0; /*  evita que se aplastte la sidebar si el resto del contenido se agranda mucho, */
 }
 
 
@@ -48,7 +47,7 @@ body {
 }   
 
 .sidebar nav {
-    padding: 0px 150px 220px 40px;
+    padding: 20px 24px;
 }
 
 .sidebar nav a {
@@ -81,8 +80,9 @@ body {
 }
 
 .sidebar-footer {
-    padding: 20px 40px;
+    padding: 20px 24px;
     border-top: 1px solid #dddddd;
+    margin-top: auto;
 }
 
 .sidebar-footer a {
@@ -182,6 +182,7 @@ body {
     justify-content: space-between;
 
     padding: 0 40px;
+    flex-shrink: 0; /* Arreglo el problema de que si el contenido de las distintas secciones se agrandaba mucho se achicaba la parte de la topbar*/
 }
 
 .topbar h1 {
