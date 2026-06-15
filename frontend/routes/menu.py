@@ -26,10 +26,9 @@ def admin_menu():
     return render_template('admin_menu.html', platos=lista_platos, usuario_autenticado="Admin")
 
 
-@menu_bp.route('/agregar', methods=['POST'])
 def agregar_plato():
     try:
-        requests.post("http://127.0.0.1:5001/platos", json={
+        response = requests.post("http://127.0.0.1:5001/platos", json={
             "nombre_plato": request.form.get('nombre_plato'),
             "descripcion": request.form.get('descripcion'),
             "precio": float(request.form.get('precio')),
@@ -37,11 +36,15 @@ def agregar_plato():
             "restricciones": request.form.get('restricciones') or None,
             "plato_disponible": request.form.get('plato_disponible') == 'True'
         })
+
+        if response.status_code != 201:
+            return render_template('error.html', message="No se pudo agregar el plato")
+
     except requests.exceptions.RequestException as e:
         print(f"Error de conexión con la API: {e}")
+        return render_template('error.html', message="No se pudo conectar con el servidor")
 
     return redirect(url_for('menu.admin_menu'))
-
 
 @menu_bp.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar_plato(id):

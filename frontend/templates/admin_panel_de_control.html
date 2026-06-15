@@ -4,11 +4,14 @@
 
 {% block admin_content %}
 <div id="chartData" 
-     data-labels='{{ labels | tojson }}' 
-     data-valores='{{ valores | tojson }}' 
-     style="display:none;">
+    data-labels='{{ labels | tojson }}' 
+    data-valores='{{ valores | tojson }}' 
+    style="display:none;">
 </div>
 <section class="contenedor-metricas">
+    {% if error_estadisticas %}
+        <p>No hay datos disponibles en este momento.</p>
+    {% else %}
     <div class="metrica">
         <div class="icono-calendario">
             <img src="{{ url_for('static', filename='Imagenes/calendario.png') }}" alt="Icono Calendario">
@@ -36,6 +39,7 @@
             <h2 class="valor-metrica">{{ cancelaciones }}</h2>
         </div>
     </div>
+    {% endif %}
 </section>
 
 <section class="contenedor-grafico">
@@ -45,7 +49,11 @@
             <p>Últimos 7 días</p>
         </div>
     </div>
-    <canvas id="graficoReservas"></canvas>
+    {% if error_semana %}
+        <p>No hay datos disponibles en este momento.</p>
+    {% else %}
+        <canvas id="graficoReservas"></canvas>
+    {% endif %}
 </section>
 {% endblock %}
 
