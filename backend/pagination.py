@@ -23,11 +23,11 @@ def paginar_tabla(nombre_tabla, base_url):
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
         
-        
-        cursor.execute(f'SELECT COUNT(*) as total FROM {nombre_tabla}')
-        total_registros = cursor.fetchone()['total']
-        
-        query = f'SELECT * FROM {nombre_tabla} LIMIT {limit} OFFSET {offset}'
+        tablas_permitidas = {'menu', 'reservas', 'reseñas', 'servicios_extras'}
+        if nombre_tabla not in tablas_permitidas:
+            return jsonify({'error': 'Tabla no permitida'}), 400
+
+        query = "SELECT * FROM {} LIMIT %s OFFSET %s".format(nombre_tabla)
         cursor.execute(query, (limit, offset))
         resultado = cursor.fetchall()
         
