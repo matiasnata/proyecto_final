@@ -24,10 +24,7 @@ body {
 }
 
 .imagen_logo{
-    display: flex;
-    align-items: flex-start;
     height: 50px;
-    cursor: pointer;
 }
 
 h1{
