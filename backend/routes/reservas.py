@@ -14,6 +14,8 @@ reservas_bp = Blueprint("reservas", __name__)
 
 mail = None
 
+frontend_url = os.getenv('FRONTEND_URL', 'http://127.0.0.1:5000')
+
 def init_mail(mail_instance):
     global mail
     mail = mail_instance
@@ -81,7 +83,8 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_re
                 nombre=nombre,
                 fecha=fecha,
                 hora=hora,
-                id_reserva=id_reserva
+                id_reserva=id_reserva,
+                url_frontend=frontend_url
             )
         elif estado == 'cancelada':
             asunto = 'Tu reserva en Flames JB fue cancelada'
@@ -97,7 +100,8 @@ def enviar_email_cambio_estado(nombre, email_cliente, estado, fecha, hora, id_re
                 'emails/reserva_asistio.html',
                 nombre=nombre,
                 fecha=fecha,
-                id_reserva=id_reserva
+                id_reserva=id_reserva,
+                url_frontend=frontend_url
             )
         else:
             return False
