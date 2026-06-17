@@ -62,7 +62,7 @@ def obtener_reseñas():
                 fila['fecha_publicacion'] = fila['fecha_publicacion'].strftime('%Y-%m-%d %H:%M:%S') #convertir un objeto de fecha y hora en texto (string) legible para humanos o para sistemas (como un JSON).
         
         
-        
+                
         links = generar_paginacion(limit, offset, request, total)
         
         
@@ -140,12 +140,12 @@ def crear_reseña():
         if reserva['estado_reserva'] != 'asistio':
             return jsonify({
                 "errors":[{
-                    "code": "403",
+                    "code": "409",
                     "message": "Solo puedes enviar una reseña si ya asistitste al restaurante",
                     "level": "error",
                     "description": "El estado de la reserva no es el correspondiente para ingresar a una reserva"
                 }]
-            }), 403
+            }), 409
         
         query_duplicado = "SELECT id_reseña FROM reseñas WHERE id_reserva = %s"
         cursor.execute(query_duplicado, (id_reserva,))

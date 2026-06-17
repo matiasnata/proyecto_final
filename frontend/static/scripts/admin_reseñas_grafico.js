@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: datosPromedios,   // 3. EJE Y (Los puntos): Usa los promedios numéricos.
                 
                 // 4. DECORACIÓN (Pura estética):
-                borderColor: '#2E5C3A', // Color de la línea (tu verde)
+                borderColor: '#2E5C3A', // Color de la línea 
                 borderWidth: 2,         // Grosor de la línea
                 tension: 0.4,           // Hace que la línea sea curva (0 es recta, 1 es muy curva)
                 pointRadius: 3          // Tamaño de los puntitos en cada mes

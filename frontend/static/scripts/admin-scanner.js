@@ -34,7 +34,7 @@ function scanear() {
 function confirmarReserva(token) {
     resultado.innerHTML = `<p class="procesando">Procesando QR...</p>`;
 
-    fetch("http://localhost:5000/admin/scanner/verificar", {
+    fetch("/admin/scanner/verificar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token_qr: token })
