@@ -21,18 +21,18 @@ def crear_reserva():
         response = requests.post(f'{API_BASE_URL}/reservas', json=data, timeout=5)
 
         if response.status_code == 201:
-            return render_template('index.html', confirmacion='¡Reserva creada con éxito! Pronto recibirás un código QR por mail.')
+            return redirect(url_for('inicio.inicio'))
         elif response.status_code == 409:
-            return render_template('index.html', error='El email ya existe, ingresá otro.')
+            return redirect(url_for('inicio.inicio'))
         else:
-            return render_template('index.html', error='Hubo un error, intentá de nuevo.')
+            return redirect(url_for('inicio.inicio'))
 
     except Timeout:
-        return render_template('index.html', error='El servidor tardó demasiado en responder, intentá más tarde.')
+        return redirect(url_for('inicio.inicio'))
     except ConnectionError:
-        return render_template('index.html', error='No se pudo conectar con el servidor, intentá más tarde.')
+        return redirect(url_for('inicio.inicio'))
     except RequestException as e:
-        return render_template('index.html', error='Error inesperado, intentá más tarde.')
+        return redirect(url_for('inicio.inicio'))
     
 @reservas_bp.route("/admin/reservas")
 def admin_reservas():
