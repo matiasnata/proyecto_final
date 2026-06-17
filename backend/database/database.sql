@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS menu(
     nombre_plato VARCHAR(100) NOT NULL,
     descripcion TEXT NOT NULL,
     precio DECIMAL(10, 2) NOT NULL,
-    url_imagen VARCHAR(255),
+    url_imagen TEXT,
     restricciones VARCHAR(255), -- por ejemplo: "sin gluten, vegano", esto lo podemos mostrar en el front para que el usuario sepa si el plato tiene alguna restriccion alimentaria
     plato_disponible BOOLEAN NOT NULL DEFAULT TRUE
 );
