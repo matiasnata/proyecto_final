@@ -11,11 +11,16 @@
 </div>
 <section class="error-container">
     <div class="caja-error">
-        <h1 class="codigo-404">404</h1>
-        <h2>¡Uy! Página no encontrada</h2>
-        <p>Lo sentimos, la página que estás intentando buscar no existe, fue eliminada o movida a otra ruta.</p>
-
-        <a href="{{ url_for('inicio.inicio') }}" class="btn-volver-error verde">Volver al inicio</a>
+<h1 class="codigo-404">Error 404</h1>
+        {% if usuario_autenticado %}
+          <!-- Solo para admin -->
+            <h2>Hola, {{ usuario_autenticado.nombre }}. Parece que esta sección del panel no existe.</h2>
+            <a href="{{ url_for('admin.admin') }}" class="btn-volver-error verde">Volver al Panel de Admin</a>
+        {% else %}
+          <!-- Solo para usuario -->
+            <p>Lo sentimos, la página que estás buscando no existe.</p>
+            <a href="{{ url_for('inicio.inicio') }}" class="btn-volver-error verde">Volver al Inicio</a>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

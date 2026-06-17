@@ -1,8 +1,10 @@
-from flask import Blueprint, redirect, url_for, request, render_template
+import logging
+from flask import Blueprint, redirect, url_for, request, render_template, abort
 import requests
 from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
 
+logger = logging.getLogger(__name__)
 reservas_bp = Blueprint("reservas", __name__)
 
 @reservas_bp.route('/reservas', methods=['POST'])
@@ -56,6 +58,8 @@ def admin_reservas():
         if response.status_code == 200:
             total_reservas = response.json().get("data", [])
             links = response.json().get("links", [])
+        else:
+            response.raise_for_status()
         
         url_frontend_base = url_for('reservas.admin_reservas')
         
@@ -71,12 +75,9 @@ def admin_reservas():
         link_first = corregir_link(links.get('first', {}))
         link_last = corregir_link(links.get('last', {}))
         
-    except Timeout:
-        print("Error: Timeout al obtener reservas")
-    except ConnectionError:
-        print("Error: No se pudo conectar con el Backend para obtener reservas")
-    except RequestException as e:
-        print(f"Error inesperado al obtener reservas: {e}")
+    except (Timeout, ConnectionError, RequestException) as e:
+        logging.error(f"[ERROR - reservas] No se pudo conectar con la API: {e}")
+        abort(500)
 
     return render_template("admin_reservas.html", usuario_autenticado="Admin", total_reservas=total_reservas, link_prev=link_prev, link_next=link_next, link_first=link_first, link_last=link_last)
 

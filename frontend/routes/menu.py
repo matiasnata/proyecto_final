@@ -1,14 +1,18 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+import logging
+from flask import render_template, abort
 import requests
 from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
 
+logger = logging.getLogger(__name__)
 menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
 
 @menu_bp.route('', methods=['GET'])
 def admin_menu():
     try:
         respuesta = requests.get(f"{API_BASE_URL}/platos", timeout=5)
+        respuesta.raise_for_status()
         datos = respuesta.json()
         
         # valido si la API devolvió un diccionario de error o si no devolvió una lista válida
@@ -20,16 +24,10 @@ def admin_menu():
             lista_platos = []
         else:
             lista_platos = datos  # si todo está bien, asigno la lista de platos
-            
-    except Timeout:
-        print("Error: Timeout al obtener platos")
-        lista_platos = []
-    except ConnectionError:
-        print("Error: No se pudo conectar con el Backend para obtener platos")
-        lista_platos = []
-    except RequestException as e:
-        print(f"Error inesperado al obtener platos: {e}")
-        lista_platos = []
+
+    except (Timeout, ConnectionError, RequestException) as e:
+        logging.error(f"[ERROR - menu] No se pudo conectar con la API: {e}")
+        abort(500)
 
     return render_template('admin_menu.html', platos=lista_platos, usuario_autenticado="Admin")
 

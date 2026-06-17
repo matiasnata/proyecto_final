@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, Blueprint, render_template, redirect, abort, url_for
+from flask import request, Blueprint, render_template, redirect, abort, url_for
+import logging
 import requests
 from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
@@ -14,20 +15,11 @@ def admin_servicios():
 
         lista_servicios = respuesta.json()
 
-    except Timeout:
-        print("Timeout: La API tardó mucho en responder")
-        return render_template('500.html', usuario_autenticado="Admin"), 504
-    except ConnectionError:
-        print("Error de conexión: El backend parece estar apagado")
-        return render_template('500.html', usuario_autenticado="Admin"), 503
-    except RequestException as e:
-        print(f"Error de conexión con la API: {e}")
-        return render_template('500.html', usuario_autenticado="Admin"), 500
+    except (Timeout, ConnectionError, RequestException) as e:
+        logging.error(f"[ERROR - Servcicios-extra] No se pudo conectar con la API: {e}")
+        abort(500)
 
-    # Si la API responde pero con un error interno
-    if respuesta.status_code == 500:
-        print("El backend devolvió error 500:", respuesta.json())
-        return render_template('500.html', usuario_autenticado="Admin"), 500
+
 
     return render_template('admin_servicios.html', servicios=lista_servicios, usuario_autenticado="Admin")
 
