@@ -33,7 +33,7 @@ def admin_resenas():
         # con request.get ya automaticmente armamos la url correspondiente  para el bakckend con la query param en caso de que se la hayan pasado, si no se la pasaron simplemente nos da la url limpia
         respuesta = requests.get(url_backend, params=parametros_para_backend, timeout=5)
         if respuesta.status_code == 500:
-            respuesta.raise_status_code()
+            respuesta.raise_for_status()
         #convertio la respuesta que nos da el backend en un diccionario de python.
         datos = respuesta.json()
         
