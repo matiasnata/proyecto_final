@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const ventanaExito = document.getElementById("ventana-exito");
     const ventanaError = document.getElementById("ventana-error");
     const contenedorFormulario = document.getElementById("contenedor-formulario");
-    const btnCerrarExito = document.getElementById("btn-cerrar-exito");
     const btnCerrarError = document.getElementById("btn-cerrar-error");
 
     // 3. Lógica para mostrar la ventana de ÉXITO
