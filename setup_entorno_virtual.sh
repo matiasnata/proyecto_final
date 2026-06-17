@@ -18,6 +18,8 @@ else
     exit 1
 fi
 
+sudo apt install python3.12-venv
+
 echo ""
 echo " Creando entorno virtual "
 python3 -m venv venv
