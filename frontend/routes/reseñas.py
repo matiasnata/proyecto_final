@@ -1,8 +1,11 @@
 from datetime import datetime
-from flask import Blueprint, render_template, url_for, request, redirect
+from flask import Blueprint, render_template, url_for, request, redirect, abort
 import requests
+import logging
 from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
+
+logger = logging.getLogger(__name__)
 
 reseñas_bp = Blueprint('reseñas', __name__,)
 
@@ -29,7 +32,8 @@ def admin_resenas():
     try:
         # con request.get ya automaticmente armamos la url correspondiente  para el bakckend con la query param en caso de que se la hayan pasado, si no se la pasaron simplemente nos da la url limpia
         respuesta = requests.get(url_backend, params=parametros_para_backend, timeout=5)
-        
+        if respuesta.status_code == 500:
+            respuesta.raise_status_code()
         #convertio la respuesta que nos da el backend en un diccionario de python.
         datos = respuesta.json()
         
@@ -52,18 +56,9 @@ def admin_resenas():
         link_first = corregir_link(links.get('first', {}))
         link_last = corregir_link(links.get('last', {}))
 
-    except Timeout:
-        print("Error: Timeout al obtener reseñas")
-        lista_resenas = []
-        link_prev = link_next = link_first = link_last = {}
-    except ConnectionError:
-        print("Error: No se pudo conectar con el Backend para obtener reseñas")
-        lista_resenas = []
-        link_prev = link_next = link_first = link_last = {}
-    except RequestException as e:
-        print(f"Error inesperado al obtener reseñas: {e}")
-        lista_resenas = []
-        link_prev = link_next = link_first = link_last = {}
+    except (Timeout, ConnectionError, RequestException) as e:
+        logging.error(f"[ERROR - resenias] No se pudo conectar con la API: {e}")
+        abort(500)
 
     # Pasamos la lista de reseñas al HTML (Jinja2) asi ejeutara el for para estas reseñas obtenidas.
     return render_template(
@@ -112,22 +107,17 @@ def estadisticas_reseñas():
     
     try:
         respuesta_grafico = requests.get(url_grafico, params={'anio': anio_buscar}, timeout=5)
+        if respuesta_grafico.status_code == 500:
+            respuesta_grafico.raise_for_status()
+
         datos_grafico = respuesta_grafico.json()
     
         meses_grafico = datos_grafico.get('meses', [])
         promedios_grafico = datos_grafico.get('promedios', [])
-    except Timeout:
-        print("Error: Timeout al obtener gráfico de reseñas")
-        meses_grafico = []
-        promedios_grafico = []
-    except ConnectionError:
-        print("Error: No se pudo conectar con el Backend para obtener gráfico")
-        meses_grafico = []
-        promedios_grafico = []
-    except RequestException as e:
-        print(f"Error inesperado al obtener gráfico: {e}")
-        meses_grafico = []
-        promedios_grafico = []
+
+    except (Timeout, ConnectionError, RequestException) as e:
+        logging.error(f"[ERROR - resenias] No se pudo conectar con la API: {e}")
+        abort(500)
     
     
     try:
