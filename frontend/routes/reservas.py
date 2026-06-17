@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, url_for, request, render_template
 import requests
+from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
 
 reservas_bp = Blueprint("reservas", __name__)
@@ -17,7 +18,7 @@ def crear_reserva():
 
     # Usamos la librería requests para llamar a la API del backend
     try:
-        response = requests.post(f'{API_BASE_URL}/reservas', json=data)
+        response = requests.post(f'{API_BASE_URL}/reservas', json=data, timeout=5)
 
         if response.status_code == 201:
             return render_template('index.html', confirmacion='¡Reserva creada con éxito! Pronto recibirás un código QR por mail.')
@@ -26,9 +27,13 @@ def crear_reserva():
         else:
             return render_template('index.html', error='Hubo un error, intentá de nuevo.')
 
-    except requests.exceptions.ConnectionError:
+    except Timeout:
+        return render_template('index.html', error='El servidor tardó demasiado en responder, intentá más tarde.')
+    except ConnectionError:
         return render_template('index.html', error='No se pudo conectar con el servidor, intentá más tarde.')
-
+    except RequestException as e:
+        return render_template('index.html', error='Error inesperado, intentá más tarde.')
+    
 @reservas_bp.route("/admin/reservas")
 def admin_reservas():
     limit = request.args.get('_limit', 5)   
@@ -47,7 +52,7 @@ def admin_reservas():
     link_last = {}
     
     try:
-        response = requests.get(f"{API_BASE_URL}/reservas/admin", params=parametros_para_backend)
+        response = requests.get(f"{API_BASE_URL}/reservas/admin", params=parametros_para_backend, timeout=5)
         if response.status_code == 200:
             total_reservas = response.json().get("data", [])
             links = response.json().get("links", [])
@@ -66,24 +71,37 @@ def admin_reservas():
         link_first = corregir_link(links.get('first', {}))
         link_last = corregir_link(links.get('last', {}))
         
-    except Exception as e:
-        print("Error al buscar reservas:", e)
+    except Timeout:
+        print("Error: Timeout al obtener reservas")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para obtener reservas")
+    except RequestException as e:
+        print(f"Error inesperado al obtener reservas: {e}")
+
     return render_template("admin_reservas.html", usuario_autenticado="Admin", total_reservas=total_reservas, link_prev=link_prev, link_next=link_next, link_first=link_first, link_last=link_last)
 
 @reservas_bp.route("/admin/reservas/confirmar/<int:id_reserva>", methods=["POST"])
 def admin_confirmar_reserva(id_reserva):
     try:
-        requests.put(f"{API_BASE_URL}/reservas/{id_reserva}", json={"estado_reserva": "asistio"})
-    except Exception as e:
-        print("Error confirmando asistencia:", e)
+        requests.put(f"{API_BASE_URL}/reservas/{id_reserva}", json={"estado_reserva": "asistio"}, timeout=5)
+    except Timeout:
+        print("Error: Timeout al confirmar reserva")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para confirmar reserva")
+    except RequestException as e:
+        print(f"Error inesperado al confirmar reserva: {e}")
     return redirect(url_for("reservas.admin_reservas"))
 
 @reservas_bp.route("/admin/reservas/cancelar/<int:id_reserva>", methods=["POST"])
 def admin_cancelar_reserva(id_reserva):
     try:
-        requests.delete(f"{API_BASE_URL}/reservas/{id_reserva}")
-    except Exception as e:
-        print("Error cancelando:", e)
+        requests.delete(f"{API_BASE_URL}/reservas/{id_reserva}", timeout=5)
+    except Timeout:
+        print("Error: Timeout al cancelar reserva")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para cancelar reserva")
+    except RequestException as e:
+        print(f"Error inesperado al cancelar reserva: {e}")
     return redirect(url_for("reservas.admin_reservas"))
 
 @reservas_bp.route("/admin/reservas/editar/<int:id_reserva>", methods=["POST"])
@@ -96,7 +114,11 @@ def admin_guardar_edicion_reserva(id_reserva):
         "estado_reserva": request.form.get("estado_reserva")
     }
     try:
-        requests.put(f"{API_BASE_URL}/reservas/{id_reserva}", json=datos_actualizados)
-    except Exception as e:
-        print("Error actualizando:", e)
+        requests.put(f"{API_BASE_URL}/reservas/{id_reserva}", json=datos_actualizados, timeout=5)
+    except Timeout:
+        print("Error: Timeout al editar reserva")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para editar reserva")
+    except RequestException as e:
+        print(f"Error inesperado al editar reserva: {e}")
     return redirect(url_for("reservas.admin_reservas"))

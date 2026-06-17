@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 import requests
+from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
 
 menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
@@ -7,7 +8,7 @@ menu_bp = Blueprint('menu', __name__, url_prefix='/admin/menu')
 @menu_bp.route('', methods=['GET'])
 def admin_menu():
     try:
-        respuesta = requests.get(f"{API_BASE_URL}/platos")
+        respuesta = requests.get(f"{API_BASE_URL}/platos", timeout=5)
         datos = respuesta.json()
         
         # valido si la API devolvió un diccionario de error o si no devolvió una lista válida
@@ -20,8 +21,14 @@ def admin_menu():
         else:
             lista_platos = datos  # si todo está bien, asigno la lista de platos
             
-    except requests.exceptions.RequestException as e:
-        print(f"Error de conexión con la API: {e}")
+    except Timeout:
+        print("Error: Timeout al obtener platos")
+        lista_platos = []
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para obtener platos")
+        lista_platos = []
+    except RequestException as e:
+        print(f"Error inesperado al obtener platos: {e}")
         lista_platos = []
 
     return render_template('admin_menu.html', platos=lista_platos, usuario_autenticado="Admin")
@@ -36,23 +43,30 @@ def agregar_plato():
             "url_imagen": request.form.get('url_imagen') or None,
             "restricciones": request.form.get('restricciones') or None,
             "plato_disponible": request.form.get('plato_disponible') == 'True'
-        })
+        }, timeout=5)
 
         if response.status_code != 201:
-            return render_template('error.html', message="No se pudo agregar el plato")
+            return redirect(url_for('menu.admin_menu'))
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error de conexión con la API: {e}")
-        return render_template('error.html', message="No se pudo conectar con el servidor")
+    except Timeout:
+        return redirect(url_for('menu.admin_menu'))
+    except ConnectionError:
+        return redirect(url_for('menu.admin_menu'))
+    except RequestException as e:
+        return redirect(url_for('menu.admin_menu'))
 
     return redirect(url_for('menu.admin_menu'))
 
 @menu_bp.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar_plato(id):
     try:
-        requests.delete(f"{API_BASE_URL}/platos/{id}")
-    except requests.exceptions.RequestException as e:
-        print(f"Error de conexión con la API: {e}")
+        requests.delete(f"{API_BASE_URL}/platos/{id}", timeout=5)
+    except Timeout:
+        print("Error: Timeout al eliminar plato")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para eliminar plato")
+    except RequestException as e:
+        print(f"Error inesperado al eliminar plato: {e}")
 
     return redirect(url_for('menu.admin_menu'))
 
@@ -67,8 +81,12 @@ def modificar_plato(id):
             "url_imagen": request.form.get('url_imagen') or None,
             "restricciones": request.form.get('restricciones') or None,
             "plato_disponible": request.form.get('plato_disponible') == 'True'
-        })
-    except requests.exceptions.RequestException as e:
-        print(f"Error de conexión con la API: {e}")
-
+        }, timeout=5)
+    except Timeout:
+        print("Error: Timeout al modificar plato")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para modificar plato")
+    except RequestException as e:
+        print(f"Error inesperado al modificar plato: {e}")
+        
     return redirect(url_for('menu.admin_menu'))
