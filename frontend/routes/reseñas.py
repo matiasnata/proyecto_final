@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, render_template, url_for, request, redirect
 import requests
+from requests.exceptions import RequestException, ConnectionError, Timeout
 from config import API_BASE_URL
 
 reseñas_bp = Blueprint('reseñas', __name__,)
@@ -27,7 +28,7 @@ def admin_resenas():
 
     try:
         # con request.get ya automaticmente armamos la url correspondiente  para el bakckend con la query param en caso de que se la hayan pasado, si no se la pasaron simplemente nos da la url limpia
-        respuesta = requests.get(url_backend, params=parametros_para_backend)
+        respuesta = requests.get(url_backend, params=parametros_para_backend, timeout=5)
         
         #convertio la respuesta que nos da el backend en un diccionario de python.
         datos = respuesta.json()
@@ -51,11 +52,17 @@ def admin_resenas():
         link_first = corregir_link(links.get('first', {}))
         link_last = corregir_link(links.get('last', {}))
 
-
-    except Exception as e:
-        # Por si te olvidaste de encender el backend o hay un error de conexión
-        print(f"Error al conectar con el backend: {e}")
-        lista_resenas = [] # Mandamos una lista vacía para que la página no se rompa
+    except Timeout:
+        print("Error: Timeout al obtener reseñas")
+        lista_resenas = []
+        link_prev = link_next = link_first = link_last = {}
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para obtener reseñas")
+        lista_resenas = []
+        link_prev = link_next = link_first = link_last = {}
+    except RequestException as e:
+        print(f"Error inesperado al obtener reseñas: {e}")
+        lista_resenas = []
         link_prev = link_next = link_first = link_last = {}
 
     # Pasamos la lista de reseñas al HTML (Jinja2) asi ejeutara el for para estas reseñas obtenidas.
@@ -77,11 +84,13 @@ def eliminar_reseña_frontend(id):
     try:
         # 2. ¡El Frontend llama al Backend!
         # En lugar de requests.get(), usamos requests.delete()
-        respuesta = requests.delete(url_backend)
-        
-        
-    except Exception as e:
-        print(f"Error al intentar enviar el DELETE al backend: {e}")
+        respuesta = requests.delete(url_backend, timeout=5)
+    except Timeout:
+        print("Error: Timeout al eliminar reseña")
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para eliminar reseña")
+    except RequestException as e:
+        print(f"Error inesperado al eliminar reseña: {e}")
         
     # 3. Sin importar qué pasó, recargamos la página principal de reseñas
     # Esto hará que se vuelva a hacer el GET y la tabla se muestre sin la reseña eliminada
@@ -102,28 +111,43 @@ def estadisticas_reseñas():
     url_promedio = f'{API_BASE_URL}/reseñas/promedio'
     
     try:
-        respuesta_grafico = requests.get(url_grafico, params={'anio': anio_buscar})
+        respuesta_grafico = requests.get(url_grafico, params={'anio': anio_buscar}, timeout=5)
         datos_grafico = respuesta_grafico.json()
     
         meses_grafico = datos_grafico.get('meses', [])
         promedios_grafico = datos_grafico.get('promedios', [])
-        
-    except Exception as e:
-        # Por si te olvidaste de encender el backend o hay un error de conexión
-        print(f"Error al conectar con el backend: {e}")
+    except Timeout:
+        print("Error: Timeout al obtener gráfico de reseñas")
+        meses_grafico = []
+        promedios_grafico = []
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para obtener gráfico")
+        meses_grafico = []
+        promedios_grafico = []
+    except RequestException as e:
+        print(f"Error inesperado al obtener gráfico: {e}")
         meses_grafico = []
         promedios_grafico = []
     
+    
     try:
-        respuesta_promedio = requests.get(url_promedio, params={'anio': anio_buscar})
+        respuesta_promedio = requests.get(url_promedio, params={'anio': anio_buscar}, timeout=5)
         data = respuesta_promedio.json()
         promedio_general = data.get('promedio_general', 0)
         total_reseñas = data.get('total_reseñas', 0)
-        
-    except Exception as e:
-        print(f"Error al conectar con el backend para el promedio: {e}")
+    except Timeout:
+        print("Error: Timeout al obtener promedio de reseñas")
         promedio_general = 0
         total_reseñas = 0
+    except ConnectionError:
+        print("Error: No se pudo conectar con el Backend para obtener promedio")
+        promedio_general = 0
+        total_reseñas = 0
+    except RequestException as e:
+        print(f"Error inesperado al obtener promedio: {e}")
+        promedio_general = 0
+        total_reseñas = 0    
+    
               
     return render_template(
         'admin_reseñas_estadisticas.html',
@@ -151,10 +175,14 @@ def enviar_resena():
     id_reserva = request.form.get('id_reserva')
     
     try:
-        response = requests.post(f'{API_BASE_URL}/reseñas', json=data)
+        response = requests.post(f'{API_BASE_URL}/reseñas', json=data, timeout=5)
         if response.status_code == 201:
             return render_template('crear_reseña.html', id_reserva=id_reserva, exito='¡Gracias por tu reseña!')
         else:
             return render_template('crear_reseña.html', id_reserva=id_reserva, error='Hubo un error,quizas ya hiciste una reseña, si no es asi intenta de nuevo')
-    except Exception as e:
-        return render_template('crear_reseña.html', id_reserva=id_reserva, error='No se pudo conectar con el servidor, intenta mas tarde.')
+    except Timeout:
+        return render_template('crear_reseña.html', id_reserva=id_reserva, error='El servidor tardó demasiado en responder')
+    except ConnectionError:
+        return render_template('crear_reseña.html', id_reserva=id_reserva, error='No se pudo conectar con el servidor')
+    except RequestException as e:
+        return render_template('crear_reseña.html', id_reserva=id_reserva, error='No se pudo conectar con el servidor, intenta más tarde.')
