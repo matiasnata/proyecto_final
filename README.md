@@ -1,6 +1,6 @@
-# FlamejBresto — Plataforma de Gestión y Reservas
+# FlamesjBresto — Plataforma de Gestión y Reservas
 
-Aplicación web para el restaurante **FlamejBresto**, desarrollada como proyecto final de la materia. El sistema permite a los clientes realizar reservas, consultar el menú y dejar reseñas, y provee al personal un panel de administración centralizado con dashboards analíticos.
+Aplicación web para el restaurante **FlamesjBresto**, desarrollada como proyecto final de la materia. El sistema permite a los clientes realizar reservas, consultar el menú y dejar reseñas, y provee al personal un panel de administración centralizado con dashboards analíticos.
 
 ## Arquitectura
 
@@ -132,17 +132,17 @@ Ambos `.env` son independientes. A continuación se describen las variables de c
 
 ### `backend/.env`
 
-| Variable              | Descripción                                        | Ejemplo                  |
-|-----------------------|----------------------------------------------------|--------------------------|
-| `DB_HOST`             | Host de MySQL                                      |  `localhost`             |
-| `DB_USER`             | Usuario de MySQL                                   | `root`                   |
-| `DB_PASSWORD`         | Contraseña de MySQL                                | `tu_contraseña`          |
-| `DB_NAME`             | Nombre de la base de datos                         | `restaurante`            |
-| `DB_PORT`             | Puerto de MySQL                                    | `3306`                   |
-| `MAIL_USERNAME`       | Email del restaurante (Gmail)                      | `flamejbresto@gmail.com` |
-| `MAIL_PASSWORD`       | Contraseña de aplicación de Gmail (16 caracteres)  | `xxxx xxxx xxxx xxxx`    |
-| `MAIL_DEFAULT_SENDER` | Email desde donde se envían los mails              | `flamejbresto@gmail.com` |
-| `FRONTEND_URL`        | URL donde corre el frontend                        | `http://localhost:5000`  |
+| Variable              | Descripción                                        | Ejemplo                   |
+|-----------------------|----------------------------------------------------|---------------------------|
+| `DB_HOST`             | Host de MySQL                                      | `localhost`               |
+| `DB_USER`             | Usuario de MySQL                                   | `root`                    |
+| `DB_PASSWORD`         | Contraseña de MySQL                                | `tu_contraseña`           |
+| `DB_NAME`             | Nombre de la base de datos                         | `restaurante`             |
+| `DB_PORT`             | Puerto de MySQL                                    | `3306`                    |
+| `MAIL_USERNAME`       | Email del restaurante (Gmail)                      | `Flamesjbresto@gmail.com` |
+| `MAIL_PASSWORD`       | Contraseña de aplicación de Gmail (16 caracteres)  | `xxxx xxxx xxxx xxxx`     |
+| `MAIL_DEFAULT_SENDER` | Email desde donde se envían los mails              | `Flamesjbresto@gmail.com` |
+| `FRONTEND_URL`        | URL donde corre el frontend                        | `http://localhost:5000`   |
 
 ### `frontend/.env`
 
