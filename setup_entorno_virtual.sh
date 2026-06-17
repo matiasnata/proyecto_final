@@ -32,6 +32,9 @@ pip install -r backend/requirements.txt
 echo "Instalando librerías del frontend..."
 pip install -r frontend/requirements.txt
 
+cd backend
+source venv/bin/activate
+python crear_admin.py
 echo ""
 echo " Setup terminado con éxito"
 echo ""
