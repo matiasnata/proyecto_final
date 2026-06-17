@@ -28,18 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             formularioActual = formulario; // Guardamos este formulario específico en la memoria
 
-            // Le quitamos la clase oculta y le ponemos la visible (¡Aparece el HTML!)
+            // Le quitamos la clase oculta y le ponemos la visible
             ventana.classList.replace('ventana-oculta', 'ventana-visible');
         });
     });
 
-    // 3. ¿Qué pasa si toca Cancelar en nuestro modal?
+    // 3. Que pasa si toca Cancelar en nuestro modal
     btnCancelar.addEventListener('click', () => {
         ventana.classList.replace('ventana-visible', 'ventana-oculta'); // Escondemos el cartel
         formularioActual = null; // Limpiamos la memoria por las dudas
     });
 
-    // 4. ¿Qué pasa si toca Confirmar en nuestro modal?
+    // 4. Qué pasa si toca Confirmar en nuestro modal
     btnConfirmar.addEventListener('click', () => {
         if (formularioActual) {
             // Agarramos el formulario que teníamos en memoria y lo mandamos a la fuerza
